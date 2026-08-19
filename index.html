@@ -3,42 +3,42 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="theme-color" content="#221a14" />
+<meta name="theme-color" content="#f7f5f0" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <title>Manico · allenatore di accordi</title>
-<meta name="description" content="Allenatore di accordi per chitarra: esercizi interattivi per imparare e memorizzare le diteggiature sul manico." />
+<meta name="description" id="metaDescription" content="Allenatore di accordi per chitarra: esercizi interattivi per imparare e memorizzare le diteggiature sul manico." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --wood:#221a14;        /* palissandro scuro */
-    --wood-2:#2f2318;      /* pannello */
-    --wood-3:#3a2c1e;      /* bordo caldo */
-    --bone:#e9e1cf;        /* osso / superficie diagramma */
-    --bone-2:#ded4bd;
-    --ink:#2b2119;         /* testo su osso */
-    --steel:#c6cbd2;       /* corde/tasti, testo freddo su legno */
-    --steel-dim:#8a9098;   /* testo attenuato */
-    --steel-faint:#5f656d;
-    --abalone:#4fa893;     /* intarsio paua — accento */
-    --abalone-deep:#2f6e60;
-    --abalone-soft:rgba(79,168,147,.16);
-    --brass:#c9a25a;       /* meccaniche/ottone — etichette, numeri */
-    --danger:#c9705a;
+    --wood:#f5f2ea;        /* sfondo carta chiaro */
+    --wood-2:#ffffff;      /* superficie / card */
+    --wood-3:#e6e1d3;      /* bordo sottile */
+    --bone:#171310;        /* testo primario ad alto contrasto */
+    --bone-2:#2a241c;
+    --ink:#1c1712;         /* testo sulla card del diagramma (chiara) */
+    --steel:#3d382f;       /* testo standard */
+    --steel-dim:#847d6d;   /* testo attenuato */
+    --steel-faint:#b7b0a0;
+    --abalone:#0f9d84;     /* accento primario — verde smeraldo */
+    --abalone-deep:#0a7562;
+    --abalone-soft:rgba(15,157,132,.12);
+    --brass:#b3781a;       /* accento secondario — ambra, etichette/numeri */
+    --danger:#d9503a;
     --ok:var(--abalone);
-    --shadow:0 18px 40px -18px rgba(0,0,0,.7);
-    --r:18px;
+    --shadow:0 14px 32px -18px rgba(30,26,18,.22);
+    --r:20px;
   }
 
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
     background:
-      radial-gradient(120% 80% at 50% -10%, #2c2115 0%, var(--wood) 55%, #1b140f 100%);
+      radial-gradient(120% 80% at 50% -10%, #fffdf9 0%, var(--wood) 55%, #efece1 100%);
     color:var(--steel);
-    font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
     -webkit-font-smoothing:antialiased;
     min-height:100dvh;
     overscroll-behavior:none;
@@ -50,101 +50,108 @@
     position:relative;
   }
   .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
-  .slab{font-family:"Zilla Slab",Georgia,serif}
+  .slab{font-family:"Space Grotesk",system-ui,sans-serif}
   button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none}
   :focus-visible{outline:2px solid var(--abalone);outline-offset:2px;border-radius:8px}
 
   /* ---------- HOME ---------- */
   .brand{display:flex;align-items:baseline;gap:10px;margin:6px 2px 2px}
   .brand h1{
-    font-family:"Zilla Slab";font-weight:700;font-size:30px;letter-spacing:.2px;
+    font-family:"Space Grotesk";font-weight:700;font-size:29px;letter-spacing:-.3px;
     color:var(--bone);margin:0;line-height:1;
   }
   .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--abalone);
     box-shadow:0 0 0 4px var(--abalone-soft);align-self:center}
-  .tagline{color:var(--steel-dim);font-size:13px;margin:4px 2px 16px;line-height:1.45}
+  .tagline{color:var(--steel-dim);font-size:13px;margin:6px 2px 18px;line-height:1.5}
 
   .panel{
-    background:linear-gradient(180deg,var(--wood-2),#281e14);
+    background:var(--wood-2);
     border:1px solid var(--wood-3);border-radius:var(--r);
-    padding:14px;margin-bottom:14px;box-shadow:var(--shadow);
+    padding:16px;margin-bottom:14px;box-shadow:var(--shadow);
   }
   .panel h2{
     font-family:"IBM Plex Mono";font-weight:600;font-size:11px;letter-spacing:.18em;
     text-transform:uppercase;color:var(--brass);margin:0 0 12px;
   }
 
-  .seg{display:flex;gap:4px;background:#1d1610;border:1px solid var(--wood-3);
+  .seg{display:flex;gap:4px;background:#f2efe6;border:1px solid var(--wood-3);
     border-radius:12px;padding:4px}
   .seg button{flex:1;padding:9px 6px;border-radius:9px;font-size:13.5px;font-weight:500;
     color:var(--steel-dim);transition:.18s}
-  .seg button[aria-pressed="true"]{background:var(--abalone);color:#0e1a17;font-weight:600}
+  .seg button[aria-pressed="true"]{background:var(--abalone);color:#ffffff;font-weight:600}
   .seg .sub{display:block;font-size:10.5px;font-weight:400;opacity:.8;margin-top:1px}
 
   .ctrl{margin-top:14px}
   .ctrl .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
   .ctrl label{font-size:13.5px;color:var(--steel)}
-  .ctrl .val{font-family:"IBM Plex Mono";font-size:13px;color:var(--abalone);font-weight:600}
+  .ctrl .val{font-family:"IBM Plex Mono";font-size:13px;color:var(--abalone-deep);font-weight:600}
   .ctrl.dim{opacity:.4;pointer-events:none;filter:grayscale(.4)}
 
   input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent}
   input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;
-    background:linear-gradient(90deg,var(--abalone) var(--pct,50%), #3a2c1e var(--pct,50%))}
-  input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:#3a2c1e}
+    background:linear-gradient(90deg,var(--abalone) var(--pct,50%), var(--wood-3) var(--pct,50%))}
+  input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:var(--wood-3)}
   input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:var(--abalone)}
   input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
-    background:var(--bone);border:3px solid var(--abalone-deep);margin-top:-8px;box-shadow:0 2px 6px rgba(0,0,0,.5)}
+    background:#ffffff;border:3px solid var(--abalone-deep);margin-top:-8px;box-shadow:0 2px 6px rgba(30,26,18,.25)}
   input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
-    background:var(--bone);border:3px solid var(--abalone-deep)}
+    background:#ffffff;border:3px solid var(--abalone-deep)}
 
   .toggles{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-  .chip{display:flex;align-items:center;gap:8px;background:#1d1610;border:1px solid var(--wood-3);
+  .chip{display:flex;align-items:center;gap:8px;background:#f2efe6;border:1px solid var(--wood-3);
     border-radius:11px;padding:8px 11px;font-size:12.5px;color:var(--steel-dim)}
   .chip[aria-pressed="true"]{color:var(--bone);border-color:var(--abalone-deep)}
-  .chip .sw{width:30px;height:18px;border-radius:20px;background:#3a2c1e;position:relative;transition:.18s;flex:none}
+  .chip .sw{width:30px;height:18px;border-radius:20px;background:var(--wood-3);position:relative;transition:.18s;flex:none}
   .chip .sw::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
-    background:var(--steel-dim);transition:.18s}
+    background:#ffffff;box-shadow:0 1px 3px rgba(30,26,18,.3);transition:.18s}
   .chip[aria-pressed="true"] .sw{background:var(--abalone)}
-  .chip[aria-pressed="true"] .sw::after{left:14px;background:#0e1a17}
+  .chip[aria-pressed="true"] .sw::after{left:14px}
 
   .group-label{font-family:"IBM Plex Mono";font-weight:600;font-size:11px;letter-spacing:.16em;
     text-transform:uppercase;color:var(--steel-faint);margin:18px 4px 9px;display:flex;align-items:center;gap:8px}
   .group-label::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--wood-3),transparent)}
 
   .deck{width:100%;text-align:left;display:flex;align-items:center;gap:13px;
-    background:linear-gradient(180deg,var(--wood-2),#281e14);
-    border:1px solid var(--wood-3);border-radius:14px;padding:12px 13px;margin-bottom:9px;
-    transition:.15s;position:relative}
+    background:var(--wood-2);
+    border:1px solid var(--wood-3);border-radius:16px;padding:12px 13px;margin-bottom:9px;
+    transition:.15s;position:relative;box-shadow:0 2px 8px -6px rgba(30,26,18,.15)}
   .deck:active{transform:scale(.995)}
   .deck[aria-pressed="true"]{border-color:var(--abalone);
-    box-shadow:0 0 0 1px var(--abalone), 0 12px 26px -14px rgba(79,168,147,.5)}
+    box-shadow:0 0 0 1px var(--abalone), 0 12px 26px -14px rgba(15,157,132,.35)}
   .deck .mini{flex:none}
   .deck .txt{flex:1;min-width:0}
-  .deck .nm{font-family:"Zilla Slab";font-weight:600;font-size:17px;color:var(--bone);line-height:1.15}
+  .deck .nm{font-family:"Space Grotesk";font-weight:600;font-size:17px;color:var(--bone);line-height:1.15}
   .deck .sb{font-size:12px;color:var(--steel-dim);margin-top:2px}
   .deck .ct{font-family:"IBM Plex Mono";font-size:11px;color:var(--brass);white-space:nowrap}
-  .deck .prog{position:absolute;left:13px;right:13px;bottom:6px;height:2px;border-radius:2px;background:#3a2c1e;overflow:hidden}
+  .deck .prog{position:absolute;left:13px;right:13px;bottom:6px;height:2px;border-radius:2px;background:var(--wood-3);overflow:hidden}
   .deck .prog i{display:block;height:100%;background:var(--abalone);width:0%}
 
+  .langtgl{display:flex;align-items:center;gap:6px;background:var(--wood-2);border:1px solid var(--wood-3);
+    border-radius:20px;padding:7px 12px 7px 9px;font-family:"IBM Plex Mono";font-size:12px;font-weight:600;
+    color:var(--steel);flex:none;transition:.15s;box-shadow:0 2px 8px -6px rgba(30,26,18,.18)}
+  .langtgl:active{transform:scale(.95)}
+  .langtgl .flag{font-size:16px;line-height:1}
+  .iconbtn.langtgl-icon{font-size:17px;line-height:1}
+
   .startbar{position:sticky;bottom:0;margin-top:8px;padding-top:10px;
-    background:linear-gradient(180deg,transparent, #1b140f 40%);}
-  .start{width:100%;padding:16px;border-radius:15px;background:var(--abalone);color:#0c1613;
+    background:linear-gradient(180deg,transparent, var(--wood) 40%);}
+  .start{width:100%;padding:16px;border-radius:16px;background:var(--abalone);color:#ffffff;
     font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;
-    box-shadow:0 14px 30px -12px rgba(79,168,147,.6);transition:.15s}
-  .start:disabled{background:#33302b;color:var(--steel-faint);box-shadow:none}
+    box-shadow:0 14px 30px -12px rgba(15,157,132,.45);transition:.15s}
+  .start:disabled{background:#e4e0d3;color:var(--steel-faint);box-shadow:none}
   .start:active{transform:translateY(1px)}
 
   /* ---------- PRACTICE ---------- */
   .stage{position:fixed;inset:0;background:
-      radial-gradient(120% 70% at 50% -5%, #2c2115 0%, var(--wood) 55%, #17110c 100%);
+      radial-gradient(120% 70% at 50% -5%, #fffdf9 0%, var(--wood) 55%, #efece1 100%);
     display:none;flex-direction:column;z-index:20;
     padding:calc(env(safe-area-inset-top) + 6px) 16px calc(env(safe-area-inset-bottom) + 16px);}
   .stage.on{display:flex}
   .stage .top{display:flex;align-items:center;gap:12px;max-width:460px;width:100%;margin:0 auto}
-  .iconbtn{width:40px;height:40px;border-radius:11px;background:var(--wood-2);border:1px solid var(--wood-3);
-    display:flex;align-items:center;justify-content:center;flex:none}
+  .iconbtn{width:40px;height:40px;border-radius:12px;background:var(--wood-2);border:1px solid var(--wood-3);
+    display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 2px 8px -6px rgba(30,26,18,.15)}
   .top .deckname{flex:1;min-width:0}
-  .top .deckname .nm{font-family:"Zilla Slab";font-weight:600;font-size:15px;color:var(--bone);
+  .top .deckname .nm{font-family:"Space Grotesk";font-weight:600;font-size:15px;color:var(--bone);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .top .deckname .pos{font-family:"IBM Plex Mono";font-size:11px;color:var(--steel-dim)}
 
@@ -153,21 +160,21 @@
     gap:10px;max-width:460px;width:100%;margin:0 auto;padding:6px 0}
 
   .prompt{text-align:center;min-height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
-  .symbol{font-family:"Zilla Slab";font-weight:700;color:var(--bone);
-    font-size:clamp(52px,17vw,74px);line-height:.95;letter-spacing:.5px}
+  .symbol{font-family:"Space Grotesk";font-weight:700;color:var(--bone);
+    font-size:clamp(52px,17vw,74px);line-height:.95;letter-spacing:-.5px}
   .symbol sup{font-size:.44em;font-weight:600;color:var(--brass);vertical-align:super;margin-left:1px}
   .itname{font-family:"IBM Plex Mono";font-size:13px;color:var(--steel-dim);letter-spacing:.03em}
 
   .ring{position:relative;width:52px;height:52px;margin-top:2px}
   .ring svg{transform:rotate(-90deg)}
   .ring .num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    font-family:"IBM Plex Mono";font-weight:600;font-size:16px;color:var(--abalone)}
+    font-family:"IBM Plex Mono";font-weight:600;font-size:16px;color:var(--abalone-deep)}
   .ring.hide{display:none}
 
-  .card{background:linear-gradient(175deg,#efe8d8,#e2d8c1);border-radius:16px;
-    padding:14px 12px 8px;box-shadow:var(--shadow), inset 0 1px 0 rgba(255,255,255,.5);
+  .card{background:var(--wood-2);border:1px solid var(--wood-3);border-radius:18px;
+    padding:14px 12px 8px;box-shadow:var(--shadow);
     width:min(284px,80vw)}
-  .neck-cap{font-family:"IBM Plex Mono";font-size:11px;color:#8a7c63;text-align:center;
+  .neck-cap{font-family:"IBM Plex Mono";font-size:11px;color:var(--steel-dim);text-align:center;
     letter-spacing:.05em;margin-bottom:2px;height:14px;transition:.2s}
   .card svg{width:100%;height:auto;display:block}
 
@@ -176,24 +183,25 @@
   .spell.show{opacity:1}
   .spell .line{font-family:"IBM Plex Mono";font-size:12.5px;color:var(--steel);letter-spacing:.02em}
   .spell .line b{color:var(--brass);font-weight:600;margin-right:6px;text-transform:uppercase;font-size:10.5px}
-  .spell .deg span{color:var(--abalone);font-weight:600}
+  .spell .deg span{color:var(--abalone-deep);font-weight:600}
 
   .controls{max-width:460px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:12px}
   .transport{display:flex;align-items:center;justify-content:center;gap:14px}
-  .tbtn{width:46px;height:46px;border-radius:13px;background:var(--wood-2);border:1px solid var(--wood-3);
-    display:flex;align-items:center;justify-content:center}
-  .tbtn.main{width:62px;height:62px;border-radius:17px;background:var(--abalone);border:none;color:#0c1613}
+  .tbtn{width:46px;height:46px;border-radius:14px;background:var(--wood-2);border:1px solid var(--wood-3);
+    display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px -6px rgba(30,26,18,.15)}
+  .tbtn.main{width:62px;height:62px;border-radius:18px;background:var(--abalone);border:none;color:#ffffff;
+    box-shadow:0 12px 26px -12px rgba(15,157,132,.5)}
   .tbtn:disabled{opacity:.35}
 
   .rate{display:flex;gap:9px}
-  .rate button{flex:1;padding:15px 8px;border-radius:14px;font-weight:600;font-size:14.5px;
+  .rate button{flex:1;padding:15px 8px;border-radius:15px;font-weight:600;font-size:14.5px;
     display:flex;flex-direction:column;align-items:center;gap:3px;border:1px solid var(--wood-3);
     background:var(--wood-2);transition:.12s}
   .rate button .k{font-family:"IBM Plex Mono";font-size:10px;font-weight:500;color:var(--steel-faint)}
   .rate button:active{transform:translateY(1px)}
-  .rate .no{color:#e6b3a3}.rate .no:active{background:rgba(201,112,90,.16)}
+  .rate .no{color:var(--danger)}.rate .no:active{background:rgba(217,80,58,.1)}
   .rate .mid{color:var(--brass)}
-  .rate .yes{color:#8fe0cd}.rate .yes:active{background:rgba(79,168,147,.16)}
+  .rate .yes{color:var(--abalone-deep)}.rate .yes:active{background:var(--abalone-soft)}
   .rate.hide{display:none}
 
   .hintbtn{align-self:center;font-family:"IBM Plex Mono";font-size:12px;color:var(--steel-dim);
@@ -202,24 +210,24 @@
 
   /* mastery leitner pips */
   .pips{display:flex;gap:4px;justify-content:center;align-items:center;min-height:14px}
-  .pips i{width:16px;height:5px;border-radius:3px;background:#3a2c1e}
+  .pips i{width:16px;height:5px;border-radius:3px;background:var(--wood-3)}
   .pips i.f{background:var(--abalone)}
   .pips.hide{display:none}
 
   /* SVG element classes */
-  .fret{stroke:#b9926a;stroke-width:1.4}
-  .nut{stroke:#6f5a3f;stroke-width:5;stroke-linecap:round}
-  .string{stroke:#9a8f7a;stroke-linecap:round}
-  .inlay{fill:rgba(79,168,147,.14)}
-  .slabel{fill:#8a7c63;font-family:"IBM Plex Mono";font-size:12px;font-weight:500}
-  .fretlab{fill:#b08a3f;font-family:"IBM Plex Mono";font-size:13px;font-weight:600}
-  .barre{fill:#241c14}
+  .fret{stroke:#d8d3c4;stroke-width:1.4}
+  .nut{stroke:var(--bone);stroke-width:5;stroke-linecap:round}
+  .string{stroke:#a8a190;stroke-linecap:round}
+  .inlay{fill:rgba(15,157,132,.12)}
+  .slabel{fill:var(--steel-dim);font-family:"IBM Plex Mono";font-size:12px;font-weight:500}
+  .fretlab{fill:var(--brass);font-family:"IBM Plex Mono";font-size:13px;font-weight:600}
+  .barre{fill:var(--abalone-deep)}
   .dotg{opacity:0}
   .markg{opacity:0}
-  .dot{fill:#241c14}
-  .dotnum{fill:#efe8d8;font-family:"IBM Plex Mono";font-size:14px;font-weight:600;text-anchor:middle}
-  .omark{fill:none;stroke:#5c8f80;stroke-width:2}
-  .xmark{stroke:#b06a55;stroke-width:2.4;stroke-linecap:round}
+  .dot{fill:var(--abalone)}
+  .dotnum{fill:#ffffff;font-family:"IBM Plex Mono";font-size:14px;font-weight:600;text-anchor:middle}
+  .omark{fill:none;stroke:var(--abalone-deep);stroke-width:2}
+  .xmark{stroke:var(--danger);stroke-width:2.4;stroke-linecap:round}
 
   .is-revealed .dotg{animation:pressIn .34s cubic-bezier(.34,1.56,.64,1) both}
   .is-revealed .markg{opacity:1;transition:opacity .3s}
@@ -227,7 +235,7 @@
   .dotg{transform-box:fill-box;transform-origin:center}
 
   .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 20px);transform:translateX(-50%) translateY(20px);
-    background:var(--wood-2);border:1px solid var(--wood-3);color:var(--bone);padding:10px 16px;border-radius:12px;
+    background:var(--bone);border:1px solid var(--bone);color:#fdfcf9;padding:10px 16px;border-radius:12px;
     font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:40;box-shadow:var(--shadow)}
   .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -239,13 +247,13 @@
 
   /* ---------- THEORY ---------- */
   .th-open{width:100%;display:flex;align-items:center;gap:12px;text-align:left;
-    background:linear-gradient(180deg,#2c2318,#241a12);border:1px solid var(--wood-3);
-    border-radius:14px;padding:13px 14px;margin-bottom:14px;transition:.15s}
+    background:var(--wood-2);border:1px solid var(--wood-3);
+    border-radius:16px;padding:13px 14px;margin-bottom:14px;transition:.15s;box-shadow:var(--shadow)}
   .th-open:active{transform:scale(.995)}
   .th-open .ic{width:38px;height:38px;border-radius:10px;background:var(--abalone-soft);
-    display:flex;align-items:center;justify-content:center;flex:none;color:var(--abalone)}
+    display:flex;align-items:center;justify-content:center;flex:none;color:var(--abalone-deep)}
   .th-open .t{flex:1}
-  .th-open .t b{font-family:"Zilla Slab";font-weight:600;font-size:16px;color:var(--bone);display:block;line-height:1.15}
+  .th-open .t b{font-family:"Space Grotesk";font-weight:600;font-size:16px;color:var(--bone);display:block;line-height:1.15}
   .th-open .t span{font-size:12px;color:var(--steel-dim)}
   .th-open .chev{color:var(--steel-faint)}
 
@@ -254,34 +262,34 @@
     max-width:460px;width:100%;margin:0 auto;padding:8px 0 28px}
   .th-intro{color:var(--steel-dim);font-size:14px;line-height:1.6;margin:10px 2px 4px}
   .th-intro b{color:var(--bone);font-weight:600}
-  .th-intro em{color:var(--abalone);font-style:normal}
-  .th-ref{background:linear-gradient(180deg,var(--wood-2),#281e14);border:1px solid var(--wood-3);
-    border-radius:14px;padding:14px;margin:14px 0}
+  .th-intro em{color:var(--abalone-deep);font-style:normal}
+  .th-ref{background:var(--wood-2);border:1px solid var(--wood-3);
+    border-radius:16px;padding:14px;margin:14px 0;box-shadow:var(--shadow)}
   .th-ref p{margin:0;font-size:12.5px;color:var(--steel-dim);line-height:1.5}
   .th-ref .scale{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:11px}
   .th-ref .d{font-family:"IBM Plex Mono";font-size:14px;font-weight:600;padding:7px 2px;border-radius:9px;
-    background:#1d1610;border:1px solid var(--wood-3);color:var(--steel);text-align:center;line-height:1.2}
+    background:#f2efe6;border:1px solid var(--wood-3);color:var(--steel);text-align:center;line-height:1.2}
   .th-ref .d small{display:block;color:var(--steel-faint);font-size:10px;font-weight:400;margin-top:2px}
   .th-switch{font-size:13.5px;color:var(--steel-dim);line-height:1.6;margin:2px 2px 16px}
   .th-switch b{color:var(--bone);font-weight:600}
 
-  .th-card{background:linear-gradient(180deg,var(--wood-2),#281e14);border:1px solid var(--wood-3);
-    border-radius:16px;padding:15px 15px 13px;margin-bottom:12px;box-shadow:var(--shadow)}
+  .th-card{background:var(--wood-2);border:1px solid var(--wood-3);
+    border-radius:18px;padding:15px 15px 13px;margin-bottom:12px;box-shadow:var(--shadow)}
   .th-eyebrow{font-family:"IBM Plex Mono";font-weight:600;font-size:10.5px;letter-spacing:.16em;
     text-transform:uppercase;color:var(--brass)}
-  .th-card h3{font-family:"Zilla Slab";font-weight:700;font-size:20px;color:var(--bone);margin:3px 0 0}
+  .th-card h3{font-family:"Space Grotesk";font-weight:700;font-size:20px;color:var(--bone);margin:3px 0 0}
   .th-formula{font-family:"IBM Plex Mono";font-size:17px;color:var(--steel);margin:9px 0 0;letter-spacing:.03em}
-  .th-formula .hl{color:var(--abalone);font-weight:600}
+  .th-formula .hl{color:var(--abalone-deep);font-weight:600}
   .th-recipe{font-size:13px;color:var(--steel-dim);line-height:1.55;margin:9px 0 0}
   .th-recipe .snd{color:var(--bone)}
   .th-ruler{margin:11px 0 2px}
-  .th-link{font-family:"IBM Plex Mono";font-size:11.5px;color:var(--abalone);margin-top:11px;
+  .th-link{font-family:"IBM Plex Mono";font-size:11.5px;color:var(--abalone-deep);margin-top:11px;
     display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid var(--abalone-deep);
     border-radius:10px;background:transparent}
   .th-link:active{background:var(--abalone-soft)}
-  .th-more{background:linear-gradient(180deg,#241a12,#20160f);border:1px dashed var(--wood-3);
-    border-radius:16px;padding:16px;margin-top:4px}
-  .th-more h3{font-family:"Zilla Slab";font-weight:600;font-size:17px;color:var(--bone);margin:0 0 10px}
+  .th-more{background:#f2efe6;border:1px dashed var(--wood-3);
+    border-radius:18px;padding:16px;margin-top:4px}
+  .th-more h3{font-family:"Space Grotesk";font-weight:600;font-size:17px;color:var(--bone);margin:0 0 10px}
   .th-more dl{margin:0}
   .th-more dt{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.06em;text-transform:uppercase;
     color:var(--brass);margin-top:12px}
@@ -289,14 +297,14 @@
   .th-more dd{margin:3px 0 0;font-size:13px;color:var(--steel-dim);line-height:1.55}
   .th-more dd b{color:var(--bone);font-weight:600}
 
-  .rl-axis{stroke:#4a3d2c;stroke-width:2;stroke-linecap:round}
-  .rl-tick{stroke:#3a2c1e;stroke-width:1.5}
-  .rl-tick.oct{stroke:#5f656d}
-  .rl-dot{fill:#c6cbd2}
+  .rl-axis{stroke:var(--wood-3);stroke-width:2;stroke-linecap:round}
+  .rl-tick{stroke:var(--wood-3);stroke-width:1.5}
+  .rl-tick.oct{stroke:var(--steel-faint)}
+  .rl-dot{fill:var(--steel-faint)}
   .rl-dot.root{fill:var(--bone)}
   .rl-dot.alt{fill:var(--abalone)}
-  .rl-lab{font-family:"IBM Plex Mono";font-size:12px;font-weight:600;text-anchor:middle;fill:#c6cbd2}
-  .rl-lab.alt{fill:var(--abalone)}
+  .rl-lab{font-family:"IBM Plex Mono";font-size:12px;font-weight:600;text-anchor:middle;fill:var(--steel-dim)}
+  .rl-lab.alt{fill:var(--abalone-deep)}
   .rl-lab.root{fill:var(--bone)}
   .rl-sub{font-family:"IBM Plex Mono";font-size:8.5px;text-anchor:middle;fill:var(--steel-faint)}
   .rl-cap{font-family:"IBM Plex Mono";font-size:9px;text-anchor:middle;fill:var(--steel-faint)}
@@ -305,20 +313,22 @@
 <body>
 
 <div class="app" id="home">
-  <div class="brand"><h1 class="slab">Manico</h1><span class="dot"></span></div>
-  <p class="tagline">Vedi il nome dell'accordo, richiama la posizione a memoria, poi verifica sul manico. Gli insiemi sono ordinati per difficoltà e per come l'accordo è costruito.</p>
+  <div class="brand"><h1 class="slab">Manico</h1><span class="dot"></span>
+    <button class="langtgl" id="langToggle" style="margin-left:auto;align-self:center" aria-label="Change language"><span class="flag">🇬🇧</span><span class="langcode">EN</span></button>
+  </div>
+  <p class="tagline" id="tagline">Vedi il nome dell'accordo, richiama la posizione a memoria, poi verifica sul manico. Gli insiemi sono ordinati per difficoltà e per come l'accordo è costruito.</p>
 
   <button class="th-open" id="openTheory">
     <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h9v16H6a2 2 0 0 0-2 2z"/><path d="M15 3h3a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2h-3"/></svg></span>
-    <span class="t"><b>Come nascono gli accordi</b><span>La teoria dietro ogni insieme, in breve</span></span>
+    <span class="t"><b id="thOpenTitle">Come nascono gli accordi</b><span id="thOpenSub">La teoria dietro ogni insieme, in breve</span></span>
     <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
   </button>
 
   <div class="panel">
-    <h2>Modalità</h2>
+    <h2 id="modeHeading">Modalità</h2>
     <div class="seg" id="modeSeg" role="group" aria-label="Modalità">
-      <button data-mode="auto" aria-pressed="true">Automatica<span class="sub">a tempo, scorre da sola</span></button>
-      <button data-mode="adaptive" aria-pressed="false">Adattiva<span class="sub">si regola su di te</span></button>
+      <button data-mode="auto" aria-pressed="true"><span id="modeAutoLab">Automatica</span><span class="sub" id="modeAutoSub">a tempo, scorre da sola</span></button>
+      <button data-mode="adaptive" aria-pressed="false"><span id="modeAdaptiveLab">Adattiva</span><span class="sub" id="modeAdaptiveSub">si regola su di te</span></button>
     </div>
 
     <div class="ctrl" id="revealCtrl">
@@ -327,14 +337,14 @@
     </div>
 
     <div class="ctrl" id="studyCtrl">
-      <div class="row"><label>Tempo per studiare la posizione</label><span class="val" id="studyVal">4.0 s</span></div>
+      <div class="row"><label id="studyLab">Tempo per studiare la posizione</label><span class="val" id="studyVal">4.0 s</span></div>
       <input type="range" id="studyRange" min="1" max="10" step="0.5" value="4" />
     </div>
 
     <div class="toggles">
-      <button class="chip" id="tglShuffle" aria-pressed="true"><span class="sw"></span>Ordine casuale</button>
-      <button class="chip" id="tglLoop" aria-pressed="true"><span class="sw"></span>Ripeti in ciclo</button>
-      <button class="chip" id="tglSpell" aria-pressed="true"><span class="sw"></span>Mostra note e gradi</button>
+      <button class="chip" id="tglShuffle" aria-pressed="true"><span class="sw"></span><span id="tglShuffleLab">Ordine casuale</span></button>
+      <button class="chip" id="tglLoop" aria-pressed="true"><span class="sw"></span><span id="tglLoopLab">Ripeti in ciclo</span></button>
+      <button class="chip" id="tglSpell" aria-pressed="true"><span class="sw"></span><span id="tglSpellLab">Mostra note e gradi</span></button>
     </div>
   </div>
 
@@ -356,6 +366,7 @@
     <button class="iconbtn" id="shuffleBtn" aria-label="Rimescola">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
     </button>
+    <button class="iconbtn langtgl-icon" id="langToggleStage" aria-label="Change language"><span class="flag">🇬🇧</span></button>
   </div>
 
   <div class="center">
@@ -365,7 +376,7 @@
       <div class="itname" id="itname"></div>
     </div>
     <div class="ring" id="ring">
-      <svg width="52" height="52"><circle cx="26" cy="26" r="21" fill="none" stroke="#3a2c1e" stroke-width="4"/><circle id="ringArc" cx="26" cy="26" r="21" fill="none" stroke="#4fa893" stroke-width="4" stroke-linecap="round" stroke-dasharray="131.9" stroke-dashoffset="0"/></svg>
+      <svg width="52" height="52"><circle cx="26" cy="26" r="21" fill="none" stroke="#e6e1d3" stroke-width="4"/><circle id="ringArc" cx="26" cy="26" r="21" fill="none" stroke="#0f9d84" stroke-width="4" stroke-linecap="round" stroke-dasharray="131.9" stroke-dashoffset="0"/></svg>
       <div class="num mono" id="ringNum"></div>
     </div>
     <div class="card">
@@ -381,9 +392,9 @@
   <div class="controls">
     <button class="hintbtn hide" id="hintBtn">Mostra la posizione ora</button>
     <div class="rate hide" id="rateRow">
-      <button class="no" data-rate="0">Non ricordavo<span class="k">1</span></button>
-      <button class="mid" data-rate="1">Quasi<span class="k">2</span></button>
-      <button class="yes" data-rate="2">Sì, sapevo<span class="k">3</span></button>
+      <button class="no" data-rate="0"><span id="rateNoLab">Non ricordavo</span><span class="k">1</span></button>
+      <button class="mid" data-rate="1"><span id="rateMidLab">Quasi</span><span class="k">2</span></button>
+      <button class="yes" data-rate="2"><span id="rateYesLab">Sì, sapevo</span><span class="k">3</span></button>
     </div>
     <div class="transport" id="transport">
       <button class="tbtn" id="prevBtn" aria-label="Precedente">
@@ -405,7 +416,8 @@
     <button class="iconbtn" id="closeTheory" aria-label="Chiudi teoria">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
-    <div class="deckname"><div class="nm">Come nascono gli accordi</div><div class="pos mono">costruzione degli accordi</div></div>
+    <div class="deckname"><div class="nm" id="theoryTopTitle">Come nascono gli accordi</div><div class="pos mono" id="theoryTopSub">costruzione degli accordi</div></div>
+    <button class="iconbtn langtgl-icon" id="langToggleTheory" aria-label="Change language"><span class="flag">🇬🇧</span></button>
   </div>
   <div class="body" id="theoryBody"></div>
 </div>
@@ -415,70 +427,202 @@
 <script>
 "use strict";
 
+/* ============ I18N ============ */
+const I18N = {
+  it: {
+    pageTitle: "Manico · allenatore di accordi",
+    tagline: "Vedi il nome dell'accordo, richiama la posizione a memoria, poi verifica sul manico. Gli insiemi sono ordinati per difficoltà e per come l'accordo è costruito.",
+    theoryOpenTitle: "Come nascono gli accordi",
+    theoryOpenSub: "La teoria dietro ogni insieme, in breve",
+    modeHeading: "Modalità",
+    modeGroupLabel: "Modalità",
+    modeAuto: "Automatica", modeAutoSub: "a tempo, scorre da sola",
+    modeAdaptive: "Adattiva", modeAdaptiveSub: "si regola su di te",
+    revealLabAuto: "Attesa prima della posizione",
+    revealLabAdaptive: "Attesa base (si accorcia con la padronanza)",
+    studyLab: "Tempo per studiare la posizione",
+    tglShuffle: "Ordine casuale",
+    tglLoop: "Ripeti in ciclo",
+    tglSpell: "Mostra note e gradi",
+    groupDiff: "Per difficoltà",
+    groupTh: "Per costruzione teorica",
+    chordsSuffix: "accordi",
+    startChoose: "Scegli un insieme",
+    startBegin: "Inizia",
+    exitAria: "Torna agli insiemi",
+    shuffleAria: "Rimescola",
+    neckCap: "Visualizza la diteggiatura",
+    hintBtn: "Mostra la posizione ora",
+    rateNo: "Non ricordavo",
+    rateMid: "Quasi",
+    rateYes: "Sì, sapevo",
+    prevAria: "Precedente",
+    pauseAria: "Pausa",
+    resumeAria: "Riprendi",
+    nextAria: "Successivo",
+    spellDeg: "gradi",
+    spellNotes: "note",
+    loopingSuffix: "in ciclo",
+    finishToast: "Giro completato",
+    shuffleToast: "Rimescolato",
+    theoryTitle: "Come nascono gli accordi",
+    theorySub: "costruzione degli accordi",
+    closeTheoryAria: "Chiudi teoria",
+    themeIntro: "Quasi tutti gli accordi nascono impilando <b>terze</b> a partire da una nota, la <em>fondamentale</em>, prendendo le note da una scala. Non conta il nome assoluto delle note ma la loro <b>distanza</b> dalla fondamentale: è l'intervallo a decidere il colore. Come metro si usa la <b>scala maggiore</b>.",
+    thRefP: "I sette gradi della scala maggiore (qui in Do). I numeri sono i mattoni con cui si scrivono tutti gli accordi qui sotto.",
+    thSwitch: "Due “interruttori” governano quasi tutto: la <b>terza</b> distingue maggiore da minore, e la <b>settima</b> — con la sua misura — aggiunge la quarta nota e definisce la famiglia. Nei righelli qui sotto, in <span style=\"color:var(--abalone)\">verde</span> è evidenziata la nota che caratterizza ciascun tipo.",
+    rulerRoot: "fond.",
+    rulerOctave: "ottava",
+    trainLink: "Allenati",
+    thMoreTitle: "Oltre le basi",
+    thMoreItems: [
+      {dt:"Estensioni", dd:"Continuando a impilare terze oltre la settima si ottengono <b>9ª, 11ª, 13ª</b>: sono le note “alte” che aggiungono tensione e colore."},
+      {dt:"“add” contro accordo di nona", dd:"<b>add9</b> aggiunge solo la nona senza la settima; l'accordo di <b>nona</b> (es. C9) include anche la ♭7. Stessa nota in cima, costruzione diversa."},
+      {dt:"Power chord (5)", dd:"Solo fondamentale e quinta, <b>senza la terza</b>: proprio perché manca la terza non è né maggiore né minore. È il suono del rock distorto."},
+      {dt:"Forme mobili e barré", dd:"Una forma sulla tastiera “congela” il pattern di intervalli: se la sposti lungo il manico cambia solo la fondamentale, non la qualità. È il motivo per cui gli accordi barré funzionano — vedi l'insieme <b>Avanzato</b>."}
+    ],
+    scaleDeg: [['1','Do'],['2','Re'],['3','Mi'],['4','Fa'],['5','Sol'],['6','La'],['7','Si']],
+    stringNames: ["MI","LA","RE","SOL","SI","mi"],
+    chordDiagramAria: "Diagramma accordo",
+    langSwitchAria: "Passa all'inglese",
+    metaDescription: "Allenatore di accordi per chitarra: esercizi interattivi per imparare e memorizzare le diteggiature sul manico.",
+  },
+  en: {
+    pageTitle: "Manico · chord trainer",
+    tagline: "See the chord's name, recall the shape from memory, then check it on the neck. The sets are ordered by difficulty and by how each chord is built.",
+    theoryOpenTitle: "How chords are built",
+    theoryOpenSub: "The theory behind each set, in brief",
+    modeHeading: "Mode",
+    modeGroupLabel: "Mode",
+    modeAuto: "Automatic", modeAutoSub: "timed, moves on its own",
+    modeAdaptive: "Adaptive", modeAdaptiveSub: "adjusts to you",
+    revealLabAuto: "Wait before showing the shape",
+    revealLabAdaptive: "Base wait (shortens as you improve)",
+    studyLab: "Time to study the shape",
+    tglShuffle: "Random order",
+    tglLoop: "Loop",
+    tglSpell: "Show notes & degrees",
+    groupDiff: "By difficulty",
+    groupTh: "By theoretical construction",
+    chordsSuffix: "chords",
+    startChoose: "Choose a set",
+    startBegin: "Start",
+    exitAria: "Back to sets",
+    shuffleAria: "Shuffle",
+    neckCap: "Reveals the fingering",
+    hintBtn: "Show the shape now",
+    rateNo: "Didn't remember",
+    rateMid: "Almost",
+    rateYes: "Yes, I knew it",
+    prevAria: "Previous",
+    pauseAria: "Pause",
+    resumeAria: "Resume",
+    nextAria: "Next",
+    spellDeg: "degrees",
+    spellNotes: "notes",
+    loopingSuffix: "looping",
+    finishToast: "Round complete",
+    shuffleToast: "Shuffled",
+    theoryTitle: "How chords are built",
+    theorySub: "chord construction",
+    closeTheoryAria: "Close theory",
+    themeIntro: "Almost every chord is built by stacking <b>thirds</b> on top of a starting note, the <em>root</em>, taking notes from a scale. What matters isn't the absolute name of a note but its <b>distance</b> from the root: it's the interval that decides the color. The <b>major scale</b> is used as the ruler.",
+    thRefP: "The seven degrees of the major scale (here in C). These numbers are the building blocks used to write every chord below.",
+    thSwitch: "Two “switches” govern almost everything: the <b>third</b> tells major from minor, and the <b>seventh</b> — with its size — adds the fourth note and defines the family. In the rulers below, the note in <span style=\"color:var(--abalone)\">green</span> is the one that defines each type.",
+    rulerRoot: "root",
+    rulerOctave: "octave",
+    trainLink: "Practice",
+    thMoreTitle: "Beyond the basics",
+    thMoreItems: [
+      {dt:"Extensions", dd:"Stacking thirds further past the seventh gives you the <b>9th, 11th and 13th</b>: the “upper” notes that add tension and color."},
+      {dt:"“add” vs. a ninth chord", dd:"<b>add9</b> adds only the ninth, without the seventh; a ninth chord (e.g. C9) also includes the ♭7. Same top note, different construction."},
+      {dt:"Power chord (5)", dd:"Just the root and the fifth, <b>no third</b>: because the third is missing, it's neither major nor minor. It's the sound of distorted rock."},
+      {dt:"Movable shapes & barre chords", dd:"A shape on the fretboard “freezes” a pattern of intervals: slide it along the neck and only the root changes, not the quality. That's why barre chords work — see the <b>Advanced</b> set."}
+    ],
+    scaleDeg: [['1','C'],['2','D'],['3','E'],['4','F'],['5','G'],['6','A'],['7','B']],
+    stringNames: ["E","A","D","G","B","e"],
+    chordDiagramAria: "Chord diagram",
+    langSwitchAria: "Switch to Italian",
+    metaDescription: "Guitar chord trainer: interactive exercises to learn and memorize fretboard fingerings.",
+  },
+};
+
 /* ============ CHORD LIBRARY ============
    frets[]: index 0 = MI basso (6ª corda) ... index 5 = mi cantino (1ª).
    'x' = corda muta, 0 = a vuoto, n = tasto.  fingers[]: 0 = nessun dito. */
 const CH = {
-  C:    {sym:"C",    it:"Do maggiore",           frets:['x',3,2,0,1,0], fingers:[0,3,2,0,1,0], deg:"1 · 3 · 5",       notes:"Do · Mi · Sol"},
-  A:    {sym:"A",    it:"La maggiore",           frets:['x',0,2,2,2,0], fingers:[0,0,1,2,3,0], deg:"1 · 3 · 5",       notes:"La · Do♯ · Mi"},
-  G:    {sym:"G",    it:"Sol maggiore",          frets:[3,2,0,0,0,3],   fingers:[2,1,0,0,0,3], deg:"1 · 3 · 5",       notes:"Sol · Si · Re"},
-  E:    {sym:"E",    it:"Mi maggiore",           frets:[0,2,2,1,0,0],   fingers:[0,2,3,1,0,0], deg:"1 · 3 · 5",       notes:"Mi · Sol♯ · Si"},
-  D:    {sym:"D",    it:"Re maggiore",           frets:['x','x',0,2,3,2],fingers:[0,0,0,1,3,2],deg:"1 · 3 · 5",       notes:"Re · Fa♯ · La"},
+  C:    {sym:"C",    name:{it:"Do maggiore",en:"C major"},                        frets:['x',3,2,0,1,0], fingers:[0,3,2,0,1,0], deg:"1 · 3 · 5",       notes:{it:"Do · Mi · Sol",en:"C · E · G"}},
+  A:    {sym:"A",    name:{it:"La maggiore",en:"A major"},                        frets:['x',0,2,2,2,0], fingers:[0,0,1,2,3,0], deg:"1 · 3 · 5",       notes:{it:"La · Do♯ · Mi",en:"A · C♯ · E"}},
+  G:    {sym:"G",    name:{it:"Sol maggiore",en:"G major"},                       frets:[3,2,0,0,0,3],   fingers:[2,1,0,0,0,3], deg:"1 · 3 · 5",       notes:{it:"Sol · Si · Re",en:"G · B · D"}},
+  E:    {sym:"E",    name:{it:"Mi maggiore",en:"E major"},                        frets:[0,2,2,1,0,0],   fingers:[0,2,3,1,0,0], deg:"1 · 3 · 5",       notes:{it:"Mi · Sol♯ · Si",en:"E · G♯ · B"}},
+  D:    {sym:"D",    name:{it:"Re maggiore",en:"D major"},                        frets:['x','x',0,2,3,2],fingers:[0,0,0,1,3,2],deg:"1 · 3 · 5",       notes:{it:"Re · Fa♯ · La",en:"D · F♯ · A"}},
 
-  Am:   {sym:"Am",   it:"La minore",             frets:['x',0,2,2,1,0], fingers:[0,0,2,3,1,0], deg:"1 · ♭3 · 5",      notes:"La · Do · Mi"},
-  Em:   {sym:"Em",   it:"Mi minore",             frets:[0,2,2,0,0,0],   fingers:[0,2,3,0,0,0], deg:"1 · ♭3 · 5",      notes:"Mi · Sol · Si"},
-  Dm:   {sym:"Dm",   it:"Re minore",             frets:['x','x',0,2,3,1],fingers:[0,0,0,2,3,1],deg:"1 · ♭3 · 5",      notes:"Re · Fa · La"},
-  Bm:   {sym:"Bm",   it:"Si minore",             frets:['x',2,4,4,3,2], fingers:[0,1,3,4,2,1], deg:"1 · ♭3 · 5",      notes:"Si · Re · Fa♯"},
+  Am:   {sym:"Am",   name:{it:"La minore",en:"A minor"},                          frets:['x',0,2,2,1,0], fingers:[0,0,2,3,1,0], deg:"1 · ♭3 · 5",      notes:{it:"La · Do · Mi",en:"A · C · E"}},
+  Em:   {sym:"Em",   name:{it:"Mi minore",en:"E minor"},                          frets:[0,2,2,0,0,0],   fingers:[0,2,3,0,0,0], deg:"1 · ♭3 · 5",      notes:{it:"Mi · Sol · Si",en:"E · G · B"}},
+  Dm:   {sym:"Dm",   name:{it:"Re minore",en:"D minor"},                          frets:['x','x',0,2,3,1],fingers:[0,0,0,2,3,1],deg:"1 · ♭3 · 5",      notes:{it:"Re · Fa · La",en:"D · F · A"}},
+  Bm:   {sym:"Bm",   name:{it:"Si minore",en:"B minor"},                          frets:['x',2,4,4,3,2], fingers:[0,1,3,4,2,1], deg:"1 · ♭3 · 5",      notes:{it:"Si · Re · Fa♯",en:"B · D · F♯"}},
 
-  G7:   {sym:"G7",   it:"Sol settima (dominante)",frets:[3,2,0,0,0,1],  fingers:[3,2,0,0,0,1], deg:"1 · 3 · 5 · ♭7",  notes:"Sol · Si · Re · Fa"},
-  C7:   {sym:"C7",   it:"Do settima",            frets:['x',3,2,3,1,0], fingers:[0,3,2,4,1,0], deg:"1 · 3 · 5 · ♭7",  notes:"Do · Mi · Sol · Si♭"},
-  D7:   {sym:"D7",   it:"Re settima",            frets:['x','x',0,2,1,2],fingers:[0,0,0,2,1,3],deg:"1 · 3 · 5 · ♭7",  notes:"Re · Fa♯ · La · Do"},
-  E7:   {sym:"E7",   it:"Mi settima",            frets:[0,2,0,1,0,0],   fingers:[0,2,0,1,0,0], deg:"1 · 3 · 5 · ♭7",  notes:"Mi · Sol♯ · Si · Re"},
-  A7:   {sym:"A7",   it:"La settima",            frets:['x',0,2,0,2,0], fingers:[0,0,2,0,3,0], deg:"1 · 3 · 5 · ♭7",  notes:"La · Do♯ · Mi · Sol"},
-  B7:   {sym:"B7",   it:"Si settima",            frets:['x',2,1,2,0,2], fingers:[0,2,1,3,0,4], deg:"1 · 3 · 5 · ♭7",  notes:"Si · Re♯ · Fa♯ · La"},
+  G7:   {sym:"G7",   name:{it:"Sol settima (dominante)",en:"G dominant seventh"}, frets:[3,2,0,0,0,1],  fingers:[3,2,0,0,0,1], deg:"1 · 3 · 5 · ♭7",  notes:{it:"Sol · Si · Re · Fa",en:"G · B · D · F"}},
+  C7:   {sym:"C7",   name:{it:"Do settima",en:"C seventh"},                       frets:['x',3,2,3,1,0], fingers:[0,3,2,4,1,0], deg:"1 · 3 · 5 · ♭7",  notes:{it:"Do · Mi · Sol · Si♭",en:"C · E · G · B♭"}},
+  D7:   {sym:"D7",   name:{it:"Re settima",en:"D seventh"},                       frets:['x','x',0,2,1,2],fingers:[0,0,0,2,1,3],deg:"1 · 3 · 5 · ♭7",  notes:{it:"Re · Fa♯ · La · Do",en:"D · F♯ · A · C"}},
+  E7:   {sym:"E7",   name:{it:"Mi settima",en:"E seventh"},                       frets:[0,2,0,1,0,0],   fingers:[0,2,0,1,0,0], deg:"1 · 3 · 5 · ♭7",  notes:{it:"Mi · Sol♯ · Si · Re",en:"E · G♯ · B · D"}},
+  A7:   {sym:"A7",   name:{it:"La settima",en:"A seventh"},                       frets:['x',0,2,0,2,0], fingers:[0,0,2,0,3,0], deg:"1 · 3 · 5 · ♭7",  notes:{it:"La · Do♯ · Mi · Sol",en:"A · C♯ · E · G"}},
+  B7:   {sym:"B7",   name:{it:"Si settima",en:"B seventh"},                       frets:['x',2,1,2,0,2], fingers:[0,2,1,3,0,4], deg:"1 · 3 · 5 · ♭7",  notes:{it:"Si · Re♯ · Fa♯ · La",en:"B · D♯ · F♯ · A"}},
 
-  Cmaj7:{sym:"Cmaj7",it:"Do settima maggiore",   frets:['x',3,2,0,0,0], fingers:[0,3,2,0,0,0], deg:"1 · 3 · 5 · 7",   notes:"Do · Mi · Sol · Si"},
-  Amaj7:{sym:"Amaj7",it:"La settima maggiore",   frets:['x',0,2,1,2,0], fingers:[0,0,2,1,3,0], deg:"1 · 3 · 5 · 7",   notes:"La · Do♯ · Mi · Sol♯"},
-  Dmaj7:{sym:"Dmaj7",it:"Re settima maggiore",   frets:['x','x',0,2,2,2],fingers:[0,0,0,1,1,1],deg:"1 · 3 · 5 · 7",   notes:"Re · Fa♯ · La · Do♯"},
-  Fmaj7:{sym:"Fmaj7",it:"Fa settima maggiore",   frets:['x','x',3,2,1,0],fingers:[0,0,3,2,1,0],deg:"1 · 3 · 5 · 7",   notes:"Fa · La · Do · Mi"},
-  Gmaj7:{sym:"Gmaj7",it:"Sol settima maggiore",  frets:[3,2,0,0,0,2],   fingers:[3,1,0,0,0,2], deg:"1 · 3 · 5 · 7",   notes:"Sol · Si · Re · Fa♯"},
-  Emaj7:{sym:"Emaj7",it:"Mi settima maggiore",   frets:[0,2,1,1,0,0],   fingers:[0,3,1,2,0,0], deg:"1 · 3 · 5 · 7",   notes:"Mi · Sol♯ · Si · Re♯"},
+  Cmaj7:{sym:"Cmaj7",name:{it:"Do settima maggiore",en:"C major seventh"},        frets:['x',3,2,0,0,0], fingers:[0,3,2,0,0,0], deg:"1 · 3 · 5 · 7",   notes:{it:"Do · Mi · Sol · Si",en:"C · E · G · B"}},
+  Amaj7:{sym:"Amaj7",name:{it:"La settima maggiore",en:"A major seventh"},        frets:['x',0,2,1,2,0], fingers:[0,0,2,1,3,0], deg:"1 · 3 · 5 · 7",   notes:{it:"La · Do♯ · Mi · Sol♯",en:"A · C♯ · E · G♯"}},
+  Dmaj7:{sym:"Dmaj7",name:{it:"Re settima maggiore",en:"D major seventh"},        frets:['x','x',0,2,2,2],fingers:[0,0,0,1,1,1],deg:"1 · 3 · 5 · 7",   notes:{it:"Re · Fa♯ · La · Do♯",en:"D · F♯ · A · C♯"}},
+  Fmaj7:{sym:"Fmaj7",name:{it:"Fa settima maggiore",en:"F major seventh"},        frets:['x','x',3,2,1,0],fingers:[0,0,3,2,1,0],deg:"1 · 3 · 5 · 7",   notes:{it:"Fa · La · Do · Mi",en:"F · A · C · E"}},
+  Gmaj7:{sym:"Gmaj7",name:{it:"Sol settima maggiore",en:"G major seventh"},       frets:[3,2,0,0,0,2],   fingers:[3,1,0,0,0,2], deg:"1 · 3 · 5 · 7",   notes:{it:"Sol · Si · Re · Fa♯",en:"G · B · D · F♯"}},
+  Emaj7:{sym:"Emaj7",name:{it:"Mi settima maggiore",en:"E major seventh"},        frets:[0,2,1,1,0,0],   fingers:[0,3,1,2,0,0], deg:"1 · 3 · 5 · 7",   notes:{it:"Mi · Sol♯ · Si · Re♯",en:"E · G♯ · B · D♯"}},
 
-  Am7:  {sym:"Am7",  it:"La minore settima",     frets:['x',0,2,0,1,0], fingers:[0,0,2,0,1,0], deg:"1 · ♭3 · 5 · ♭7", notes:"La · Do · Mi · Sol"},
-  Em7:  {sym:"Em7",  it:"Mi minore settima",     frets:[0,2,0,0,0,0],   fingers:[0,2,0,0,0,0], deg:"1 · ♭3 · 5 · ♭7", notes:"Mi · Sol · Si · Re"},
-  Dm7:  {sym:"Dm7",  it:"Re minore settima",     frets:['x','x',0,2,1,1],fingers:[0,0,0,2,1,1],deg:"1 · ♭3 · 5 · ♭7", notes:"Re · Fa · La · Do"},
-  Bm7:  {sym:"Bm7",  it:"Si minore settima",     frets:['x',2,0,2,0,2], fingers:[0,1,0,2,0,3], deg:"1 · ♭3 · 5 · ♭7", notes:"Si · Re · Fa♯ · La"},
+  Am7:  {sym:"Am7",  name:{it:"La minore settima",en:"A minor seventh"},          frets:['x',0,2,0,1,0], fingers:[0,0,2,0,1,0], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"La · Do · Mi · Sol",en:"A · C · E · G"}},
+  Em7:  {sym:"Em7",  name:{it:"Mi minore settima",en:"E minor seventh"},          frets:[0,2,0,0,0,0],   fingers:[0,2,0,0,0,0], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Mi · Sol · Si · Re",en:"E · G · B · D"}},
+  Dm7:  {sym:"Dm7",  name:{it:"Re minore settima",en:"D minor seventh"},          frets:['x','x',0,2,1,1],fingers:[0,0,0,2,1,1],deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Re · Fa · La · Do",en:"D · F · A · C"}},
+  Bm7:  {sym:"Bm7",  name:{it:"Si minore settima",en:"B minor seventh"},          frets:['x',2,0,2,0,2], fingers:[0,1,0,2,0,3], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Si · Re · Fa♯ · La",en:"B · D · F♯ · A"}},
 
-  Asus2:{sym:"Asus2",it:"La sospesa (sus2)",     frets:['x',0,2,2,0,0], fingers:[0,0,1,2,0,0], deg:"1 · 2 · 5",       notes:"La · Si · Mi"},
-  Asus4:{sym:"Asus4",it:"La sospesa (sus4)",     frets:['x',0,2,2,3,0], fingers:[0,0,1,2,3,0], deg:"1 · 4 · 5",       notes:"La · Re · Mi"},
-  Dsus2:{sym:"Dsus2",it:"Re sospesa (sus2)",     frets:['x','x',0,2,3,0],fingers:[0,0,0,1,3,0],deg:"1 · 2 · 5",       notes:"Re · Mi · La"},
-  Dsus4:{sym:"Dsus4",it:"Re sospesa (sus4)",     frets:['x','x',0,2,3,3],fingers:[0,0,0,1,2,3],deg:"1 · 4 · 5",       notes:"Re · Sol · La"},
-  Esus4:{sym:"Esus4",it:"Mi sospesa (sus4)",     frets:[0,2,2,2,0,0],   fingers:[0,1,2,3,0,0], deg:"1 · 4 · 5",       notes:"Mi · La · Si"},
-  Cadd9:{sym:"Cadd9",it:"Do add9",               frets:['x',3,2,0,3,0], fingers:[0,2,1,0,3,0], deg:"1 · 3 · 5 · 9",   notes:"Do · Mi · Sol · Re"},
+  Asus2:{sym:"Asus2",name:{it:"La sospesa (sus2)",en:"A suspended (sus2)"},       frets:['x',0,2,2,0,0], fingers:[0,0,1,2,0,0], deg:"1 · 2 · 5",       notes:{it:"La · Si · Mi",en:"A · B · E"}},
+  Asus4:{sym:"Asus4",name:{it:"La sospesa (sus4)",en:"A suspended (sus4)"},       frets:['x',0,2,2,3,0], fingers:[0,0,1,2,3,0], deg:"1 · 4 · 5",       notes:{it:"La · Re · Mi",en:"A · D · E"}},
+  Dsus2:{sym:"Dsus2",name:{it:"Re sospesa (sus2)",en:"D suspended (sus2)"},       frets:['x','x',0,2,3,0],fingers:[0,0,0,1,3,0],deg:"1 · 2 · 5",       notes:{it:"Re · Mi · La",en:"D · E · A"}},
+  Dsus4:{sym:"Dsus4",name:{it:"Re sospesa (sus4)",en:"D suspended (sus4)"},       frets:['x','x',0,2,3,3],fingers:[0,0,0,1,2,3],deg:"1 · 4 · 5",       notes:{it:"Re · Sol · La",en:"D · G · A"}},
+  Esus4:{sym:"Esus4",name:{it:"Mi sospesa (sus4)",en:"E suspended (sus4)"},       frets:[0,2,2,2,0,0],   fingers:[0,1,2,3,0,0], deg:"1 · 4 · 5",       notes:{it:"Mi · La · Si",en:"E · A · B"}},
+  Cadd9:{sym:"Cadd9",name:{it:"Do add9",en:"C add9"},                             frets:['x',3,2,0,3,0], fingers:[0,2,1,0,3,0], deg:"1 · 3 · 5 · 9",   notes:{it:"Do · Mi · Sol · Re",en:"C · E · G · D"}},
 
-  F:    {sym:"F",    it:"Fa maggiore (barré)",   frets:[1,3,3,2,1,1],   fingers:[1,3,4,2,1,1], deg:"1 · 3 · 5",       notes:"Fa · La · Do"},
-  Bb:   {sym:"B♭",   it:"Si♭ maggiore (barré)",  frets:['x',1,3,3,3,1], fingers:[0,1,3,3,3,1], deg:"1 · 3 · 5",       notes:"Si♭ · Re · Fa"},
-  Fm:   {sym:"Fm",   it:"Fa minore (barré)",     frets:[1,3,3,1,1,1],   fingers:[1,3,4,1,1,1], deg:"1 · ♭3 · 5",      notes:"Fa · La♭ · Do"},
-  Fsm:  {sym:"F♯m",  it:"Fa♯ minore (barré)",    frets:[2,4,4,2,2,2],   fingers:[1,3,4,1,1,1], deg:"1 · ♭3 · 5",      notes:"Fa♯ · La · Do♯"},
-  B:    {sym:"B",    it:"Si maggiore (barré)",   frets:['x',2,4,4,4,2], fingers:[0,1,3,3,3,1], deg:"1 · 3 · 5",       notes:"Si · Re♯ · Fa♯"},
+  F:    {sym:"F",    name:{it:"Fa maggiore (barré)",en:"F major (barre)"},        frets:[1,3,3,2,1,1],   fingers:[1,3,4,2,1,1], deg:"1 · 3 · 5",       notes:{it:"Fa · La · Do",en:"F · A · C"}},
+  Bb:   {sym:"B♭",   name:{it:"Si♭ maggiore (barré)",en:"B♭ major (barre)"},      frets:['x',1,3,3,3,1], fingers:[0,1,3,3,3,1], deg:"1 · 3 · 5",       notes:{it:"Si♭ · Re · Fa",en:"B♭ · D · F"}},
+  Fm:   {sym:"Fm",   name:{it:"Fa minore (barré)",en:"F minor (barre)"},          frets:[1,3,3,1,1,1],   fingers:[1,3,4,1,1,1], deg:"1 · ♭3 · 5",      notes:{it:"Fa · La♭ · Do",en:"F · A♭ · C"}},
+  Fsm:  {sym:"F♯m",  name:{it:"Fa♯ minore (barré)",en:"F♯ minor (barre)"},        frets:[2,4,4,2,2,2],   fingers:[1,3,4,1,1,1], deg:"1 · ♭3 · 5",      notes:{it:"Fa♯ · La · Do♯",en:"F♯ · A · C♯"}},
+  B:    {sym:"B",    name:{it:"Si maggiore (barré)",en:"B major (barre)"},        frets:['x',2,4,4,4,2], fingers:[0,1,3,3,3,1], deg:"1 · 3 · 5",       notes:{it:"Si · Re♯ · Fa♯",en:"B · D♯ · F♯"}},
 };
 
 const DECKS = [
-  {group:"diff", id:"beg",  nm:"Principiante", sb:"Accordi aperti fondamentali", ch:["Em","Am","C","G","D","E","A","Dm"]},
-  {group:"diff", id:"int",  nm:"Intermedio", sb:"Settime aperte e colori", ch:["G7","C7","D7","E7","A7","Em7","Am7","Dm7","Asus2","Dsus4","Cadd9"]},
-  {group:"diff", id:"adv",  nm:"Avanzato", sb:"Barré e forme mobili", ch:["F","Bb","Fm","Fsm","B","Bm"]},
+  {group:"diff", id:"beg",  nm:{it:"Principiante",en:"Beginner"}, sb:{it:"Accordi aperti fondamentali",en:"Fundamental open chords"}, ch:["Em","Am","C","G","D","E","A","Dm"]},
+  {group:"diff", id:"int",  nm:{it:"Intermedio",en:"Intermediate"}, sb:{it:"Settime aperte e colori",en:"Open sevenths and colors"}, ch:["G7","C7","D7","E7","A7","Em7","Am7","Dm7","Asus2","Dsus4","Cadd9"]},
+  {group:"diff", id:"adv",  nm:{it:"Avanzato",en:"Advanced"}, sb:{it:"Barré e forme mobili",en:"Barre chords and movable shapes"}, ch:["F","Bb","Fm","Fsm","B","Bm"]},
 
-  {group:"th", id:"maj",  nm:"Triadi maggiori", sb:"Costruzione 1 · 3 · 5", ch:["C","A","G","E","D"]},
-  {group:"th", id:"min",  nm:"Triadi minori", sb:"La 3ª si abbassa · 1 · ♭3 · 5", ch:["Am","Em","Dm","Bm"]},
-  {group:"th", id:"dom",  nm:"Settime di dominante", sb:"Aggiungi la ♭7 · 1 · 3 · 5 · ♭7", ch:["G7","C7","D7","E7","A7","B7"]},
-  {group:"th", id:"maj7", nm:"Settime maggiori", sb:"7ª naturale · 1 · 3 · 5 · 7", ch:["Cmaj7","Amaj7","Dmaj7","Fmaj7","Gmaj7","Emaj7"]},
-  {group:"th", id:"min7", nm:"Settime minori", sb:"♭3 e ♭7 · 1 · ♭3 · 5 · ♭7", ch:["Am7","Em7","Dm7","Bm7"]},
-  {group:"th", id:"col",  nm:"Accordi di colore", sb:"sus e add: sostituisci o aggiungi", ch:["Asus2","Asus4","Dsus2","Dsus4","Esus4","Cadd9"]},
+  {group:"th", id:"maj",  nm:{it:"Triadi maggiori",en:"Major triads"}, sb:{it:"Costruzione 1 · 3 · 5",en:"Built as 1 · 3 · 5"}, ch:["C","A","G","E","D"]},
+  {group:"th", id:"min",  nm:{it:"Triadi minori",en:"Minor triads"}, sb:{it:"La 3ª si abbassa · 1 · ♭3 · 5",en:"The 3rd drops · 1 · ♭3 · 5"}, ch:["Am","Em","Dm","Bm"]},
+  {group:"th", id:"dom",  nm:{it:"Settime di dominante",en:"Dominant sevenths"}, sb:{it:"Aggiungi la ♭7 · 1 · 3 · 5 · ♭7",en:"Add the ♭7 · 1 · 3 · 5 · ♭7"}, ch:["G7","C7","D7","E7","A7","B7"]},
+  {group:"th", id:"maj7", nm:{it:"Settime maggiori",en:"Major sevenths"}, sb:{it:"7ª naturale · 1 · 3 · 5 · 7",en:"Natural 7th · 1 · 3 · 5 · 7"}, ch:["Cmaj7","Amaj7","Dmaj7","Fmaj7","Gmaj7","Emaj7"]},
+  {group:"th", id:"min7", nm:{it:"Settime minori",en:"Minor sevenths"}, sb:{it:"♭3 e ♭7 · 1 · ♭3 · 5 · ♭7",en:"♭3 and ♭7 · 1 · ♭3 · 5 · ♭7"}, ch:["Am7","Em7","Dm7","Bm7"]},
+  {group:"th", id:"col",  nm:{it:"Accordi di colore",en:"Color chords"}, sb:{it:"sus e add: sostituisci o aggiungi",en:"sus & add: replace or add a note"}, ch:["Asus2","Asus4","Dsus2","Dsus4","Esus4","Cadd9"]},
 ];
+
+/* ============ persistence (safe) ============ */
+function load(k){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
+function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+function detectLang(){
+  const saved = load("chordtrainer.lang.v1");
+  if(saved==="it" || saved==="en") return saved;
+  try{ if(navigator.language && navigator.language.toLowerCase().startsWith("en")) return "en"; }catch(e){}
+  return "it";
+}
 
 /* ============ STATE ============ */
 const S = {
   mode:"auto",
+  lang: detectLang(),
   revealMs:3000, studyMs:4000,
   shuffle:true, loop:true, spell:true,
   deckId:null,
@@ -489,9 +633,12 @@ const S = {
   mastery:load("chordtrainer.mastery.v1") || {}, // sym -> box 1..5
 };
 
-/* ============ persistence (safe) ============ */
-function load(k){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
-function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+/* ============ translation helper ============ */
+function t(key){ const v=(I18N[S.lang]||I18N.it)[key]; return v!==undefined ? v : I18N.it[key]; }
+function fretOrdinal(n){
+  if(S.lang==="en"){ const s=["th","st","nd","rd"]; const v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
+  return n+"ª";
+}
 
 /* ============ SVG chord diagram ============ */
 function svgChord(c){
@@ -515,9 +662,9 @@ function svgChord(c){
   for(let i=0;i<6;i++){ const w=(2.5-i*0.28).toFixed(2);
     g.push(`<line class="string" style="stroke-width:${w}" x1="${xs[i]}" y1="${TOP-(showNut?2:0)}" x2="${xs[i]}" y2="${TOP+N*FSP}"/>`); }
   // fret position label
-  if(!showNut) g.push(`<text class="fretlab" x="${L-16}" y="${rowY(start)+4}" text-anchor="middle">${start}ª</text>`);
+  if(!showNut) g.push(`<text class="fretlab" x="${L-16}" y="${rowY(start)+4}" text-anchor="middle">${fretOrdinal(start)}</text>`);
   // string names
-  const names=["MI","LA","RE","SOL","SI","mi"];
+  const names=t('stringNames');
   for(let i=0;i<6;i++) g.push(`<text class="slabel" x="${xs[i]}" y="${TOP+N*FSP+22}" text-anchor="middle">${names[i]}</text>`);
 
   // markers group (o / x) above nut
@@ -540,7 +687,7 @@ function svgChord(c){
     dots.push(`<circle class="dot" cx="${xs[i]}" cy="${y}" r="13"/>`);
     if(c.fingers[i]>0) dots.push(`<text class="dotnum" x="${xs[i]}" y="${y+5}">${c.fingers[i]}</text>`); } }
 
-  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Diagramma accordo ${c.sym}">
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${t('chordDiagramAria')} ${c.sym}">
     <g>${g.join("")}</g>
     <g class="markg">${mk.join("")}</g>
     <g class="dotg">${bars.join("")}${dots.join("")}</g>
@@ -561,24 +708,24 @@ const el = id => document.getElementById(id);
 function miniDiagram(){
   // small decorative neck glyph used as a deck marker
   let lines="";
-  for(let i=0;i<5;i++){ const x=8+i*6; lines+=`<line x1="${x}" y1="5" x2="${x}" y2="31" stroke="#5f656d" stroke-width="1"/>`; }
-  for(let r=0;r<4;r++){ const y=5+r*8; lines+=`<line x1="8" y1="${y}" x2="32" y2="${y}" stroke="#4a3d2c" stroke-width="1"/>`; }
-  return `<svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="7" fill="#1d1610"/>${lines}<circle cx="20" cy="21" r="4" fill="#4fa893" opacity=".9"/></svg>`;
+  for(let i=0;i<5;i++){ const x=8+i*6; lines+=`<line x1="${x}" y1="5" x2="${x}" y2="31" stroke="#c9c3b3" stroke-width="1"/>`; }
+  for(let r=0;r<4;r++){ const y=5+r*8; lines+=`<line x1="8" y1="${y}" x2="32" y2="${y}" stroke="#d8d3c4" stroke-width="1"/>`; }
+  return `<svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="7" fill="#f2efe6"/>${lines}<circle cx="20" cy="21" r="4" fill="#0f9d84" opacity=".9"/></svg>`;
 }
 
 function renderDecks(){
   const wrap=el("deckList"); wrap.innerHTML="";
-  const groups=[{k:"diff",t:"Per difficoltà"},{k:"th",t:"Per costruzione teorica"}];
+  const groups=[{k:"diff",label:t('groupDiff')},{k:"th",label:t('groupTh')}];
   groups.forEach(gr=>{
-    const lab=document.createElement("div"); lab.className="group-label"; lab.textContent=gr.t; wrap.appendChild(lab);
+    const lab=document.createElement("div"); lab.className="group-label"; lab.textContent=gr.label; wrap.appendChild(lab);
     DECKS.filter(d=>d.group===gr.k).forEach(d=>{
       const mastered=d.ch.filter(s=>(S.mastery[s]||1)>=4).length;
       const pct=Math.round(100*mastered/d.ch.length);
       const b=document.createElement("button");
       b.className="deck"; b.setAttribute("aria-pressed", S.deckId===d.id);
       b.innerHTML=`<span class="mini">${miniDiagram()}</span>
-        <span class="txt"><span class="nm">${d.nm}</span><span class="sb">${d.sb}</span></span>
-        <span class="ct">${d.ch.length} accordi</span>
+        <span class="txt"><span class="nm">${d.nm[S.lang]}</span><span class="sb">${d.sb[S.lang]}</span></span>
+        <span class="ct">${d.ch.length} ${t('chordsSuffix')}</span>
         <span class="prog"><i style="width:${pct}%"></i></span>`;
       b.onclick=()=>{ S.deckId=d.id; renderDecks(); updateStart(); };
       wrap.appendChild(b);
@@ -588,7 +735,7 @@ function renderDecks(){
 function updateStart(){
   const d=DECKS.find(x=>x.id===S.deckId);
   el("startBtn").disabled=!d;
-  el("startLabel").textContent = d ? `Inizia · ${d.nm}` : "Scegli un insieme";
+  el("startLabel").textContent = d ? `${t('startBegin')} · ${d.nm[S.lang]}` : t('startChoose');
 }
 
 /* ============ controls wiring ============ */
@@ -600,7 +747,7 @@ el("modeSeg").addEventListener("click",e=>{
   [...el("modeSeg").children].forEach(b=>b.setAttribute("aria-pressed", b===btn));
   const adaptive=S.mode==="adaptive";
   el("studyCtrl").classList.toggle("dim", adaptive);
-  el("revealLab").textContent = adaptive ? "Attesa base (si accorcia con la padronanza)" : "Attesa prima della posizione";
+  el("revealLab").textContent = adaptive ? t('revealLabAdaptive') : t('revealLabAuto');
 });
 
 el("revealRange").addEventListener("input",e=>{ S.revealMs=e.target.value*1000; el("revealVal").textContent=(+e.target.value).toFixed(1)+" s"; setPct(e.target); });
@@ -643,7 +790,7 @@ function startSession(){
   el("home").style.display="none";
   el("stage").classList.add("on");
   const d=DECKS.find(x=>x.id===S.deckId);
-  el("stDeck").textContent=d.nm;
+  el("stDeck").textContent=d.nm[S.lang];
   const adaptive=S.mode==="adaptive";
   el("pips").classList.toggle("hide", !adaptive);
   el("transport").style.display = adaptive ? "none" : "flex";
@@ -682,9 +829,9 @@ function effectiveReveal(sym){
 function showPrompt(sym){
   const c=CH[sym]; S.phase="prompt";
   el("symbol").innerHTML=fmtSymbol(c.sym);
-  el("itname").textContent=c.it;
+  el("itname").textContent=c.name[S.lang];
   el("diagram").innerHTML=svgChord(c);
-  el("neckCap").textContent="Visualizza la diteggiatura";
+  el("neckCap").textContent=t('neckCap');
   el("neckCap").style.opacity="1";
   el("spell").classList.remove("show");
   el("rateRow").classList.add("hide");
@@ -721,8 +868,8 @@ function reveal(){
   if(svg) svg.classList.add("is-revealed");
   const c=CH[S.queue[S.qi]];
   if(S.spell){
-    el("spellDeg").innerHTML=`<b>gradi</b><span>${c.deg}</span>`;
-    el("spellNotes").innerHTML=`<b>note</b>${c.notes}`;
+    el("spellDeg").innerHTML=`<b>${t('spellDeg')}</b><span>${c.deg}</span>`;
+    el("spellNotes").innerHTML=`<b>${t('spellNotes')}</b>${c.notes[S.lang]}`;
     el("spell").classList.add("show");
   }
   if(S.mode==="adaptive"){
@@ -745,12 +892,12 @@ function rate(v){
 
 function finishSession(){
   const d=DECKS.find(x=>x.id===S.deckId);
-  toast(`Giro completato · ${d.nm}`);
+  toast(`${t('finishToast')} · ${d.nm[S.lang]}`);
   later(()=>exitSession(), 900);
 }
 
 function updatePos(){
-  el("stPos").textContent = `${S.qi+1} / ${S.queue.length}` + (S.loop?" · in ciclo":"");
+  el("stPos").textContent = `${S.qi+1} / ${S.queue.length}` + (S.loop?" · "+t('loopingSuffix'):"");
 }
 function updatePips(sym){
   if(S.mode!=="adaptive") return;
@@ -763,7 +910,7 @@ function setPlayIcon(){
   el("playIcon").innerHTML = S.paused
     ? '<path d="M7 5v14l12-7z"/>'
     : '<path d="M6 5h4v14H6zM14 5h4v14h-4z"/>';
-  el("playBtn").setAttribute("aria-label", S.paused?"Riprendi":"Pausa");
+  el("playBtn").setAttribute("aria-label", S.paused?t('resumeAria'):t('pauseAria'));
 }
 function togglePlay(){
   S.paused=!S.paused; setPlayIcon();
@@ -778,12 +925,88 @@ function togglePlay(){
 
 /* toast */
 let toastT;
-function toast(msg){ const t=el("toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("on"),1600); }
+function toast(msg){ const box=el("toast"); box.textContent=msg; box.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>box.classList.remove("on"),1600); }
+
+/* ============ LANGUAGE SWITCHING ============ */
+function updateLangButtons(){
+  const other = S.lang==="it" ? "en" : "it";
+  const flag = other==="it" ? "🇮🇹" : "🇬🇧";
+  const code = other==="it" ? "IT" : "EN";
+  ["langToggle","langToggleStage","langToggleTheory"].forEach(id=>{
+    const b=el(id); if(!b) return;
+    const f=b.querySelector(".flag"); if(f) f.textContent=flag;
+    const cd=b.querySelector(".langcode"); if(cd) cd.textContent=code;
+    b.setAttribute("aria-label", t('langSwitchAria'));
+  });
+}
+
+function applyLangStatic(){
+  el("tagline").textContent=t('tagline');
+  el("thOpenTitle").textContent=t('theoryOpenTitle');
+  el("thOpenSub").textContent=t('theoryOpenSub');
+  el("modeHeading").textContent=t('modeHeading');
+  el("modeSeg").setAttribute("aria-label", t('modeGroupLabel'));
+  el("modeAutoLab").textContent=t('modeAuto');
+  el("modeAutoSub").textContent=t('modeAutoSub');
+  el("modeAdaptiveLab").textContent=t('modeAdaptive');
+  el("modeAdaptiveSub").textContent=t('modeAdaptiveSub');
+  const adaptive=S.mode==="adaptive";
+  el("revealLab").textContent = adaptive ? t('revealLabAdaptive') : t('revealLabAuto');
+  el("studyLab").textContent=t('studyLab');
+  el("tglShuffleLab").textContent=t('tglShuffle');
+  el("tglLoopLab").textContent=t('tglLoop');
+  el("tglSpellLab").textContent=t('tglSpell');
+  el("exitBtn").setAttribute("aria-label", t('exitAria'));
+  el("shuffleBtn").setAttribute("aria-label", t('shuffleAria'));
+  el("hintBtn").textContent=t('hintBtn');
+  el("rateNoLab").textContent=t('rateNo');
+  el("rateMidLab").textContent=t('rateMid');
+  el("rateYesLab").textContent=t('rateYes');
+  el("prevBtn").setAttribute("aria-label", t('prevAria'));
+  el("nextBtn").setAttribute("aria-label", t('nextAria'));
+  setPlayIcon();
+  el("closeTheory").setAttribute("aria-label", t('closeTheoryAria'));
+  el("theoryTopTitle").textContent=t('theoryTitle');
+  el("theoryTopSub").textContent=t('theorySub');
+  document.documentElement.lang = S.lang;
+  document.title = t('pageTitle');
+  const metaDesc = document.getElementById('metaDescription');
+  if(metaDesc) metaDesc.setAttribute('content', t('metaDescription'));
+  updateLangButtons();
+}
+
+function refreshCardTexts(){
+  if(!el("stage").classList.contains("on")) return;
+  const sym=S.queue[S.qi]; if(!sym || !CH[sym]) return;
+  const c=CH[sym];
+  el("itname").textContent=c.name[S.lang];
+  el("diagram").innerHTML=svgChord(c);
+  if(S.phase==="reveal"){
+    const svg=el("diagram").querySelector("svg"); if(svg) svg.classList.add("is-revealed");
+    if(S.spell){
+      el("spellDeg").innerHTML=`<b>${t('spellDeg')}</b><span>${c.deg}</span>`;
+      el("spellNotes").innerHTML=`<b>${t('spellNotes')}</b>${c.notes[S.lang]}`;
+    }
+  }
+  updatePos();
+}
+
+function toggleLang(){
+  S.lang = S.lang==="it" ? "en" : "it";
+  save("chordtrainer.lang.v1", S.lang);
+  applyLangStatic();
+  renderDecks(); updateStart();
+  if(el("theory").classList.contains("on")) renderTheory();
+  refreshCardTexts();
+}
+["langToggle","langToggleStage","langToggleTheory"].forEach(id=>{
+  const b=el(id); if(b) b.onclick=toggleLang;
+});
 
 /* stage events */
 el("startBtn").onclick=()=>{ if(S.deckId) startSession(); };
 el("exitBtn").onclick=exitSession;
-el("shuffleBtn").onclick=()=>{ buildQueue(); nextCard(); toast("Rimescolato"); };
+el("shuffleBtn").onclick=()=>{ buildQueue(); nextCard(); toast(t('shuffleToast')); };
 el("playBtn").onclick=togglePlay;
 el("nextBtn").onclick=()=>nextCard();
 el("prevBtn").onclick=()=>prevCard();
@@ -808,99 +1031,129 @@ document.addEventListener("keydown",e=>{
 
 /* ============ THEORY ============ */
 const THEORY = [
-  { eyebrow:"Triade · 3 note", title:"Triade maggiore", deckId:"maj",
+  { deckId:"maj",
     formula:['1','<span class="hl">3</span>','5'],
-    recipe:"Fondamentale, <b>terza maggiore</b> (4 semitoni) e quinta giusta (7). È la triade di base.",
-    sound:"Il suono pieno, aperto e stabile.",
+    it:{eyebrow:"Triade · 3 note", title:"Triade maggiore",
+      recipe:"Fondamentale, <b>terza maggiore</b> (4 semitoni) e quinta giusta (7). È la triade di base.",
+      sound:"Il suono pieno, aperto e stabile."},
+    en:{eyebrow:"Triad · 3 notes", title:"Major triad",
+      recipe:"Root, <b>major third</b> (4 semitones) and perfect fifth (7). This is the basic triad.",
+      sound:"A full, open, stable sound."},
     tones:[{d:'1',s:0,c:'root'},{d:'3',s:4,c:'alt'},{d:'5',s:7,c:''}] },
 
-  { eyebrow:"Triade · 3 note", title:"Triade minore", deckId:"min",
+  { deckId:"min",
     formula:['1','<span class="hl">♭3</span>','5'],
-    recipe:"Stessa triade, ma la terza scende di un semitono → <b>terza minore</b> (3 semitoni). Cambia solo quella nota.",
-    sound:"Colore più scuro e malinconico.",
+    it:{eyebrow:"Triade · 3 note", title:"Triade minore",
+      recipe:"Stessa triade, ma la terza scende di un semitono → <b>terza minore</b> (3 semitoni). Cambia solo quella nota.",
+      sound:"Colore più scuro e malinconico."},
+    en:{eyebrow:"Triad · 3 notes", title:"Minor triad",
+      recipe:"Same triad, but the third drops by one semitone → <b>minor third</b> (3 semitones). Only that note changes.",
+      sound:"A darker, more melancholic color."},
     tones:[{d:'1',s:0,c:'root'},{d:'♭3',s:3,c:'alt'},{d:'5',s:7,c:''}] },
 
-  { eyebrow:"Settima · 4 note", title:"Settima di dominante", deckId:"dom",
+  { deckId:"dom",
     formula:['1','3','5','<span class="hl">♭7</span>'],
-    recipe:"Triade maggiore + <b>settima minore</b> (10 semitoni). La quarta nota si aggiunge impilando un'altra terza.",
-    sound:"Instabile: “tira” verso la risoluzione (il classico V7 → I).",
+    it:{eyebrow:"Settima · 4 note", title:"Settima di dominante",
+      recipe:"Triade maggiore + <b>settima minore</b> (10 semitoni). La quarta nota si aggiunge impilando un'altra terza.",
+      sound:"Instabile: “tira” verso la risoluzione (il classico V7 → I)."},
+    en:{eyebrow:"Seventh · 4 notes", title:"Dominant seventh",
+      recipe:"Major triad + <b>minor seventh</b> (10 semitones). The fourth note is added by stacking one more third.",
+      sound:"Unstable: it “pulls” toward resolution (the classic V7 → I)."},
     tones:[{d:'1',s:0,c:'root'},{d:'3',s:4,c:''},{d:'5',s:7,c:''},{d:'♭7',s:10,c:'alt'}] },
 
-  { eyebrow:"Settima · 4 note", title:"Settima maggiore", deckId:"maj7",
+  { deckId:"maj7",
     formula:['1','3','5','<span class="hl">7</span>'],
-    recipe:"Triade maggiore + <b>settima maggiore</b> (11 semitoni): la settima sfiora l'ottava.",
-    sound:"Morbido e luminoso, la sonorità tipica del jazz.",
+    it:{eyebrow:"Settima · 4 note", title:"Settima maggiore",
+      recipe:"Triade maggiore + <b>settima maggiore</b> (11 semitoni): la settima sfiora l'ottava.",
+      sound:"Morbido e luminoso, la sonorità tipica del jazz."},
+    en:{eyebrow:"Seventh · 4 notes", title:"Major seventh",
+      recipe:"Major triad + <b>major seventh</b> (11 semitones): the seventh sits just below the octave.",
+      sound:"Soft and bright, the classic jazz sound."},
     tones:[{d:'1',s:0,c:'root'},{d:'3',s:4,c:''},{d:'5',s:7,c:''},{d:'7',s:11,c:'alt'}] },
 
-  { eyebrow:"Settima · 4 note", title:"Settima minore", deckId:"min7",
+  { deckId:"min7",
     formula:['1','<span class="hl">♭3</span>','5','<span class="hl">♭7</span>'],
-    recipe:"Triade minore + settima minore: terza <b>e</b> settima abbassate (3 e 10 semitoni).",
-    sound:"Caldo, attenuato, poco teso.",
+    it:{eyebrow:"Settima · 4 note", title:"Settima minore",
+      recipe:"Triade minore + settima minore: terza <b>e</b> settima abbassate (3 e 10 semitoni).",
+      sound:"Caldo, attenuato, poco teso."},
+    en:{eyebrow:"Seventh · 4 notes", title:"Minor seventh",
+      recipe:"Minor triad + minor seventh: <b>both</b> the third and seventh are lowered (3 and 10 semitones).",
+      sound:"Warm, mellow, low tension."},
     tones:[{d:'1',s:0,c:'root'},{d:'♭3',s:3,c:'alt'},{d:'5',s:7,c:''},{d:'♭7',s:10,c:'alt'}] },
 
-  { eyebrow:"Sospeso · niente terza", title:"Sospeso sus4", deckId:"col",
+  { deckId:"col",
     formula:['1','<span class="hl">4</span>','5'],
-    recipe:"Togli la terza e mettila <b>quarta giusta</b> (5 semitoni). Senza terza non è né maggiore né minore.",
-    sound:"In sospensione: vuole scendere sulla terza.",
+    it:{eyebrow:"Sospeso · niente terza", title:"Sospeso sus4",
+      recipe:"Togli la terza e mettila <b>quarta giusta</b> (5 semitoni). Senza terza non è né maggiore né minore.",
+      sound:"In sospensione: vuole scendere sulla terza."},
+    en:{eyebrow:"Suspended · no third", title:"Suspended sus4",
+      recipe:"Remove the third and put a <b>perfect fourth</b> in its place (5 semitones). Without a third, it's neither major nor minor.",
+      sound:"Suspended: it wants to resolve down to the third."},
     tones:[{d:'1',s:0,c:'root'},{d:'4',s:5,c:'alt'},{d:'5',s:7,c:''}] },
 
-  { eyebrow:"Sospeso · niente terza", title:"Sospeso sus2", deckId:"col",
+  { deckId:"col",
     formula:['1','<span class="hl">2</span>','5'],
-    recipe:"Stessa idea, ma la terza è rimpiazzata dalla <b>seconda</b> (2 semitoni).",
-    sound:"Aperto e cristallino.",
+    it:{eyebrow:"Sospeso · niente terza", title:"Sospeso sus2",
+      recipe:"Stessa idea, ma la terza è rimpiazzata dalla <b>seconda</b> (2 semitoni).",
+      sound:"Aperto e cristallino."},
+    en:{eyebrow:"Suspended · no third", title:"Suspended sus2",
+      recipe:"Same idea, but the third is replaced by the <b>second</b> (2 semitones).",
+      sound:"Open and crystalline."},
     tones:[{d:'1',s:0,c:'root'},{d:'2',s:2,c:'alt'},{d:'5',s:7,c:''}] },
 
-  { eyebrow:"Nota aggiunta · 4 note", title:"Accordo add9", deckId:"col",
+  { deckId:"col",
     formula:['1','3','5','<span class="hl">9</span>'],
-    recipe:"Triade maggiore + la <b>nona</b> (la seconda un'ottava sopra), <b>senza</b> la settima. “add” = aggiungi solo quel colore.",
-    sound:"Brillante, ma leggero: non appesantisce l'accordo.",
+    it:{eyebrow:"Nota aggiunta · 4 note", title:"Accordo add9",
+      recipe:"Triade maggiore + la <b>nona</b> (la seconda un'ottava sopra), <b>senza</b> la settima. “add” = aggiungi solo quel colore.",
+      sound:"Brillante, ma leggero: non appesantisce l'accordo."},
+    en:{eyebrow:"Added note · 4 notes", title:"Add9 chord",
+      recipe:"Major triad + the <b>ninth</b> (the second, an octave higher), <b>without</b> the seventh. “add” = add just that color.",
+      sound:"Bright but light: it doesn't weigh the chord down."},
     tones:[{d:'1',s:0,c:'root'},{d:'3',s:4,c:''},{d:'5',s:7,c:''},{d:'9',s:2,c:'alt',sub:'+8ᵃ'}] },
 ];
 
 function ruler(tones){
   const W=300,H=66,PAD=18,STEP=(W-2*PAD)/12, X=s=>PAD+s*STEP;
-  let t="";
-  t+=`<line class="rl-axis" x1="${X(0)}" y1="44" x2="${X(12)}" y2="44"/>`;
-  for(let s=0;s<=12;s++){ const oct=(s===0||s===12); t+=`<line class="rl-tick ${oct?'oct':''}" x1="${X(s)}" y1="${oct?36:40}" x2="${X(s)}" y2="48"/>`; }
-  t+=`<text class="rl-cap" x="${X(0)}" y="62">fond.</text>`;
-  t+=`<text class="rl-cap" x="${X(12)}" y="62">ottava</text>`;
+  let svgStr="";
+  svgStr+=`<line class="rl-axis" x1="${X(0)}" y1="44" x2="${X(12)}" y2="44"/>`;
+  for(let s=0;s<=12;s++){ const oct=(s===0||s===12); svgStr+=`<line class="rl-tick ${oct?'oct':''}" x1="${X(s)}" y1="${oct?36:40}" x2="${X(s)}" y2="48"/>`; }
+  svgStr+=`<text class="rl-cap" x="${X(0)}" y="62">${t('rulerRoot')}</text>`;
+  svgStr+=`<text class="rl-cap" x="${X(12)}" y="62">${t('rulerOctave')}</text>`;
   tones.forEach(o=>{
-    t+=`<circle class="rl-dot ${o.c}" cx="${X(o.s)}" cy="44" r="6"/>`;
-    t+=`<text class="rl-lab ${o.c}" x="${X(o.s)}" y="22">${o.d}</text>`;
-    if(o.sub) t+=`<text class="rl-sub" x="${X(o.s)}" y="34">${o.sub}</text>`;
+    svgStr+=`<circle class="rl-dot ${o.c}" cx="${X(o.s)}" cy="44" r="6"/>`;
+    svgStr+=`<text class="rl-lab ${o.c}" x="${X(o.s)}" y="22">${o.d}</text>`;
+    if(o.sub) svgStr+=`<text class="rl-sub" x="${X(o.s)}" y="34">${o.sub}</text>`;
   });
-  return `<svg class="th-ruler" viewBox="0 0 ${W} ${H}" width="100%" aria-hidden="true">${t}</svg>`;
+  return `<svg class="th-ruler" viewBox="0 0 ${W} ${H}" width="100%" aria-hidden="true">${svgStr}</svg>`;
 }
 
 function renderTheory(){
-  const scaleDeg=[['1','Do'],['2','Re'],['3','Mi'],['4','Fa'],['5','Sol'],['6','La'],['7','Si']];
+  const scaleDeg=t('scaleDeg');
   let h="";
-  h+=`<p class="th-intro">Quasi tutti gli accordi nascono impilando <b>terze</b> a partire da una nota, la <em>fondamentale</em>, prendendo le note da una scala. Non conta il nome assoluto delle note ma la loro <b>distanza</b> dalla fondamentale: è l'intervallo a decidere il colore. Come metro si usa la <b>scala maggiore</b>.</p>`;
-  h+=`<div class="th-ref"><p>I sette gradi della scala maggiore (qui in Do). I numeri sono i mattoni con cui si scrivono tutti gli accordi qui sotto.</p><div class="scale">`;
+  h+=`<p class="th-intro">${t('themeIntro')}</p>`;
+  h+=`<div class="th-ref"><p>${t('thRefP')}</p><div class="scale">`;
   scaleDeg.forEach(([n,nt])=>{ h+=`<div class="d">${n}<small>${nt}</small></div>`; });
   h+=`</div></div>`;
-  h+=`<p class="th-switch">Due “interruttori” governano quasi tutto: la <b>terza</b> distingue maggiore da minore, e la <b>settima</b> — con la sua misura — aggiunge la quarta nota e definisce la famiglia. Nei righelli qui sotto, in <span style="color:var(--abalone)">verde</span> è evidenziata la nota che caratterizza ciascun tipo.</p>`;
+  h+=`<p class="th-switch">${t('thSwitch')}</p>`;
 
   THEORY.forEach(f=>{
     const deck=DECKS.find(d=>d.id===f.deckId);
+    const L=f[S.lang];
     h+=`<div class="th-card">
-      <div class="th-eyebrow">${f.eyebrow}</div>
-      <h3>${f.title}</h3>
+      <div class="th-eyebrow">${L.eyebrow}</div>
+      <h3>${L.title}</h3>
       <div class="th-formula">${f.formula.join('<span style="color:var(--steel-faint)"> · </span>')}</div>
-      <div class="th-recipe">${f.recipe} <span class="snd">${f.sound}</span></div>
+      <div class="th-recipe">${L.recipe} <span class="snd">${L.sound}</span></div>
       ${ruler(f.tones)}
-      <button class="th-link" data-deck="${f.deckId}">Allenati · ${deck.nm}
+      <button class="th-link" data-deck="${f.deckId}">${t('trainLink')} · ${deck.nm[S.lang]}
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </button>
     </div>`;
   });
 
-  h+=`<div class="th-more"><h3>Oltre le basi</h3><dl>
-    <dt>Estensioni</dt><dd>Continuando a impilare terze oltre la settima si ottengono <b>9ª, 11ª, 13ª</b>: sono le note “alte” che aggiungono tensione e colore.</dd>
-    <dt>“add” contro accordo di nona</dt><dd><b>add9</b> aggiunge solo la nona senza la settima; l'accordo di <b>nona</b> (es. C9) include anche la ♭7. Stessa nota in cima, costruzione diversa.</dd>
-    <dt>Power chord (5)</dt><dd>Solo fondamentale e quinta, <b>senza la terza</b>: proprio perché manca la terza non è né maggiore né minore. È il suono del rock distorto.</dd>
-    <dt>Forme mobili e barré</dt><dd>Una forma sulla tastiera “congela” il pattern di intervalli: se la sposti lungo il manico cambia solo la fondamentale, non la qualità. È il motivo per cui gli accordi barré funzionano — vedi l'insieme <b>Avanzato</b>.</dd>
-  </dl></div>`;
+  h+=`<div class="th-more"><h3>${t('thMoreTitle')}</h3><dl>`;
+  t('thMoreItems').forEach(item=>{ h+=`<dt>${item.dt}</dt><dd>${item.dd}</dd>`; });
+  h+=`</dl></div>`;
 
   el("theoryBody").innerHTML=h;
 }
@@ -916,6 +1169,7 @@ el("theoryBody").addEventListener("click",e=>{
 });
 
 /* init */
+applyLangStatic();
 renderDecks(); updateStart();
 </script>
 </body>
