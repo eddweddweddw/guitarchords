@@ -32,7 +32,17 @@
     holdFrames:   16,  // quanto si tiene l'ultima lettura buona quando il suono cala
     smoothMin:  0.05,  // inseguimento minimo: fermo vicino al bersaglio
     smoothMax:  0.45,  // inseguimento massimo: pronto quando il bersaglio si sposta
-    smoothSpan:   40   // scarto (cent) al quale l'inseguimento è già al massimo
+    smoothSpan:   40,  // scarto (cent) al quale l'inseguimento è già al massimo
+
+    /* Ascolto degli accordi. Numeri diversi da quelli dell'accordatore perché
+       il problema è diverso: lì una nota che dura, qui sei corde insieme che
+       decadono. */
+    chordSize:     32768, // campioni tenuti in memoria: 0,68 s a 48 kHz
+    chordWindows:      3, // finestre di chroma da mediare
+    chordGate:     0.012, // sotto questo livello non è una pennata
+    chordRise:       2.5, // di quanto deve salire il livello per essere un attacco
+    chordWaitMs:     800, // attesa dall'attacco prima di giudicare
+    chordHoldMs:    1300  // pausa dopo un verdetto, prima di ascoltarne un altro
   };
 
   /* Nomi delle note come dato, non come stringa d'interfaccia: chi disegna
@@ -358,7 +368,10 @@
   let ctx = null, stream = null, node = null, analyser = null;
   let timer = null, raf = null, lastAt = 0;
   let frame = null, stabilise = null, running = false;
-  const callbacks = [];
+  let mode = "pitch";                 // "pitch" = accordatore · "chord" = accordi
+  let atteso = null;                  // cosa il sito ha chiesto di suonare
+  let watcher = null;
+  const callbacks = [], chordCallbacks = [];
 
   function onDetect(cb) {
     if (typeof cb === "function") callbacks.push(cb);
@@ -367,15 +380,75 @@
 
   function emit(result) { for (const cb of callbacks) cb(result); }
 
-  /* Un giro di analisi: prende i campioni freschi, li misura, li annuncia. */
-  function analyseFrame() {
-    if (!running) return;
+  function onChord(cb) {
+    if (typeof cb === "function") chordCallbacks.push(cb);
+    return () => { const i = chordCallbacks.indexOf(cb); if (i >= 0) chordCallbacks.splice(i, 1); };
+  }
+
+  /* Cosa aspettarsi: la diteggiatura richiesta e l'elenco dei candidati fra cui
+     cercare i rivali. Il sito ha già tutto in CH: glielo passa e basta. */
+  function expectChord(spec) { atteso = spec || null; watcher = makeChordWatcher(); }
+
+  /* L'ascolto degli accordi, come macchina a stati pura.
+
+     Dal vivo non si può fare quello che fa il banco di prova: lì il file è tutto
+     lì, e il segmentatore guarda avanti per decidere dove finisce una pennata.
+     Qui esiste solo il passato — l'AnalyserNode tiene gli ultimi 0,68 secondi e
+     nient'altro. Quindi si ribalta la logica: si riconosce un attacco, poi si
+     lascia scorrere il tempo finché la memoria non contiene esattamente il
+     tratto su cui sono state tarate le misure.
+
+     È una funzione senza mondo attorno — le entrano campioni, un orologio e cosa
+     ci si aspetta, le escono eventi — proprio perché così si può provare sulle
+     registrazioni invece che solo con la chitarra in mano. */
+  function makeChordWatcher(opts) {
+    const cfg = Object.assign({}, CFG, opts || {});
+    let base = 0, attesaFino = 0, fermoFino = 0;
+
+    return function push(frame, sampleRate, now, richiesto) {
+      /* Livello degli ultimi 50 ms: il presente, non la media di tutto. */
+      const coda = Math.min(frame.length, Math.floor(sampleRate * 0.05));
+      let somma = 0;
+      for (let i = frame.length - coda; i < frame.length; i++) somma += frame[i]*frame[i];
+      const rms = Math.sqrt(somma / coda);
+
+      /* Rumore di fondo inseguito dal basso: scende in fretta verso il silenzio,
+         sale piano. Così l'attacco si misura rispetto a com'era la stanza un
+         attimo fa, invece che rispetto a una soglia fissa che in un'altra stanza
+         sarebbe sbagliata. */
+      base = base === 0 ? rms : (rms < base ? base*0.85 + rms*0.15 : base*0.995 + rms*0.005);
+
+      if (attesaFino) {
+        if (now < attesaFino) return null;
+        attesaFino = 0;
+        fermoFino = now + cfg.chordHoldMs;
+        const ch = chromaAverage(frame, sampleRate,
+                                 { size: 16384, windows: cfg.chordWindows, hopMs: 120 });
+        const esito = richiesto
+          ? verifyChord(ch, richiesto.frets, richiesto.candidates || [])
+          : { ok: false, score: 0, reason: "nessun accordo richiesto" };
+        esito.chroma = ch;
+        esito.sym = richiesto ? richiesto.sym : null;
+        esito.rms = rms;
+        return esito;
+      }
+
+      if (now < fermoFino) return null;                 // pausa dopo un verdetto
+      if (rms > cfg.chordGate && rms > base * cfg.chordRise) {
+        attesaFino = now + cfg.chordWaitMs;
+        return { attacco: true, rms: rms };
+      }
+      return null;
+    };
+  }
+
+  /* L'adattatore: prende i campioni freschi dall'AnalyserNode e li passa alla
+     macchina a stati. Tutto ciò che decide sta di sopra, qui non c'è logica. */
+  function analyseChordFrame(now) {
+    if (!watcher) watcher = makeChordWatcher();
     analyser.getFloatTimeDomainData(frame);
-    const res = detectPitch(frame, ctx.sampleRate);
-    res.stable = stabilise(res.freq, res.clarity);
-    res.stableNote = res.stable ? noteFromFreq(res.stable) : null;
-    emit(res);
-    schedule();
+    const evento = watcher(frame, ctx.sampleRate, now, atteso);
+    if (evento) for (const cb of chordCallbacks) cb(evento);
   }
 
   /* Il ritmo dell'analisi.
@@ -389,7 +462,7 @@
     if (typeof root.requestAnimationFrame === "function") {
       raf = root.requestAnimationFrame(now => {
         if (!running) return;
-        if (now - lastAt >= CFG.intervalMs) { lastAt = now; analyseFrame(); }
+        if (now - lastAt >= CFG.intervalMs) { lastAt = now; analyseFrame(now); }
         else schedule();
       });
     } else {
@@ -406,7 +479,11 @@
        microfono: se restassero accesi insieme, l'accordatore accorderebbe la
        propria nota di riferimento. Le due cose si escludono a vicenda. */
     stopReference();
-    const o = Object.assign({ filter: true, source: null }, opts || {});
+    const o = Object.assign({ filter: true, source: null, mode: "pitch" }, opts || {});
+    mode = o.mode;
+    /* Per gli accordi il passa-basso dell'accordatore va tolto: lì gli armonici
+       sono un disturbo, qui sono la materia prima del chroma. */
+    if (mode === "chord") o.filter = false;
 
     ctx = new (root.AudioContext || root.webkitAudioContext)();
     if (ctx.state === "suspended") await ctx.resume();
@@ -427,7 +504,7 @@
     }
 
     analyser = ctx.createAnalyser();
-    analyser.fftSize = CFG.fftSize;
+    analyser.fftSize = mode === "chord" ? CFG.chordSize : CFG.fftSize;
 
     if (o.filter) {
       /* Passa-alto: via il rombo di rete e il rumore di maneggio sotto le corde.
@@ -448,7 +525,7 @@
     frame  = new Float32Array(analyser.fftSize);
     stabilise = makeStabiliser(o.stabiliser);
     running = true;
-    lastAt = 0;
+    lastAt = 0; watcher = null;
     analyseFrame();
     return true;
   }
@@ -728,7 +805,7 @@
 
   /* ------------------------------------------------------------- superficie */
   root.Listener = {
-    start, stop, isRunning, onDetect,
+    start, stop, isRunning, onDetect, onChord, expectChord, makeChordWatcher,
     playReference, stopReference, isPlaying,
     detectPitch, makeStabiliser, chroma, chromaAverage, profileFromFrets, cosine,
     decidable, rivalsFrom, verifyChroma, verifyChord, OPEN_STRINGS,

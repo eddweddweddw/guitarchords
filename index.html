@@ -233,8 +233,8 @@
     border:1px solid var(--line);border-radius:16px;padding:12px 13px;margin-bottom:9px;
     transition:.15s;position:relative;box-shadow:var(--shadow-sm)}
   .deck:active{transform:scale(.995)}
-  .deck[aria-pressed="true"]{border-color:var(--accent);
-    box-shadow:0 0 0 1px var(--accent), var(--accent-glow)}
+  .deck .go{color:var(--faint);flex:none;transition:.15s}
+  .deck:hover .go{color:var(--accent)}
   .deck .mini{flex:none}
   .deck .txt{flex:1;min-width:0}
   .deck .nm{display:block;font-family:"Roboto";font-weight:600;font-size:17px;color:var(--text);line-height:1.15}
@@ -288,8 +288,6 @@
   .langmenu button[aria-current="true"] .tick{opacity:1}
   @media (prefers-reduced-motion:reduce){ .langmenu{transition:none} }
 
-  .startbar{position:sticky;bottom:0;margin-top:8px;padding-top:10px;
-    background:linear-gradient(180deg,transparent, var(--bg) 40%);}
   .start{width:100%;padding:16px;border-radius:16px;background:var(--accent);color:var(--on-accent);
     font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;
     box-shadow:var(--accent-glow-strong);transition:.15s}
@@ -429,11 +427,8 @@
   .th-switch b{color:var(--text);font-weight:600}
 
   .th-card{background:var(--surface);border:1px solid var(--line);
-    border-radius:18px 18px 0 0;border-bottom:none;
-    padding:15px 15px 13px;margin:18px 0 0;box-shadow:var(--shadow)}
+    border-radius:18px;padding:15px 15px 13px;margin:20px 0 10px;box-shadow:var(--shadow)}
   .th-formula .sep{color:var(--faint)}
-  /* la riga dell'insieme si aggancia sotto la sua scheda di teoria */
-  .deck.attached{border-radius:0 0 16px 16px;margin-top:0;border-top:1px dashed var(--line)}
   .th-eyebrow{font-family:"Roboto Mono";font-weight:600;font-size:10.5px;letter-spacing:.16em;
     text-transform:uppercase;color:var(--accent-2)}
   .th-card h3{font-family:"Roboto";font-weight:700;font-size:20px;color:var(--text);margin:3px 0 0}
@@ -512,9 +507,6 @@
   <div id="deckList"></div>
   <div style="height:70px"></div>
 
-  <div class="startbar">
-    <button class="start" id="startBtn" disabled><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5v14l12-7z"/></svg><span id="startLabel">Scegli un insieme</span></button>
-  </div>
 </div>
 
 <!-- PRACTICE STAGE -->
@@ -634,7 +626,7 @@ const I18N = {
     tunerPlayAria: "Suona la nota di riferimento",
     tunerDenied: "Microfono negato. Puoi consentirlo dalle impostazioni del browser.",
     tunerNoMic: "Microfono non disponibile su questa connessione.",
-    tunerHint: "Tocca una corda per sentirla. Il microfono e la nota di riferimento non vanno insieme: l'uno spegne l'altra.",
+    tunerHint: "Tocca una corda per sentirla.",
     tunerCents: "cent",
     modeHeading: "Modalità",
     modeGroupLabel: "Modalità",
@@ -649,7 +641,6 @@ const I18N = {
     groupDiff: "Per difficoltà",
     groupTh: "Per costruzione teorica",
     chordsSuffix: "accordi",
-    startChoose: "Scegli un insieme",
     startBegin: "Inizia",
     exitAria: "Torna agli insiemi",
     shuffleAria: "Rimescola",
@@ -711,7 +702,7 @@ const I18N = {
     tunerPlayAria: "Play the reference note",
     tunerDenied: "Microphone denied. You can allow it in your browser settings.",
     tunerNoMic: "Microphone not available on this connection.",
-    tunerHint: "Tap a string to hear it. The microphone and the reference note don't mix: each one switches the other off.",
+    tunerHint: "Tap a string to hear it.",
     tunerCents: "cents",
     modeHeading: "Mode",
     modeGroupLabel: "Mode",
@@ -726,7 +717,6 @@ const I18N = {
     groupDiff: "By difficulty",
     groupTh: "By theoretical construction",
     chordsSuffix: "chords",
-    startChoose: "Choose a set",
     startBegin: "Start",
     exitAria: "Back to sets",
     shuffleAria: "Shuffle",
@@ -872,7 +862,7 @@ const CH = {
 };
 
 const DECKS = [
-  {group:"diff", id:"pop",  nm:{it:"Più popolari",en:"Most popular"}, sb:{it:"Gli accordi delle canzoni che conosci",en:"The chords of the songs you know"}, ch:["G","C","D","Em","Am","E","A","Dm","G7","E7","A7","D7","F","Bm"]},
+  {group:"top",  id:"pop",  nm:{it:"Più popolari",en:"Most popular"}, sb:{it:"Gli accordi delle canzoni che conosci",en:"The chords of the songs you know"}, ch:["G","C","D","Em","Am","E","A","Dm","G7","E7","A7","D7","F","Bm"]},
   {group:"diff", id:"beg",  nm:{it:"Principiante",en:"Beginner"}, sb:{it:"Accordi aperti fondamentali",en:"Fundamental open chords"}, ch:["Em","Am","C","G","D","E","A","Dm"]},
   {group:"diff", id:"int",  nm:{it:"Intermedio",en:"Intermediate"}, sb:{it:"Settime aperte e colori",en:"Open sevenths and colors"}, ch:["G7","C7","D7","E7","A7","Em7","Am7","Dm7","Asus2","Dsus4","Cadd9"]},
   {group:"diff", id:"adv",  nm:{it:"Avanzato",en:"Advanced"}, sb:{it:"Barré e forme mobili",en:"Barre chords and movable shapes"}, ch:["F","Bb","Fm","Fsm","B","Bm","Csm","Gsm","Eb","Ab","Db","Fs"]},
@@ -1087,9 +1077,11 @@ function theoryCard(f){
 
 function renderDecks(){
   const wrap=el("deckList"); wrap.innerHTML="";
-  const groups=[{k:"diff",label:t('groupDiff')},{k:"th",label:t('groupTh')}];
+  const groups=[{k:"top",label:null},{k:"diff",label:t('groupDiff')},{k:"th",label:t('groupTh')}];
   groups.forEach(gr=>{
-    const lab=document.createElement("div"); lab.className="group-label"; lab.textContent=gr.label; wrap.appendChild(lab);
+    if(gr.label){
+      const lab=document.createElement("div"); lab.className="group-label"; lab.textContent=gr.label; wrap.appendChild(lab);
+    }
 
     if(gr.k==="th"){   // introduzione comune a tutta la sezione teorica
       const lead=document.createElement("div");
@@ -1106,12 +1098,14 @@ function renderDecks(){
       const mastered=d.ch.filter(s=>(S.mastery[s]||1)>=4).length;
       const pct=Math.round(100*mastered/d.ch.length);
       const b=document.createElement("button");
-      b.className="deck"+(f?" attached":""); b.setAttribute("aria-pressed", S.deckId===d.id);
+      b.className="deck";
+      b.setAttribute("aria-label", `${t('startBegin')} · ${d.nm[S.lang]}`);
       b.innerHTML=`<span class="mini">${deckIcon(d.id)}</span>
         <span class="txt"><span class="nm">${d.nm[S.lang]}</span><span class="sb">${d.sb[S.lang]}</span></span>
         <span class="ct">${d.ch.length} ${t('chordsSuffix')}</span>
+        <svg class="go" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
         <span class="prog"><i style="width:${pct}%"></i></span>`;
-      b.onclick=()=>{ S.deckId=d.id; renderDecks(); updateStart(); };
+      b.onclick=()=>{ S.deckId=d.id; startSession(); };
       wrap.appendChild(b);
     });
 
@@ -1123,12 +1117,6 @@ function renderDecks(){
     }
   });
 }
-function updateStart(){
-  const d=DECKS.find(x=>x.id===S.deckId);
-  el("startBtn").disabled=!d;
-  el("startLabel").textContent = d ? `${t('startBegin')} · ${d.nm[S.lang]}` : t('startChoose');
-}
-
 /* ============ controls wiring ============ */
 function setPct(input){ const p=(input.value-input.min)/(input.max-input.min)*100; input.style.setProperty("--pct",p+"%"); }
 
@@ -1192,7 +1180,7 @@ function exitSession(){
   clearTimers();
   el("stage").classList.remove("on");
   el("home").style.display="flex";
-  renderDecks(); updateStart();
+  renderDecks();
 }
 
 function nextCard(){
@@ -1404,7 +1392,7 @@ function setLang(code){
   S.lang = code;
   save("chordtrainer.lang.v1", S.lang);
   applyLangStatic();
-  renderDecks(); updateStart();
+  renderDecks();
   refreshCardTexts();
 }
 
@@ -1431,7 +1419,6 @@ document.addEventListener("click", closeLangMenus);
 document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeLangMenus(); });
 
 /* stage events */
-el("startBtn").onclick=()=>{ if(S.deckId) startSession(); };
 el("exitBtn").onclick=exitSession;
 el("shuffleBtn").onclick=()=>{ buildQueue(); nextCard(); toast(t('shuffleToast')); };
 el("playBtn").onclick=togglePlay;
@@ -1677,7 +1664,7 @@ document.addEventListener("visibilitychange",()=>{
 /* init */
 applyTheme(detectTheme());
 applyLangStatic();
-renderDecks(); updateStart();
+renderDecks();
 </script>
 <script src="assets/listener.js" defer></script>
 </body>
