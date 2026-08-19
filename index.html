@@ -3,42 +3,121 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="theme-color" content="#f7f5f0" />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme:light)" />
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme:dark)" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <title>Manico · allenatore di accordi</title>
 <meta name="description" id="metaDescription" content="Allenatore di accordi per chitarra: esercizi interattivi per imparare e memorizzare le diteggiature sul manico." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
+  /* ============================================================
+     DUE TEMI, UN SOLO INSIEME DI NOMI.
+     Il tema chiaro sta in :root ed e' il ripiego sicuro. Quello scuro
+     si applica in due modi: dalla preferenza di sistema, e dall'attributo
+     data-theme che scrive il bottone. Il secondo vince sempre sul primo.
+     Nessuna regola piu' in basso conosce i colori: usa solo questi nomi.
+     ============================================================ */
   :root{
-    --wood:#f5f2ea;        /* sfondo carta chiaro */
-    --wood-2:#ffffff;      /* superficie / card */
-    --wood-3:#e6e1d3;      /* bordo sottile */
-    --bone:#171310;        /* testo primario ad alto contrasto */
-    --bone-2:#2a241c;
-    --ink:#1c1712;         /* testo sulla card del diagramma (chiara) */
-    --steel:#3d382f;       /* testo standard */
-    --steel-dim:#847d6d;   /* testo attenuato */
-    --steel-faint:#b7b0a0;
-    --abalone:#0f9d84;     /* accento primario — verde smeraldo */
-    --abalone-deep:#0a7562;
-    --abalone-soft:rgba(15,157,132,.12);
-    --brass:#b3781a;       /* accento secondario — ambra, etichette/numeri */
-    --danger:#d9503a;
-    --ok:var(--abalone);
-    --shadow:0 14px 32px -18px rgba(30,26,18,.22);
+    --bg:#ffffff;              /* fondo: bianco */
+    --bg-1:#ffffff;            /* alone alto del fondo */
+    --bg-2:#eef3f9;            /* alone basso, azzurrino */
+    --surface:#ffffff;         /* card e pannelli */
+    --surface-2:#eff4fa;       /* superficie incassata */
+    --line:#dbe3ec;            /* bordi sottili */
+    --text:#0a0d12;            /* testo primario: nero */
+    --text-2:#1b2029;
+    --ink:#0a0d12;             /* testo sul diagramma del manico */
+    --body:#39424e;            /* testo corrente */
+    --dim:#6d7986;             /* testo attenuato */
+    --faint:#a3aeba;           /* testo terziario */
+    --accent:#1667d1;          /* accento: blu */
+    --accent-deep:#0f4d9e;     /* accento su fondo chiaro */
+    --accent-soft:rgba(22,103,209,.10);
+    --accent-2:#2b7ea8;        /* secondario: azzurro, dati ed etichette */
+    --on-accent:#ffffff;       /* testo sopra l'accento */
+    --danger:#c8372d;
+    --danger-soft:rgba(200,55,45,.10);
+    --ok:var(--accent);
+    --diagram-line:#c8d3df;    /* tasti */
+    --diagram-string:#93a1b0;  /* corde */
+    --shadow:0 14px 32px -18px rgba(10,22,40,.20);
+    --shadow-sm:0 2px 8px -6px rgba(10,22,40,.18);
+    --shadow-knob:0 1px 3px rgba(10,22,40,.28);
+    --accent-glow:0 12px 26px -14px rgba(22,103,209,.40);
+    --accent-glow-strong:0 14px 30px -12px rgba(22,103,209,.45);
     --r:20px;
+  }
+
+  /* tema scuro: nero come colore principale, blu come secondario */
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --bg:#000000;
+      --bg-1:#0b0f16;
+      --bg-2:#000000;
+      --surface:#0e1219;
+      --surface-2:#161c26;
+      --line:#232b37;
+      --text:#f3f6fa;
+      --text-2:#dbe2ec;
+      --ink:#f3f6fa;
+      --body:#bcc6d3;
+      --dim:#8794a3;
+      --faint:#5b6674;
+      --accent:#4b8ef7;
+      --accent-deep:#7fb0ff;
+      --accent-soft:rgba(75,142,247,.18);
+      --accent-2:#68b6de;
+      --on-accent:#04070d;
+      --danger:#f0705f;
+      --danger-soft:rgba(240,112,95,.14);
+      --diagram-line:#2c3644;
+      --diagram-string:#697787;
+      --shadow:0 14px 32px -18px rgba(0,0,0,.85);
+      --shadow-sm:0 2px 8px -6px rgba(0,0,0,.8);
+      --shadow-knob:0 1px 3px rgba(0,0,0,.7);
+      --accent-glow:0 12px 26px -14px rgba(75,142,247,.55);
+      --accent-glow-strong:0 14px 30px -12px rgba(75,142,247,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#000000;
+    --bg-1:#0b0f16;
+    --bg-2:#000000;
+    --surface:#0e1219;
+    --surface-2:#161c26;
+    --line:#232b37;
+    --text:#f3f6fa;
+    --text-2:#dbe2ec;
+    --ink:#f3f6fa;
+    --body:#bcc6d3;
+    --dim:#8794a3;
+    --faint:#5b6674;
+    --accent:#4b8ef7;
+    --accent-deep:#7fb0ff;
+    --accent-soft:rgba(75,142,247,.18);
+    --accent-2:#68b6de;
+    --on-accent:#04070d;
+    --danger:#f0705f;
+    --danger-soft:rgba(240,112,95,.14);
+    --diagram-line:#2c3644;
+    --diagram-string:#697787;
+    --shadow:0 14px 32px -18px rgba(0,0,0,.85);
+    --shadow-sm:0 2px 8px -6px rgba(0,0,0,.8);
+    --shadow-knob:0 1px 3px rgba(0,0,0,.7);
+    --accent-glow:0 12px 26px -14px rgba(75,142,247,.55);
+    --accent-glow-strong:0 14px 30px -12px rgba(75,142,247,.5);
   }
 
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
     background:
-      radial-gradient(120% 80% at 50% -10%, #fffdf9 0%, var(--wood) 55%, #efece1 100%);
-    color:var(--steel);
-    font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      radial-gradient(120% 80% at 50% -10%, var(--bg-1) 0%, var(--bg) 55%, var(--bg-2) 100%);
+    color:var(--body);
+    font-family:"Roboto",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
     -webkit-font-smoothing:antialiased;
     min-height:100dvh;
     overscroll-behavior:none;
@@ -49,97 +128,145 @@
     padding:calc(env(safe-area-inset-top) + 4px) 16px calc(env(safe-area-inset-bottom) + 14px);
     position:relative;
   }
-  .mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
-  .slab{font-family:"Space Grotesk",system-ui,sans-serif}
+  .mono{font-family:"Roboto Mono",ui-monospace,monospace}
+  .slab{font-family:"Roboto",system-ui,sans-serif;font-weight:900;letter-spacing:-.02em}
   button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none}
-  :focus-visible{outline:2px solid var(--abalone);outline-offset:2px;border-radius:8px}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+
+  /* ---------- ACCORDATORE ---------- */
+  .tuner .center{justify-content:center;gap:20px}
+  .tn-note{font-family:"Roboto";font-weight:700;color:var(--text);text-align:center;
+    font-size:clamp(54px,17vw,72px);line-height:1;letter-spacing:-.5px}
+  .tn-note.idle{color:var(--faint)}
+  .tn-meter{position:relative;width:100%;max-width:320px;height:40px;margin:0 auto}
+  .tn-meter .track{position:absolute;left:0;right:0;top:19px;height:2px;border-radius:2px;background:var(--line)}
+  .tn-meter .tick{position:absolute;top:14px;width:1px;height:12px;background:var(--line);transform:translateX(-50%)}
+  .tn-meter .tick.mid{top:6px;height:28px;background:var(--faint)}
+  .tn-meter .needle{position:absolute;top:4px;left:50%;width:4px;height:32px;border-radius:3px;
+    background:var(--body);transform:translateX(-50%);opacity:0;
+    transition:left .18s ease-out, background .18s, box-shadow .18s, opacity .18s}
+  .tn-meter .needle.on{opacity:1}
+  .tn-meter.tuned .needle{background:var(--accent);box-shadow:0 0 0 5px var(--accent-soft)}
+  .tn-state{font-size:13.5px;color:var(--dim);text-align:center;min-height:20px}
+  .tn-state .mono{font-size:13px;color:var(--body)}
+  .tn-state.tuned{color:var(--accent-deep);font-weight:600}
+  /* Le sei note di riferimento stanno sulle rispettive corde di un manico
+     disegnato: le corde scendono dal capotasto e finiscono nel bottone. */
+  .tn-fretboard{width:100%;max-width:320px;margin:0 auto}
+  .tn-neck{line-height:0}
+  .tn-nut{stroke:var(--text);stroke-width:4;stroke-linecap:round}
+  .tn-fret{stroke:var(--diagram-line);stroke-width:1.4}
+  .tn-str{stroke:var(--diagram-string);transition:stroke .18s,stroke-width .18s}
+  .tn-str.on{stroke:var(--accent)}
+  .tn-strings{display:flex}
+  .tn-strings button{flex:1;min-height:46px;padding:0 2px;
+    font-family:"Roboto Mono";font-size:12px;color:var(--dim);
+    border-radius:0 0 13px 13px;border:1px solid transparent;border-top:none;
+    transition:.15s}
+  .tn-strings button[aria-current="true"]{background:var(--accent-soft);
+    border-color:var(--accent-soft);color:var(--accent-deep);font-weight:600}
+  .tn-strings button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);
+    color:var(--on-accent);font-weight:600}
+  .tn-act{max-width:320px;margin:0 auto}
+  .tn-hint{font-size:12px;line-height:1.45;color:var(--dim);text-align:center;
+    max-width:300px;margin:0 auto}
 
   /* ---------- HOME ---------- */
   .brand{display:flex;align-items:baseline;gap:10px;margin:6px 2px 2px}
   .brand h1{
-    font-family:"Space Grotesk";font-weight:700;font-size:29px;letter-spacing:-.3px;
-    color:var(--bone);margin:0;line-height:1;
+    font-family:"Roboto";font-weight:700;font-size:29px;letter-spacing:-.3px;
+    color:var(--text);margin:0;line-height:1;
   }
-  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--abalone);
-    box-shadow:0 0 0 4px var(--abalone-soft);align-self:center}
-  .tagline{color:var(--steel-dim);font-size:13px;margin:6px 2px 18px;line-height:1.5}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 4px var(--accent-soft);align-self:center}
+  .tagline{color:var(--dim);font-size:13px;margin:6px 2px 18px;line-height:1.5}
 
   .panel{
-    background:var(--wood-2);
-    border:1px solid var(--wood-3);border-radius:var(--r);
+    background:var(--surface);
+    border:1px solid var(--line);border-radius:var(--r);
     padding:16px;margin-bottom:14px;box-shadow:var(--shadow);
   }
   .panel h2{
-    font-family:"IBM Plex Mono";font-weight:600;font-size:11px;letter-spacing:.18em;
-    text-transform:uppercase;color:var(--brass);margin:0 0 12px;
+    font-family:"Roboto Mono";font-weight:600;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--accent-2);margin:0 0 12px;
   }
 
-  .seg{display:flex;gap:4px;background:#f2efe6;border:1px solid var(--wood-3);
+  .seg{display:flex;gap:4px;background:var(--surface-2);border:1px solid var(--line);
     border-radius:12px;padding:4px}
   .seg button{flex:1;padding:9px 6px;border-radius:9px;font-size:13.5px;font-weight:500;
-    color:var(--steel-dim);transition:.18s}
-  .seg button[aria-pressed="true"]{background:var(--abalone);color:#ffffff;font-weight:600}
+    color:var(--dim);transition:.18s}
+  .seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);font-weight:600}
   .seg .sub{display:block;font-size:10.5px;font-weight:400;opacity:.8;margin-top:1px}
 
   .ctrl{margin-top:14px}
   .ctrl .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
-  .ctrl label{font-size:13.5px;color:var(--steel)}
-  .ctrl .val{font-family:"IBM Plex Mono";font-size:13px;color:var(--abalone-deep);font-weight:600}
+  .ctrl label{font-size:13.5px;color:var(--body)}
+  .ctrl .val{font-family:"Roboto Mono";font-size:13px;color:var(--accent-deep);font-weight:600}
   .ctrl.dim{opacity:.4;pointer-events:none;filter:grayscale(.4)}
 
   input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent}
   input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;
-    background:linear-gradient(90deg,var(--abalone) var(--pct,50%), var(--wood-3) var(--pct,50%))}
-  input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:var(--wood-3)}
-  input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:var(--abalone)}
+    background:linear-gradient(90deg,var(--accent) var(--pct,50%), var(--line) var(--pct,50%))}
+  input[type=range]::-moz-range-track{height:4px;border-radius:4px;background:var(--line)}
+  input[type=range]::-moz-range-progress{height:4px;border-radius:4px;background:var(--accent)}
   input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;
-    background:#ffffff;border:3px solid var(--abalone-deep);margin-top:-8px;box-shadow:0 2px 6px rgba(30,26,18,.25)}
+    background:var(--surface);border:3px solid var(--accent-deep);margin-top:-8px;box-shadow:var(--shadow-knob)}
   input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
-    background:#ffffff;border:3px solid var(--abalone-deep)}
+    background:var(--surface);border:3px solid var(--accent-deep)}
 
   .toggles{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-  .chip{display:flex;align-items:center;gap:8px;background:#f2efe6;border:1px solid var(--wood-3);
-    border-radius:11px;padding:8px 11px;font-size:12.5px;color:var(--steel-dim)}
-  .chip[aria-pressed="true"]{color:var(--bone);border-color:var(--abalone-deep)}
-  .chip .sw{width:30px;height:18px;border-radius:20px;background:var(--wood-3);position:relative;transition:.18s;flex:none}
+  .chip{display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--line);
+    border-radius:11px;padding:8px 11px;font-size:12.5px;color:var(--dim)}
+  .chip[aria-pressed="true"]{color:var(--text);border-color:var(--accent-deep)}
+  .chip .sw{width:30px;height:18px;border-radius:20px;background:var(--line);position:relative;transition:.18s;flex:none}
   .chip .sw::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
-    background:#ffffff;box-shadow:0 1px 3px rgba(30,26,18,.3);transition:.18s}
-  .chip[aria-pressed="true"] .sw{background:var(--abalone)}
+    background:var(--surface);box-shadow:var(--shadow-knob);transition:.18s}
+  .chip[aria-pressed="true"] .sw{background:var(--accent)}
   .chip[aria-pressed="true"] .sw::after{left:14px}
 
-  .group-label{font-family:"IBM Plex Mono";font-weight:600;font-size:11px;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--steel-faint);margin:18px 4px 9px;display:flex;align-items:center;gap:8px}
-  .group-label::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--wood-3),transparent)}
+  .group-label{font-family:"Roboto Mono";font-weight:600;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--faint);margin:18px 4px 9px;display:flex;align-items:center;gap:8px}
+  .group-label::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
 
   .deck{width:100%;text-align:left;display:flex;align-items:center;gap:13px;
-    background:var(--wood-2);
-    border:1px solid var(--wood-3);border-radius:16px;padding:12px 13px;margin-bottom:9px;
-    transition:.15s;position:relative;box-shadow:0 2px 8px -6px rgba(30,26,18,.15)}
+    background:var(--surface);
+    border:1px solid var(--line);border-radius:16px;padding:12px 13px;margin-bottom:9px;
+    transition:.15s;position:relative;box-shadow:var(--shadow-sm)}
   .deck:active{transform:scale(.995)}
-  .deck[aria-pressed="true"]{border-color:var(--abalone);
-    box-shadow:0 0 0 1px var(--abalone), 0 12px 26px -14px rgba(15,157,132,.35)}
+  .deck[aria-pressed="true"]{border-color:var(--accent);
+    box-shadow:0 0 0 1px var(--accent), var(--accent-glow)}
   .deck .mini{flex:none}
   .deck .txt{flex:1;min-width:0}
-  .deck .nm{font-family:"Space Grotesk";font-weight:600;font-size:17px;color:var(--bone);line-height:1.15}
-  .deck .sb{font-size:12px;color:var(--steel-dim);margin-top:2px}
-  .deck .ct{font-family:"IBM Plex Mono";font-size:11px;color:var(--brass);white-space:nowrap}
-  .deck .prog{position:absolute;left:13px;right:13px;bottom:6px;height:2px;border-radius:2px;background:var(--wood-3);overflow:hidden}
-  .deck .prog i{display:block;height:100%;background:var(--abalone);width:0%}
+  .deck .nm{display:block;font-family:"Roboto";font-weight:600;font-size:17px;color:var(--text);line-height:1.15}
+  .deck .sb{display:block;font-size:12px;color:var(--dim);margin-top:2px;line-height:1.35}
+  .deck .ct{font-family:"Roboto Mono";font-size:11px;color:var(--accent-2);white-space:nowrap}
+  .deck .prog{position:absolute;left:13px;right:13px;bottom:6px;height:2px;border-radius:2px;background:var(--line);overflow:hidden}
+  .deck .prog i{display:block;height:100%;background:var(--accent);width:0%}
 
-  .langtgl{display:flex;align-items:center;gap:6px;background:var(--wood-2);border:1px solid var(--wood-3);
-    border-radius:20px;padding:7px 12px 7px 9px;font-family:"IBM Plex Mono";font-size:12px;font-weight:600;
-    color:var(--steel);flex:none;transition:.15s;box-shadow:0 2px 8px -6px rgba(30,26,18,.18)}
+  .langtgl{display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;
+    background:var(--surface);border:1px solid var(--line);
+    border-radius:20px;padding:0 12px 0 10px;font-family:"Roboto Mono";font-size:12px;font-weight:600;
+    color:var(--body);flex:none;transition:.15s;box-shadow:var(--shadow-sm)}
   .langtgl:active{transform:scale(.95)}
   .langtgl .flag{font-size:16px;line-height:1}
   .iconbtn.langtgl-icon{font-size:17px;line-height:1}
 
   /* selettore lingua a tendina */
   .langpick{position:relative;flex:none}
-  .langpick.at-home{margin-left:auto;align-self:center}
+  .brandtools{margin-left:auto;align-self:center;display:flex;align-items:center;gap:7px}
+  .iconbtn.hdr{width:40px;height:40px;border-radius:20px;box-shadow:var(--shadow-sm)}
+  /* il sole compare sul tema scuro (dove serve accendere la luce) e viceversa */
+  .ic-sun{display:none}
+  :root[data-theme="dark"] .ic-sun{display:block}
+  :root[data-theme="dark"] .ic-moon{display:none}
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]) .ic-sun{display:block}
+    :root:not([data-theme="light"]) .ic-moon{display:none}
+  }
   .langmenu{
     position:absolute;top:calc(100% + 6px);right:0;z-index:50;
     min-width:158px;margin:0;padding:5px;list-style:none;
-    background:var(--wood-2);border:1px solid var(--wood-3);border-radius:14px;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
     box-shadow:var(--shadow);
     opacity:0;visibility:hidden;transform:translateY(-4px);
     transition:opacity .15s, transform .15s, visibility .15s;
@@ -152,109 +279,109 @@
   .langmenu li{margin:0}
   .langmenu button{
     display:flex;align-items:center;gap:9px;width:100%;text-align:left;
-    padding:10px;border-radius:10px;font-size:13.5px;color:var(--steel);transition:.15s;
+    min-height:44px;padding:0 10px;border-radius:10px;font-size:13.5px;color:var(--body);transition:.15s;
   }
-  .langmenu button:hover{background:#f2efe6}
-  .langmenu button[aria-current="true"]{background:var(--abalone-soft);color:var(--bone);font-weight:600}
+  .langmenu button:hover{background:var(--surface-2)}
+  .langmenu button[aria-current="true"]{background:var(--accent-soft);color:var(--text);font-weight:600}
   .langmenu .flag{font-size:16px;line-height:1}
-  .langmenu .tick{margin-left:auto;color:var(--abalone-deep);font-size:12px;opacity:0}
+  .langmenu .tick{margin-left:auto;color:var(--accent-deep);font-size:12px;opacity:0}
   .langmenu button[aria-current="true"] .tick{opacity:1}
   @media (prefers-reduced-motion:reduce){ .langmenu{transition:none} }
 
   .startbar{position:sticky;bottom:0;margin-top:8px;padding-top:10px;
-    background:linear-gradient(180deg,transparent, var(--wood) 40%);}
-  .start{width:100%;padding:16px;border-radius:16px;background:var(--abalone);color:#ffffff;
+    background:linear-gradient(180deg,transparent, var(--bg) 40%);}
+  .start{width:100%;padding:16px;border-radius:16px;background:var(--accent);color:var(--on-accent);
     font-weight:600;font-size:16px;display:flex;align-items:center;justify-content:center;gap:10px;
-    box-shadow:0 14px 30px -12px rgba(15,157,132,.45);transition:.15s}
-  .start:disabled{background:#e4e0d3;color:var(--steel-faint);box-shadow:none}
+    box-shadow:var(--accent-glow-strong);transition:.15s}
+  .start:disabled{background:var(--surface-2);color:var(--faint);box-shadow:none}
   .start:active{transform:translateY(1px)}
 
   /* ---------- PRACTICE ---------- */
   .stage{position:fixed;inset:0;background:
-      radial-gradient(120% 70% at 50% -5%, #fffdf9 0%, var(--wood) 55%, #efece1 100%);
+      radial-gradient(120% 70% at 50% -5%, var(--bg-1) 0%, var(--bg) 55%, var(--bg-2) 100%);
     display:none;flex-direction:column;z-index:20;
     padding:calc(env(safe-area-inset-top) + 6px) 16px calc(env(safe-area-inset-bottom) + 16px);}
   .stage.on{display:flex}
   .stage .top{display:flex;align-items:center;gap:12px;max-width:460px;width:100%;margin:0 auto}
-  .iconbtn{width:40px;height:40px;border-radius:12px;background:var(--wood-2);border:1px solid var(--wood-3);
-    display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 2px 8px -6px rgba(30,26,18,.15)}
+  .iconbtn{width:40px;height:40px;border-radius:12px;background:var(--surface);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;flex:none;box-shadow:var(--shadow-sm)}
   .top .deckname{flex:1;min-width:0}
-  .top .deckname .nm{font-family:"Space Grotesk";font-weight:600;font-size:15px;color:var(--bone);
+  .top .deckname .nm{font-family:"Roboto";font-weight:600;font-size:15px;color:var(--text);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .top .deckname .pos{font-family:"IBM Plex Mono";font-size:11px;color:var(--steel-dim)}
+  .top .deckname .pos{font-family:"Roboto Mono";font-size:11px;color:var(--dim)}
 
   .center{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     gap:10px;max-width:460px;width:100%;margin:0 auto;padding:6px 0}
 
   .prompt{text-align:center;min-height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
-  .symbol{font-family:"Space Grotesk";font-weight:700;color:var(--bone);
+  .symbol{font-family:"Roboto";font-weight:700;color:var(--text);
     font-size:clamp(52px,17vw,74px);line-height:.95;letter-spacing:-.5px}
-  .symbol sup{font-size:.44em;font-weight:600;color:var(--brass);vertical-align:super;margin-left:1px}
-  .itname{font-family:"IBM Plex Mono";font-size:13px;color:var(--steel-dim);letter-spacing:.03em}
+  .symbol sup{font-size:.44em;font-weight:600;color:var(--accent-2);vertical-align:super;margin-left:1px}
+  .itname{font-family:"Roboto Mono";font-size:13px;color:var(--dim);letter-spacing:.03em}
 
   .ring{position:relative;width:52px;height:52px;margin-top:2px}
   .ring svg{transform:rotate(-90deg)}
   .ring .num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    font-family:"IBM Plex Mono";font-weight:600;font-size:16px;color:var(--abalone-deep)}
+    font-family:"Roboto Mono";font-weight:600;font-size:16px;color:var(--accent-deep)}
   .ring.hide{display:none}
 
-  .card{background:var(--wood-2);border:1px solid var(--wood-3);border-radius:18px;
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;
     padding:14px 12px 8px;box-shadow:var(--shadow);
     width:min(284px,80vw)}
-  .neck-cap{font-family:"IBM Plex Mono";font-size:11px;color:var(--steel-dim);text-align:center;
+  .neck-cap{font-family:"Roboto Mono";font-size:11px;color:var(--dim);text-align:center;
     letter-spacing:.05em;margin-bottom:2px;height:14px;transition:.2s}
   .card svg{width:100%;height:auto;display:block}
 
   .spell{display:flex;flex-direction:column;gap:4px;align-items:center;margin-top:8px;min-height:40px;
     opacity:0;transition:opacity .35s .1s}
   .spell.show{opacity:1}
-  .spell .line{font-family:"IBM Plex Mono";font-size:12.5px;color:var(--steel);letter-spacing:.02em}
-  .spell .line b{color:var(--brass);font-weight:600;margin-right:6px;text-transform:uppercase;font-size:10.5px}
-  .spell .deg span{color:var(--abalone-deep);font-weight:600}
+  .spell .line{font-family:"Roboto Mono";font-size:12.5px;color:var(--body);letter-spacing:.02em}
+  .spell .line b{color:var(--accent-2);font-weight:600;margin-right:6px;text-transform:uppercase;font-size:10.5px}
+  .spell .deg span{color:var(--accent-deep);font-weight:600}
 
   .controls{max-width:460px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:12px}
   .transport{display:flex;align-items:center;justify-content:center;gap:14px}
-  .tbtn{width:46px;height:46px;border-radius:14px;background:var(--wood-2);border:1px solid var(--wood-3);
-    display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px -6px rgba(30,26,18,.15)}
-  .tbtn.main{width:62px;height:62px;border-radius:18px;background:var(--abalone);border:none;color:#ffffff;
-    box-shadow:0 12px 26px -12px rgba(15,157,132,.5)}
+  .tbtn{width:46px;height:46px;border-radius:14px;background:var(--surface);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm)}
+  .tbtn.main{width:62px;height:62px;border-radius:18px;background:var(--accent);border:none;color:var(--on-accent);
+    box-shadow:var(--accent-glow-strong)}
   .tbtn:disabled{opacity:.35}
 
   .rate{display:flex;gap:9px}
   .rate button{flex:1;padding:15px 8px;border-radius:15px;font-weight:600;font-size:14.5px;
-    display:flex;flex-direction:column;align-items:center;gap:3px;border:1px solid var(--wood-3);
-    background:var(--wood-2);transition:.12s}
-  .rate button .k{font-family:"IBM Plex Mono";font-size:10px;font-weight:500;color:var(--steel-faint)}
+    display:flex;flex-direction:column;align-items:center;gap:3px;border:1px solid var(--line);
+    background:var(--surface);transition:.12s}
+  .rate button .k{font-family:"Roboto Mono";font-size:10px;font-weight:500;color:var(--faint)}
   .rate button:active{transform:translateY(1px)}
-  .rate .no{color:var(--danger)}.rate .no:active{background:rgba(217,80,58,.1)}
-  .rate .mid{color:var(--brass)}
-  .rate .yes{color:var(--abalone-deep)}.rate .yes:active{background:var(--abalone-soft)}
+  .rate .no{color:var(--danger)}.rate .no:active{background:var(--danger-soft)}
+  .rate .mid{color:var(--accent-2)}
+  .rate .yes{color:var(--accent-deep)}.rate .yes:active{background:var(--accent-soft)}
   .rate.hide{display:none}
 
-  .hintbtn{align-self:center;font-family:"IBM Plex Mono";font-size:12px;color:var(--steel-dim);
-    padding:10px 14px;border-radius:11px;border:1px dashed var(--wood-3)}
+  .hintbtn{align-self:center;font-family:"Roboto Mono";font-size:12px;color:var(--dim);
+    padding:10px 14px;border-radius:11px;border:1px dashed var(--line)}
   .hintbtn.hide{display:none}
 
   /* mastery leitner pips */
   .pips{display:flex;gap:4px;justify-content:center;align-items:center;min-height:14px}
-  .pips i{width:16px;height:5px;border-radius:3px;background:var(--wood-3)}
-  .pips i.f{background:var(--abalone)}
+  .pips i{width:16px;height:5px;border-radius:3px;background:var(--line)}
+  .pips i.f{background:var(--accent)}
   .pips.hide{display:none}
 
   /* SVG element classes */
-  .fret{stroke:#d8d3c4;stroke-width:1.4}
-  .nut{stroke:var(--bone);stroke-width:5;stroke-linecap:round}
-  .string{stroke:#a8a190;stroke-linecap:round}
-  .inlay{fill:rgba(15,157,132,.12)}
-  .slabel{fill:var(--steel-dim);font-family:"IBM Plex Mono";font-size:12px;font-weight:500}
-  .fretlab{fill:var(--brass);font-family:"IBM Plex Mono";font-size:13px;font-weight:600}
-  .barre{fill:var(--abalone-deep)}
+  .fret{stroke:var(--diagram-line);stroke-width:1.4}
+  .nut{stroke:var(--text);stroke-width:5;stroke-linecap:round}
+  .string{stroke:var(--diagram-string);stroke-linecap:round}
+  .inlay{fill:var(--accent-soft)}
+  .slabel{fill:var(--dim);font-family:"Roboto Mono";font-size:12px;font-weight:500}
+  .fretlab{fill:var(--accent-2);font-family:"Roboto Mono";font-size:13px;font-weight:600}
+  .barre{fill:var(--accent-deep)}
   .dotg{opacity:0}
   .markg{opacity:0}
-  .dot{fill:var(--abalone)}
-  .dotnum{fill:#ffffff;font-family:"IBM Plex Mono";font-size:14px;font-weight:600;text-anchor:middle}
-  .omark{fill:none;stroke:var(--abalone-deep);stroke-width:2}
+  .dot{fill:var(--accent)}
+  .dotnum{fill:var(--on-accent);font-family:"Roboto Mono";font-size:14px;font-weight:600;text-anchor:middle}
+  .omark{fill:none;stroke:var(--accent-deep);stroke-width:2}
   .xmark{stroke:var(--danger);stroke-width:2.4;stroke-linecap:round}
 
   .is-revealed .dotg{animation:pressIn .34s cubic-bezier(.34,1.56,.64,1) both}
@@ -263,7 +390,7 @@
   .dotg{transform-box:fill-box;transform-origin:center}
 
   .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 20px);transform:translateX(-50%) translateY(20px);
-    background:var(--bone);border:1px solid var(--bone);color:#fdfcf9;padding:10px 16px;border-radius:12px;
+    background:var(--text);border:1px solid var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;
     font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:40;box-shadow:var(--shadow)}
   .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -275,85 +402,88 @@
 
   /* ---------- THEORY ---------- */
   .th-open{width:100%;display:flex;align-items:center;gap:12px;text-align:left;
-    background:var(--wood-2);border:1px solid var(--wood-3);
+    background:var(--surface);border:1px solid var(--line);
     border-radius:16px;padding:13px 14px;margin-bottom:14px;transition:.15s;box-shadow:var(--shadow)}
   .th-open:active{transform:scale(.995)}
-  .th-open .ic{width:38px;height:38px;border-radius:10px;background:var(--abalone-soft);
-    display:flex;align-items:center;justify-content:center;flex:none;color:var(--abalone-deep)}
+  .th-open .ic{width:38px;height:38px;border-radius:10px;background:var(--accent-soft);
+    display:flex;align-items:center;justify-content:center;flex:none;color:var(--accent-deep)}
   .th-open .t{flex:1}
-  .th-open .t b{font-family:"Space Grotesk";font-weight:600;font-size:16px;color:var(--bone);display:block;line-height:1.15}
-  .th-open .t span{font-size:12px;color:var(--steel-dim)}
-  .th-open .chev{color:var(--steel-faint)}
+  .th-open .t b{font-family:"Roboto";font-weight:600;font-size:16px;color:var(--text);display:block;line-height:1.15}
+  .th-open .t span{font-size:12px;color:var(--dim)}
+  .th-open .chev{color:var(--faint)}
 
   .theory{z-index:30}
   .theory .body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
     max-width:460px;width:100%;margin:0 auto;padding:8px 0 28px}
-  .th-intro{color:var(--steel-dim);font-size:14px;line-height:1.6;margin:10px 2px 4px}
-  .th-intro b{color:var(--bone);font-weight:600}
-  .th-intro em{color:var(--abalone-deep);font-style:normal}
-  .th-ref{background:var(--wood-2);border:1px solid var(--wood-3);
+  .th-intro{color:var(--dim);font-size:14px;line-height:1.6;margin:10px 2px 4px}
+  .th-intro b{color:var(--text);font-weight:600}
+  .th-intro em{color:var(--accent-deep);font-style:normal}
+  .th-ref{background:var(--surface);border:1px solid var(--line);
     border-radius:16px;padding:14px;margin:14px 0;box-shadow:var(--shadow)}
-  .th-ref p{margin:0;font-size:12.5px;color:var(--steel-dim);line-height:1.5}
+  .th-ref p{margin:0;font-size:12.5px;color:var(--dim);line-height:1.5}
   .th-ref .scale{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:11px}
-  .th-ref .d{font-family:"IBM Plex Mono";font-size:14px;font-weight:600;padding:7px 2px;border-radius:9px;
-    background:#f2efe6;border:1px solid var(--wood-3);color:var(--steel);text-align:center;line-height:1.2}
-  .th-ref .d small{display:block;color:var(--steel-faint);font-size:10px;font-weight:400;margin-top:2px}
-  .th-switch{font-size:13.5px;color:var(--steel-dim);line-height:1.6;margin:2px 2px 16px}
-  .th-switch b{color:var(--bone);font-weight:600}
+  .th-ref .d{font-family:"Roboto Mono";font-size:14px;font-weight:600;padding:7px 2px;border-radius:9px;
+    background:var(--surface-2);border:1px solid var(--line);color:var(--body);text-align:center;line-height:1.2}
+  .th-ref .d small{display:block;color:var(--faint);font-size:10px;font-weight:400;margin-top:2px}
+  .th-switch{font-size:13.5px;color:var(--dim);line-height:1.6;margin:2px 2px 16px}
+  .th-switch b{color:var(--text);font-weight:600}
 
-  .th-card{background:var(--wood-2);border:1px solid var(--wood-3);
-    border-radius:18px;padding:15px 15px 13px;margin-bottom:12px;box-shadow:var(--shadow)}
-  .th-eyebrow{font-family:"IBM Plex Mono";font-weight:600;font-size:10.5px;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--brass)}
-  .th-card h3{font-family:"Space Grotesk";font-weight:700;font-size:20px;color:var(--bone);margin:3px 0 0}
-  .th-formula{font-family:"IBM Plex Mono";font-size:17px;color:var(--steel);margin:9px 0 0;letter-spacing:.03em}
-  .th-formula .hl{color:var(--abalone-deep);font-weight:600}
-  .th-recipe{font-size:13px;color:var(--steel-dim);line-height:1.55;margin:9px 0 0}
-  .th-recipe .snd{color:var(--bone)}
+  .th-card{background:var(--surface);border:1px solid var(--line);
+    border-radius:18px 18px 0 0;border-bottom:none;
+    padding:15px 15px 13px;margin:18px 0 0;box-shadow:var(--shadow)}
+  .th-formula .sep{color:var(--faint)}
+  /* la riga dell'insieme si aggancia sotto la sua scheda di teoria */
+  .deck.attached{border-radius:0 0 16px 16px;margin-top:0;border-top:1px dashed var(--line)}
+  .th-eyebrow{font-family:"Roboto Mono";font-weight:600;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--accent-2)}
+  .th-card h3{font-family:"Roboto";font-weight:700;font-size:20px;color:var(--text);margin:3px 0 0}
+  .th-formula{font-family:"Roboto Mono";font-size:17px;color:var(--body);margin:9px 0 0;letter-spacing:.03em}
+  .th-formula .hl{color:var(--accent-deep);font-weight:600}
+  .th-recipe{font-size:13px;color:var(--dim);line-height:1.55;margin:9px 0 0}
+  .th-recipe .snd{color:var(--text)}
   .th-ruler{margin:11px 0 2px}
-  .th-link{font-family:"IBM Plex Mono";font-size:11.5px;color:var(--abalone-deep);margin-top:11px;
-    display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid var(--abalone-deep);
-    border-radius:10px;background:transparent}
-  .th-link:active{background:var(--abalone-soft)}
-  .th-more{background:#f2efe6;border:1px dashed var(--wood-3);
+  .th-more{margin-top:20px;background:var(--surface-2);border:1px dashed var(--line);
     border-radius:18px;padding:16px;margin-top:4px}
-  .th-more h3{font-family:"Space Grotesk";font-weight:600;font-size:17px;color:var(--bone);margin:0 0 10px}
+  .th-more h3{font-family:"Roboto";font-weight:600;font-size:17px;color:var(--text);margin:0 0 10px}
   .th-more dl{margin:0}
-  .th-more dt{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--brass);margin-top:12px}
+  .th-more dt{font-family:"Roboto Mono";font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--accent-2);margin-top:12px}
   .th-more dt:first-child{margin-top:0}
-  .th-more dd{margin:3px 0 0;font-size:13px;color:var(--steel-dim);line-height:1.55}
-  .th-more dd b{color:var(--bone);font-weight:600}
+  .th-more dd{margin:3px 0 0;font-size:13px;color:var(--dim);line-height:1.55}
+  .th-more dd b{color:var(--text);font-weight:600}
 
-  .rl-axis{stroke:var(--wood-3);stroke-width:2;stroke-linecap:round}
-  .rl-tick{stroke:var(--wood-3);stroke-width:1.5}
-  .rl-tick.oct{stroke:var(--steel-faint)}
-  .rl-dot{fill:var(--steel-faint)}
-  .rl-dot.root{fill:var(--bone)}
-  .rl-dot.alt{fill:var(--abalone)}
-  .rl-lab{font-family:"IBM Plex Mono";font-size:12px;font-weight:600;text-anchor:middle;fill:var(--steel-dim)}
-  .rl-lab.alt{fill:var(--abalone-deep)}
-  .rl-lab.root{fill:var(--bone)}
-  .rl-sub{font-family:"IBM Plex Mono";font-size:8.5px;text-anchor:middle;fill:var(--steel-faint)}
-  .rl-cap{font-family:"IBM Plex Mono";font-size:9px;text-anchor:middle;fill:var(--steel-faint)}
+  .rl-axis{stroke:var(--line);stroke-width:2;stroke-linecap:round}
+  .rl-tick{stroke:var(--line);stroke-width:1.5}
+  .rl-tick.oct{stroke:var(--faint)}
+  .rl-dot{fill:var(--faint)}
+  .rl-dot.root{fill:var(--text)}
+  .rl-dot.alt{fill:var(--accent)}
+  .rl-lab{font-family:"Roboto Mono";font-size:12px;font-weight:600;text-anchor:middle;fill:var(--dim)}
+  .rl-lab.alt{fill:var(--accent-deep)}
+  .rl-lab.root{fill:var(--text)}
+  .rl-sub{font-family:"Roboto Mono";font-size:8.5px;text-anchor:middle;fill:var(--faint)}
+  .rl-cap{font-family:"Roboto Mono";font-size:9px;text-anchor:middle;fill:var(--faint)}
 </style>
 </head>
 <body>
 
 <div class="app" id="home">
   <div class="brand"><h1 class="slab">Manico</h1><span class="dot"></span>
-    <div class="langpick at-home" id="langPickHome">
+    <div class="brandtools">
+      <button class="iconbtn hdr" id="openTuner" type="button" aria-label="Accordatore">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v8a3 3 0 0 0 6 0V3"/><path d="M12 14v7"/><circle cx="12" cy="21" r="1.4" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <button class="iconbtn hdr" id="themeToggle" type="button" aria-label="Tema">
+        <svg class="ic-sun" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"/></svg>
+        <svg class="ic-moon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.2 8.2 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>
+      </button>
+      <div class="langpick" id="langPickHome">
       <button class="langtgl" id="langToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Change language"><span class="flag">🇮🇹</span><span class="langcode">IT</span></button>
-      <ul class="langmenu" role="menu"></ul>
+        <ul class="langmenu" role="menu"></ul>
+      </div>
     </div>
   </div>
   <p class="tagline" id="tagline">Vedi il nome dell'accordo, richiama la posizione a memoria, poi verifica sul manico. Gli insiemi sono ordinati per difficoltà e per come l'accordo è costruito.</p>
-
-  <button class="th-open" id="openTheory">
-    <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h9v16H6a2 2 0 0 0-2 2z"/><path d="M15 3h3a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2h-3"/></svg></span>
-    <span class="t"><b id="thOpenTitle">Come nascono gli accordi</b><span id="thOpenSub">La teoria dietro ogni insieme, in breve</span></span>
-    <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-  </button>
 
   <div class="panel">
     <h2 id="modeHeading">Modalità</h2>
@@ -445,18 +575,34 @@
 </div>
 
 <!-- THEORY -->
-<div class="stage theory" id="theory">
+<!-- ACCORDATORE -->
+<div class="stage tuner" id="tuner">
   <div class="top">
-    <button class="iconbtn" id="closeTheory" aria-label="Chiudi teoria">
+    <button class="iconbtn" id="closeTuner" aria-label="Chiudi accordatore">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
-    <div class="deckname"><div class="nm" id="theoryTopTitle">Come nascono gli accordi</div><div class="pos mono" id="theoryTopSub">costruzione degli accordi</div></div>
-    <div class="langpick" id="langPickTheory">
-      <button class="iconbtn langtgl-icon" id="langToggleTheory" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Change language"><span class="flag">🇮🇹</span></button>
+    <div class="deckname"><div class="nm" id="tunerTopTitle">Accordatore</div><div class="pos mono" id="tunerTopSub">accordatura standard</div></div>
+    <div class="langpick" id="langPickTuner">
+      <button class="iconbtn langtgl-icon" id="langToggleTuner" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Change language"><span class="flag">🇮🇹</span></button>
       <ul class="langmenu" role="menu"></ul>
     </div>
   </div>
-  <div class="body" id="theoryBody"></div>
+  <div class="center">
+    <div class="tn-note idle" id="tnNote">—</div>
+    <div class="tn-meter" id="tnMeter">
+      <div class="track"></div>
+      <i class="tick" style="left:0"></i><i class="tick" style="left:25%"></i>
+      <i class="tick mid" style="left:50%"></i><i class="tick" style="left:75%"></i><i class="tick" style="left:100%"></i>
+      <i class="needle" id="tnNeedle"></i>
+    </div>
+    <div class="tn-state" id="tnState" aria-live="polite"></div>
+    <div class="tn-fretboard">
+      <div class="tn-neck" id="tnNeck"></div>
+      <div class="tn-strings" id="tnStrings"></div>
+    </div>
+    <button class="start tn-act" id="tnToggle"><span id="tnToggleLab">Ascolta</span></button>
+    <p class="tn-hint" id="tnHint"></p>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -471,6 +617,25 @@ const I18N = {
     tagline: "Vedi il nome dell'accordo, richiama la posizione a memoria, poi verifica sul manico. Gli insiemi sono ordinati per difficoltà e per come l'accordo è costruito.",
     theoryOpenTitle: "Come nascono gli accordi",
     theoryOpenSub: "La teoria dietro ogni insieme, in breve",
+    tunerOpenAria: "Apri l'accordatore",
+    themeAria: "Cambia tema",
+    themeToLight: "Passa al tema chiaro",
+    themeToDark: "Passa al tema scuro",
+    tunerTitle: "Accordatore",
+    tunerSub: "accordatura standard",
+    closeTunerAria: "Chiudi accordatore",
+    tunerStart: "Ascolta",
+    tunerStop: "Ferma l'ascolto",
+    tunerIdle: "Tocca «Ascolta» e pizzica una corda",
+    tunerListening: "In ascolto…",
+    tunerFlat: "tendi la corda",
+    tunerSharp: "allenta la corda",
+    tunerInTune: "in accordo",
+    tunerPlayAria: "Suona la nota di riferimento",
+    tunerDenied: "Microfono negato. Puoi consentirlo dalle impostazioni del browser.",
+    tunerNoMic: "Microfono non disponibile su questa connessione.",
+    tunerHint: "Tocca una corda per sentirla. Il microfono e la nota di riferimento non vanno insieme: l'uno spegne l'altra.",
+    tunerCents: "cent",
     modeHeading: "Modalità",
     modeGroupLabel: "Modalità",
     modeAuto: "Automatica", modeAutoSub: "a tempo, scorre da sola",
@@ -507,7 +672,7 @@ const I18N = {
     closeTheoryAria: "Chiudi teoria",
     themeIntro: "Quasi tutti gli accordi nascono impilando <b>terze</b> a partire da una nota, la <em>fondamentale</em>, prendendo le note da una scala. Non conta il nome assoluto delle note ma la loro <b>distanza</b> dalla fondamentale: è l'intervallo a decidere il colore. Come metro si usa la <b>scala maggiore</b>.",
     thRefP: "I sette gradi della scala maggiore (qui in Do). I numeri sono i mattoni con cui si scrivono tutti gli accordi qui sotto.",
-    thSwitch: "Due “interruttori” governano quasi tutto: la <b>terza</b> distingue maggiore da minore, e la <b>settima</b> — con la sua misura — aggiunge la quarta nota e definisce la famiglia. Nei righelli qui sotto, in <span style=\"color:var(--abalone)\">verde</span> è evidenziata la nota che caratterizza ciascun tipo.",
+    thSwitch: "Due “interruttori” governano quasi tutto: la <b>terza</b> distingue maggiore da minore, e la <b>settima</b> — con la sua misura — aggiunge la quarta nota e definisce la famiglia. Nei righelli qui sotto, la nota che caratterizza ciascun tipo è <span style=\"color:var(--accent)\">in evidenza</span>.",
     rulerRoot: "fond.",
     rulerOctave: "ottava",
     trainLink: "Allenati",
@@ -529,6 +694,25 @@ const I18N = {
     tagline: "See the chord's name, recall the shape from memory, then check it on the neck. The sets are ordered by difficulty and by how each chord is built.",
     theoryOpenTitle: "How chords are built",
     theoryOpenSub: "The theory behind each set, in brief",
+    tunerOpenAria: "Open the tuner",
+    themeAria: "Change theme",
+    themeToLight: "Switch to the light theme",
+    themeToDark: "Switch to the dark theme",
+    tunerTitle: "Tuner",
+    tunerSub: "standard tuning",
+    closeTunerAria: "Close tuner",
+    tunerStart: "Listen",
+    tunerStop: "Stop listening",
+    tunerIdle: "Tap “Listen” and pluck a string",
+    tunerListening: "Listening…",
+    tunerFlat: "tighten the string",
+    tunerSharp: "loosen the string",
+    tunerInTune: "in tune",
+    tunerPlayAria: "Play the reference note",
+    tunerDenied: "Microphone denied. You can allow it in your browser settings.",
+    tunerNoMic: "Microphone not available on this connection.",
+    tunerHint: "Tap a string to hear it. The microphone and the reference note don't mix: each one switches the other off.",
+    tunerCents: "cents",
     modeHeading: "Mode",
     modeGroupLabel: "Mode",
     modeAuto: "Automatic", modeAutoSub: "timed, moves on its own",
@@ -565,7 +749,7 @@ const I18N = {
     closeTheoryAria: "Close theory",
     themeIntro: "Almost every chord is built by stacking <b>thirds</b> on top of a starting note, the <em>root</em>, taking notes from a scale. What matters isn't the absolute name of a note but its <b>distance</b> from the root: it's the interval that decides the color. The <b>major scale</b> is used as the ruler.",
     thRefP: "The seven degrees of the major scale (here in C). These numbers are the building blocks used to write every chord below.",
-    thSwitch: "Two “switches” govern almost everything: the <b>third</b> tells major from minor, and the <b>seventh</b> — with its size — adds the fourth note and defines the family. In the rulers below, the note in <span style=\"color:var(--abalone)\">green</span> is the one that defines each type.",
+    thSwitch: "Two “switches” govern almost everything: the <b>third</b> tells major from minor, and the <b>seventh</b> — with its size — adds the fourth note and defines the family. In the rulers below, the note <span style=\"color:var(--accent)\">highlighted</span> is the one that defines each type.",
     rulerRoot: "root",
     rulerOctave: "octave",
     trainLink: "Practice",
@@ -589,60 +773,118 @@ const I18N = {
    'x' = corda muta, 0 = a vuoto, n = tasto.  fingers[]: 0 = nessun dito. */
 const CH = {
   C:    {sym:"C",    name:{it:"Do maggiore",en:"C major"},                        frets:['x',3,2,0,1,0], fingers:[0,3,2,0,1,0], deg:"1 · 3 · 5",       notes:{it:"Do · Mi · Sol",en:"C · E · G"}},
-  A:    {sym:"A",    name:{it:"La maggiore",en:"A major"},                        frets:['x',0,2,2,2,0], fingers:[0,0,1,2,3,0], deg:"1 · 3 · 5",       notes:{it:"La · Do♯ · Mi",en:"A · C♯ · E"}},
-  G:    {sym:"G",    name:{it:"Sol maggiore",en:"G major"},                       frets:[3,2,0,0,0,3],   fingers:[2,1,0,0,0,3], deg:"1 · 3 · 5",       notes:{it:"Sol · Si · Re",en:"G · B · D"}},
-  E:    {sym:"E",    name:{it:"Mi maggiore",en:"E major"},                        frets:[0,2,2,1,0,0],   fingers:[0,2,3,1,0,0], deg:"1 · 3 · 5",       notes:{it:"Mi · Sol♯ · Si",en:"E · G♯ · B"}},
+  Db: {sym:"D♭", name:{it:"Re♭ maggiore (barré)",en:"D♭ major (barre)"}, frets:['x',4,6,6,6,4], fingers:[0,1,3,3,3,1], deg:"1 · 3 · 5", notes:{it:"Re♭ · Fa · La♭",en:"D♭ · F · A♭"}},
   D:    {sym:"D",    name:{it:"Re maggiore",en:"D major"},                        frets:['x','x',0,2,3,2],fingers:[0,0,0,1,3,2],deg:"1 · 3 · 5",       notes:{it:"Re · Fa♯ · La",en:"D · F♯ · A"}},
+  Eb: {sym:"E♭", name:{it:"Mi♭ maggiore (barré)",en:"E♭ major (barre)"}, frets:['x','x',1,3,4,3], fingers:[0,0,1,2,4,3], deg:"1 · 3 · 5", notes:{it:"Mi♭ · Sol · Si♭",en:"E♭ · G · B♭"}},
+  E:    {sym:"E",    name:{it:"Mi maggiore",en:"E major"},                        frets:[0,2,2,1,0,0],   fingers:[0,2,3,1,0,0], deg:"1 · 3 · 5",       notes:{it:"Mi · Sol♯ · Si",en:"E · G♯ · B"}},
+  F:    {sym:"F",    name:{it:"Fa maggiore (barré)",en:"F major (barre)"},        frets:[1,3,3,2,1,1],   fingers:[1,3,4,2,1,1], deg:"1 · 3 · 5",       notes:{it:"Fa · La · Do",en:"F · A · C"}},
+  Fs: {sym:"F♯", name:{it:"Fa♯ maggiore (barré)",en:"F♯ major (barre)"}, frets:[2,4,4,3,2,2], fingers:[1,3,4,2,1,1], deg:"1 · 3 · 5", notes:{it:"Fa♯ · La♯ · Do♯",en:"F♯ · A♯ · C♯"}},
+  G:    {sym:"G",    name:{it:"Sol maggiore",en:"G major"},                       frets:[3,2,0,0,0,3],   fingers:[2,1,0,0,0,3], deg:"1 · 3 · 5",       notes:{it:"Sol · Si · Re",en:"G · B · D"}},
+  Ab: {sym:"A♭", name:{it:"La♭ maggiore (barré)",en:"A♭ major (barre)"}, frets:[4,6,6,5,4,4], fingers:[1,3,4,2,1,1], deg:"1 · 3 · 5", notes:{it:"La♭ · Do · Mi♭",en:"A♭ · C · E♭"}},
+  A:    {sym:"A",    name:{it:"La maggiore",en:"A major"},                        frets:['x',0,2,2,2,0], fingers:[0,0,1,2,3,0], deg:"1 · 3 · 5",       notes:{it:"La · Do♯ · Mi",en:"A · C♯ · E"}},
+  Bb:   {sym:"B♭",   name:{it:"Si♭ maggiore (barré)",en:"B♭ major (barre)"},      frets:['x',1,3,3,3,1], fingers:[0,1,3,3,3,1], deg:"1 · 3 · 5",       notes:{it:"Si♭ · Re · Fa",en:"B♭ · D · F"}},
+  B:    {sym:"B",    name:{it:"Si maggiore (barré)",en:"B major (barre)"},        frets:['x',2,4,4,4,2], fingers:[0,1,3,3,3,1], deg:"1 · 3 · 5",       notes:{it:"Si · Re♯ · Fa♯",en:"B · D♯ · F♯"}},
 
-  Am:   {sym:"Am",   name:{it:"La minore",en:"A minor"},                          frets:['x',0,2,2,1,0], fingers:[0,0,2,3,1,0], deg:"1 · ♭3 · 5",      notes:{it:"La · Do · Mi",en:"A · C · E"}},
-  Em:   {sym:"Em",   name:{it:"Mi minore",en:"E minor"},                          frets:[0,2,2,0,0,0],   fingers:[0,2,3,0,0,0], deg:"1 · ♭3 · 5",      notes:{it:"Mi · Sol · Si",en:"E · G · B"}},
+  Cm: {sym:"Cm", name:{it:"Do minore (barré)",en:"C minor (barre)"}, frets:['x',3,5,5,4,3], fingers:[0,1,3,4,2,1], deg:"1 · ♭3 · 5", notes:{it:"Do · Mi♭ · Sol",en:"C · E♭ · G"}},
+  Csm: {sym:"C♯m", name:{it:"Do♯ minore (barré)",en:"C♯ minor (barre)"}, frets:['x',4,6,6,5,4], fingers:[0,1,3,4,2,1], deg:"1 · ♭3 · 5", notes:{it:"Do♯ · Mi · Sol♯",en:"C♯ · E · G♯"}},
   Dm:   {sym:"Dm",   name:{it:"Re minore",en:"D minor"},                          frets:['x','x',0,2,3,1],fingers:[0,0,0,2,3,1],deg:"1 · ♭3 · 5",      notes:{it:"Re · Fa · La",en:"D · F · A"}},
+  Ebm: {sym:"E♭m", name:{it:"Mi♭ minore (barré)",en:"E♭ minor (barre)"}, frets:['x','x',1,3,4,2], fingers:[0,0,1,3,4,2], deg:"1 · ♭3 · 5", notes:{it:"Mi♭ · Sol♭ · Si♭",en:"E♭ · G♭ · B♭"}},
+  Em:   {sym:"Em",   name:{it:"Mi minore",en:"E minor"},                          frets:[0,2,2,0,0,0],   fingers:[0,2,3,0,0,0], deg:"1 · ♭3 · 5",      notes:{it:"Mi · Sol · Si",en:"E · G · B"}},
+  Fm:   {sym:"Fm",   name:{it:"Fa minore (barré)",en:"F minor (barre)"},          frets:[1,3,3,1,1,1],   fingers:[1,3,4,1,1,1], deg:"1 · ♭3 · 5",      notes:{it:"Fa · La♭ · Do",en:"F · A♭ · C"}},
+  Fsm:  {sym:"F♯m",  name:{it:"Fa♯ minore (barré)",en:"F♯ minor (barre)"},        frets:[2,4,4,2,2,2],   fingers:[1,3,4,1,1,1], deg:"1 · ♭3 · 5",      notes:{it:"Fa♯ · La · Do♯",en:"F♯ · A · C♯"}},
+  Gm: {sym:"Gm", name:{it:"Sol minore (barré)",en:"G minor (barre)"}, frets:[3,5,5,3,3,3], fingers:[1,3,4,1,1,1], deg:"1 · ♭3 · 5", notes:{it:"Sol · Si♭ · Re",en:"G · B♭ · D"}},
+  Gsm: {sym:"G♯m", name:{it:"Sol♯ minore (barré)",en:"G♯ minor (barre)"}, frets:[4,6,6,4,4,4], fingers:[1,3,4,1,1,1], deg:"1 · ♭3 · 5", notes:{it:"Sol♯ · Si · Re♯",en:"G♯ · B · D♯"}},
+  Am:   {sym:"Am",   name:{it:"La minore",en:"A minor"},                          frets:['x',0,2,2,1,0], fingers:[0,0,2,3,1,0], deg:"1 · ♭3 · 5",      notes:{it:"La · Do · Mi",en:"A · C · E"}},
+  Bbm: {sym:"B♭m", name:{it:"Si♭ minore (barré)",en:"B♭ minor (barre)"}, frets:['x',1,3,3,2,1], fingers:[0,1,3,4,2,1], deg:"1 · ♭3 · 5", notes:{it:"Si♭ · Re♭ · Fa",en:"B♭ · D♭ · F"}},
   Bm:   {sym:"Bm",   name:{it:"Si minore",en:"B minor"},                          frets:['x',2,4,4,3,2], fingers:[0,1,3,4,2,1], deg:"1 · ♭3 · 5",      notes:{it:"Si · Re · Fa♯",en:"B · D · F♯"}},
 
-  G7:   {sym:"G7",   name:{it:"Sol settima (dominante)",en:"G dominant seventh"}, frets:[3,2,0,0,0,1],  fingers:[3,2,0,0,0,1], deg:"1 · 3 · 5 · ♭7",  notes:{it:"Sol · Si · Re · Fa",en:"G · B · D · F"}},
-  C7:   {sym:"C7",   name:{it:"Do settima",en:"C seventh"},                       frets:['x',3,2,3,1,0], fingers:[0,3,2,4,1,0], deg:"1 · 3 · 5 · ♭7",  notes:{it:"Do · Mi · Sol · Si♭",en:"C · E · G · B♭"}},
+  C7:   {sym:"C7",   name:{it:"Do settima",en:"C seventh"},                       frets:['x',3,2,3,1,0], fingers:[0,3,2,4,1,0], deg:"1 · 3 · ♭7",      notes:{it:"Do · Mi · Si♭",en:"C · E · B♭"}},
+  Cs7: {sym:"C♯7", name:{it:"Do♯ settima (barré)",en:"C♯ seventh (barre)"}, frets:['x',4,6,4,6,4], fingers:[0,1,3,1,4,1], deg:"1 · 3 · 5 · ♭7", notes:{it:"Do♯ · Mi♯ · Sol♯ · Si",en:"C♯ · E♯ · G♯ · B"}},
   D7:   {sym:"D7",   name:{it:"Re settima",en:"D seventh"},                       frets:['x','x',0,2,1,2],fingers:[0,0,0,2,1,3],deg:"1 · 3 · 5 · ♭7",  notes:{it:"Re · Fa♯ · La · Do",en:"D · F♯ · A · C"}},
+  Eb7: {sym:"E♭7", name:{it:"Mi♭ settima (barré)",en:"E♭ seventh (barre)"}, frets:['x',6,8,6,8,6], fingers:[0,1,3,1,4,1], deg:"1 · 3 · 5 · ♭7", notes:{it:"Mi♭ · Sol · Si♭ · Re♭",en:"E♭ · G · B♭ · D♭"}},
   E7:   {sym:"E7",   name:{it:"Mi settima",en:"E seventh"},                       frets:[0,2,0,1,0,0],   fingers:[0,2,0,1,0,0], deg:"1 · 3 · 5 · ♭7",  notes:{it:"Mi · Sol♯ · Si · Re",en:"E · G♯ · B · D"}},
+  F7: {sym:"F7", name:{it:"Fa settima (barré)",en:"F seventh (barre)"}, frets:[1,3,1,2,1,1], fingers:[1,3,1,2,1,1], deg:"1 · 3 · 5 · ♭7", notes:{it:"Fa · La · Do · Mi♭",en:"F · A · C · E♭"}},
+  Fs7: {sym:"F♯7", name:{it:"Fa♯ settima (barré)",en:"F♯ seventh (barre)"}, frets:[2,4,2,3,2,2], fingers:[1,3,1,2,1,1], deg:"1 · 3 · 5 · ♭7", notes:{it:"Fa♯ · La♯ · Do♯ · Mi",en:"F♯ · A♯ · C♯ · E"}},
+  G7:   {sym:"G7",   name:{it:"Sol settima (dominante)",en:"G dominant seventh"}, frets:[3,2,0,0,0,1],  fingers:[3,2,0,0,0,1], deg:"1 · 3 · 5 · ♭7",  notes:{it:"Sol · Si · Re · Fa",en:"G · B · D · F"}},
+  Ab7: {sym:"A♭7", name:{it:"La♭ settima (barré)",en:"A♭ seventh (barre)"}, frets:[4,6,4,5,4,4], fingers:[1,3,1,2,1,1], deg:"1 · 3 · 5 · ♭7", notes:{it:"La♭ · Do · Mi♭ · Sol♭",en:"A♭ · C · E♭ · G♭"}},
   A7:   {sym:"A7",   name:{it:"La settima",en:"A seventh"},                       frets:['x',0,2,0,2,0], fingers:[0,0,2,0,3,0], deg:"1 · 3 · 5 · ♭7",  notes:{it:"La · Do♯ · Mi · Sol",en:"A · C♯ · E · G"}},
+  Bb7: {sym:"B♭7", name:{it:"Si♭ settima (barré)",en:"B♭ seventh (barre)"}, frets:['x',1,3,1,3,1], fingers:[0,1,3,1,4,1], deg:"1 · 3 · 5 · ♭7", notes:{it:"Si♭ · Re · Fa · La♭",en:"B♭ · D · F · A♭"}},
   B7:   {sym:"B7",   name:{it:"Si settima",en:"B seventh"},                       frets:['x',2,1,2,0,2], fingers:[0,2,1,3,0,4], deg:"1 · 3 · 5 · ♭7",  notes:{it:"Si · Re♯ · Fa♯ · La",en:"B · D♯ · F♯ · A"}},
 
   Cmaj7:{sym:"Cmaj7",name:{it:"Do settima maggiore",en:"C major seventh"},        frets:['x',3,2,0,0,0], fingers:[0,3,2,0,0,0], deg:"1 · 3 · 5 · 7",   notes:{it:"Do · Mi · Sol · Si",en:"C · E · G · B"}},
-  Amaj7:{sym:"Amaj7",name:{it:"La settima maggiore",en:"A major seventh"},        frets:['x',0,2,1,2,0], fingers:[0,0,2,1,3,0], deg:"1 · 3 · 5 · 7",   notes:{it:"La · Do♯ · Mi · Sol♯",en:"A · C♯ · E · G♯"}},
+  Dbmaj7: {sym:"D♭maj7", name:{it:"Re♭ settima maggiore (barré)",en:"D♭ major seventh (barre)"}, frets:['x',4,6,5,6,4], fingers:[0,1,3,2,4,1], deg:"1 · 3 · 5 · 7", notes:{it:"Re♭ · Fa · La♭ · Do",en:"D♭ · F · A♭ · C"}},
   Dmaj7:{sym:"Dmaj7",name:{it:"Re settima maggiore",en:"D major seventh"},        frets:['x','x',0,2,2,2],fingers:[0,0,0,1,1,1],deg:"1 · 3 · 5 · 7",   notes:{it:"Re · Fa♯ · La · Do♯",en:"D · F♯ · A · C♯"}},
-  Fmaj7:{sym:"Fmaj7",name:{it:"Fa settima maggiore",en:"F major seventh"},        frets:['x','x',3,2,1,0],fingers:[0,0,3,2,1,0],deg:"1 · 3 · 5 · 7",   notes:{it:"Fa · La · Do · Mi",en:"F · A · C · E"}},
-  Gmaj7:{sym:"Gmaj7",name:{it:"Sol settima maggiore",en:"G major seventh"},       frets:[3,2,0,0,0,2],   fingers:[3,1,0,0,0,2], deg:"1 · 3 · 5 · 7",   notes:{it:"Sol · Si · Re · Fa♯",en:"G · B · D · F♯"}},
+  Ebmaj7: {sym:"E♭maj7", name:{it:"Mi♭ settima maggiore (barré)",en:"E♭ major seventh (barre)"}, frets:['x',6,8,7,8,6], fingers:[0,1,3,2,4,1], deg:"1 · 3 · 5 · 7", notes:{it:"Mi♭ · Sol · Si♭ · Re",en:"E♭ · G · B♭ · D"}},
   Emaj7:{sym:"Emaj7",name:{it:"Mi settima maggiore",en:"E major seventh"},        frets:[0,2,1,1,0,0],   fingers:[0,3,1,2,0,0], deg:"1 · 3 · 5 · 7",   notes:{it:"Mi · Sol♯ · Si · Re♯",en:"E · G♯ · B · D♯"}},
+  Fmaj7:{sym:"Fmaj7",name:{it:"Fa settima maggiore",en:"F major seventh"},        frets:['x','x',3,2,1,0],fingers:[0,0,3,2,1,0],deg:"1 · 3 · 5 · 7",   notes:{it:"Fa · La · Do · Mi",en:"F · A · C · E"}},
+  Gbmaj7: {sym:"G♭maj7", name:{it:"Sol♭ settima maggiore (barré)",en:"G♭ major seventh (barre)"}, frets:[2,4,3,3,2,2], fingers:[1,4,2,3,1,1], deg:"1 · 3 · 5 · 7", notes:{it:"Sol♭ · Si♭ · Re♭ · Fa",en:"G♭ · B♭ · D♭ · F"}},
+  Gmaj7:{sym:"Gmaj7",name:{it:"Sol settima maggiore",en:"G major seventh"},       frets:[3,2,0,0,0,2],   fingers:[3,1,0,0,0,2], deg:"1 · 3 · 5 · 7",   notes:{it:"Sol · Si · Re · Fa♯",en:"G · B · D · F♯"}},
+  Abmaj7: {sym:"A♭maj7", name:{it:"La♭ settima maggiore (barré)",en:"A♭ major seventh (barre)"}, frets:[4,6,5,5,4,4], fingers:[1,4,2,3,1,1], deg:"1 · 3 · 5 · 7", notes:{it:"La♭ · Do · Mi♭ · Sol",en:"A♭ · C · E♭ · G"}},
+  Amaj7:{sym:"Amaj7",name:{it:"La settima maggiore",en:"A major seventh"},        frets:['x',0,2,1,2,0], fingers:[0,0,2,1,3,0], deg:"1 · 3 · 5 · 7",   notes:{it:"La · Do♯ · Mi · Sol♯",en:"A · C♯ · E · G♯"}},
+  Bbmaj7: {sym:"B♭maj7", name:{it:"Si♭ settima maggiore (barré)",en:"B♭ major seventh (barre)"}, frets:['x',1,3,2,3,1], fingers:[0,1,3,2,4,1], deg:"1 · 3 · 5 · 7", notes:{it:"Si♭ · Re · Fa · La",en:"B♭ · D · F · A"}},
+  Bmaj7: {sym:"Bmaj7", name:{it:"Si settima maggiore (barré)",en:"B major seventh (barre)"}, frets:['x',2,4,3,4,2], fingers:[0,1,3,2,4,1], deg:"1 · 3 · 5 · 7", notes:{it:"Si · Re♯ · Fa♯ · La♯",en:"B · D♯ · F♯ · A♯"}},
 
-  Am7:  {sym:"Am7",  name:{it:"La minore settima",en:"A minor seventh"},          frets:['x',0,2,0,1,0], fingers:[0,0,2,0,1,0], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"La · Do · Mi · Sol",en:"A · C · E · G"}},
-  Em7:  {sym:"Em7",  name:{it:"Mi minore settima",en:"E minor seventh"},          frets:[0,2,0,0,0,0],   fingers:[0,2,0,0,0,0], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Mi · Sol · Si · Re",en:"E · G · B · D"}},
+  Cm7: {sym:"Cm7", name:{it:"Do minore settima (barré)",en:"C minor seventh (barre)"}, frets:['x',3,5,3,4,3], fingers:[0,1,3,1,2,1], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Do · Mi♭ · Sol · Si♭",en:"C · E♭ · G · B♭"}},
+  Csm7: {sym:"C♯m7", name:{it:"Do♯ minore settima (barré)",en:"C♯ minor seventh (barre)"}, frets:['x',4,6,4,5,4], fingers:[0,1,3,1,2,1], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Do♯ · Mi · Sol♯ · Si",en:"C♯ · E · G♯ · B"}},
   Dm7:  {sym:"Dm7",  name:{it:"Re minore settima",en:"D minor seventh"},          frets:['x','x',0,2,1,1],fingers:[0,0,0,2,1,1],deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Re · Fa · La · Do",en:"D · F · A · C"}},
+  Ebm7: {sym:"E♭m7", name:{it:"Mi♭ minore settima (barré)",en:"E♭ minor seventh (barre)"}, frets:['x',6,8,6,7,6], fingers:[0,1,3,1,2,1], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Mi♭ · Sol♭ · Si♭ · Re♭",en:"E♭ · G♭ · B♭ · D♭"}},
+  Em7:  {sym:"Em7",  name:{it:"Mi minore settima",en:"E minor seventh"},          frets:[0,2,0,0,0,0],   fingers:[0,2,0,0,0,0], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Mi · Sol · Si · Re",en:"E · G · B · D"}},
+  Fm7: {sym:"Fm7", name:{it:"Fa minore settima (barré)",en:"F minor seventh (barre)"}, frets:[1,3,1,1,1,1], fingers:[1,3,1,1,1,1], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Fa · La♭ · Do · Mi♭",en:"F · A♭ · C · E♭"}},
+  Fsm7: {sym:"F♯m7", name:{it:"Fa♯ minore settima (barré)",en:"F♯ minor seventh (barre)"}, frets:[2,4,2,2,2,2], fingers:[1,3,1,1,1,1], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Fa♯ · La · Do♯ · Mi",en:"F♯ · A · C♯ · E"}},
+  Gm7: {sym:"Gm7", name:{it:"Sol minore settima (barré)",en:"G minor seventh (barre)"}, frets:[3,5,3,3,3,3], fingers:[1,3,1,1,1,1], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Sol · Si♭ · Re · Fa",en:"G · B♭ · D · F"}},
+  Gsm7: {sym:"G♯m7", name:{it:"Sol♯ minore settima (barré)",en:"G♯ minor seventh (barre)"}, frets:[4,6,4,4,4,4], fingers:[1,3,1,1,1,1], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Sol♯ · Si · Re♯ · Fa♯",en:"G♯ · B · D♯ · F♯"}},
+  Am7:  {sym:"Am7",  name:{it:"La minore settima",en:"A minor seventh"},          frets:['x',0,2,0,1,0], fingers:[0,0,2,0,1,0], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"La · Do · Mi · Sol",en:"A · C · E · G"}},
+  Bbm7: {sym:"B♭m7", name:{it:"Si♭ minore settima (barré)",en:"B♭ minor seventh (barre)"}, frets:['x',1,3,1,2,1], fingers:[0,1,3,1,2,1], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Si♭ · Re♭ · Fa · La♭",en:"B♭ · D♭ · F · A♭"}},
   Bm7:  {sym:"Bm7",  name:{it:"Si minore settima",en:"B minor seventh"},          frets:['x',2,0,2,0,2], fingers:[0,1,0,2,0,3], deg:"1 · ♭3 · 5 · ♭7", notes:{it:"Si · Re · Fa♯ · La",en:"B · D · F♯ · A"}},
 
-  Asus2:{sym:"Asus2",name:{it:"La sospesa (sus2)",en:"A suspended (sus2)"},       frets:['x',0,2,2,0,0], fingers:[0,0,1,2,0,0], deg:"1 · 2 · 5",       notes:{it:"La · Si · Mi",en:"A · B · E"}},
-  Asus4:{sym:"Asus4",name:{it:"La sospesa (sus4)",en:"A suspended (sus4)"},       frets:['x',0,2,2,3,0], fingers:[0,0,1,2,3,0], deg:"1 · 4 · 5",       notes:{it:"La · Re · Mi",en:"A · D · E"}},
+  Csus2: {sym:"Csus2", name:{it:"Do sospesa (sus2) (barré)",en:"C suspended (sus2) (barre)"}, frets:['x',3,5,5,3,3], fingers:[0,1,3,4,1,1], deg:"1 · 2 · 5", notes:{it:"Do · Re · Sol",en:"C · D · G"}},
+  Cssus2: {sym:"C♯sus2", name:{it:"Do♯ sospesa (sus2) (barré)",en:"C♯ suspended (sus2) (barre)"}, frets:['x',4,6,6,4,4], fingers:[0,1,3,4,1,1], deg:"1 · 2 · 5", notes:{it:"Do♯ · Re♯ · Sol♯",en:"C♯ · D♯ · G♯"}},
   Dsus2:{sym:"Dsus2",name:{it:"Re sospesa (sus2)",en:"D suspended (sus2)"},       frets:['x','x',0,2,3,0],fingers:[0,0,0,1,3,0],deg:"1 · 2 · 5",       notes:{it:"Re · Mi · La",en:"D · E · A"}},
-  Dsus4:{sym:"Dsus4",name:{it:"Re sospesa (sus4)",en:"D suspended (sus4)"},       frets:['x','x',0,2,3,3],fingers:[0,0,0,1,2,3],deg:"1 · 4 · 5",       notes:{it:"Re · Sol · La",en:"D · G · A"}},
-  Esus4:{sym:"Esus4",name:{it:"Mi sospesa (sus4)",en:"E suspended (sus4)"},       frets:[0,2,2,2,0,0],   fingers:[0,1,2,3,0,0], deg:"1 · 4 · 5",       notes:{it:"Mi · La · Si",en:"E · A · B"}},
-  Cadd9:{sym:"Cadd9",name:{it:"Do add9",en:"C add9"},                             frets:['x',3,2,0,3,0], fingers:[0,2,1,0,3,0], deg:"1 · 3 · 5 · 9",   notes:{it:"Do · Mi · Sol · Re",en:"C · E · G · D"}},
+  Ebsus2: {sym:"E♭sus2", name:{it:"Mi♭ sospesa (sus2) (barré)",en:"E♭ suspended (sus2) (barre)"}, frets:['x','x',1,3,4,1], fingers:[0,0,1,2,3,1], deg:"1 · 2 · 5", notes:{it:"Mi♭ · Fa · Si♭",en:"E♭ · F · B♭"}},
+  Esus2: {sym:"Esus2", name:{it:"Mi sospesa (sus2) (barré)",en:"E suspended (sus2) (barre)"}, frets:['x','x',2,4,5,2], fingers:[0,0,1,2,3,1], deg:"1 · 2 · 5", notes:{it:"Mi · Fa♯ · Si",en:"E · F♯ · B"}},
+  Fsus2: {sym:"Fsus2", name:{it:"Fa sospesa (sus2) (barré)",en:"F suspended (sus2) (barre)"}, frets:['x','x',3,5,6,3], fingers:[0,0,1,2,3,1], deg:"1 · 2 · 5", notes:{it:"Fa · Sol · Do",en:"F · G · C"}},
+  Fssus2: {sym:"F♯sus2", name:{it:"Fa♯ sospesa (sus2) (barré)",en:"F♯ suspended (sus2) (barre)"}, frets:['x','x',4,6,7,4], fingers:[0,0,1,2,3,1], deg:"1 · 2 · 5", notes:{it:"Fa♯ · Sol♯ · Do♯",en:"F♯ · G♯ · C♯"}},
+  Gsus2: {sym:"Gsus2", name:{it:"Sol sospesa (sus2) (barré)",en:"G suspended (sus2) (barre)"}, frets:['x','x',5,7,8,5], fingers:[0,0,1,2,3,1], deg:"1 · 2 · 5", notes:{it:"Sol · La · Re",en:"G · A · D"}},
+  Gssus2: {sym:"G♯sus2", name:{it:"Sol♯ sospesa (sus2) (barré)",en:"G♯ suspended (sus2) (barre)"}, frets:['x','x',6,8,9,6], fingers:[0,0,1,2,3,1], deg:"1 · 2 · 5", notes:{it:"Sol♯ · La♯ · Re♯",en:"G♯ · A♯ · D♯"}},
+  Asus2:{sym:"Asus2",name:{it:"La sospesa (sus2)",en:"A suspended (sus2)"},       frets:['x',0,2,2,0,0], fingers:[0,0,1,2,0,0], deg:"1 · 2 · 5",       notes:{it:"La · Si · Mi",en:"A · B · E"}},
+  Bbsus2: {sym:"B♭sus2", name:{it:"Si♭ sospesa (sus2) (barré)",en:"B♭ suspended (sus2) (barre)"}, frets:['x',1,3,3,1,1], fingers:[0,1,3,4,1,1], deg:"1 · 2 · 5", notes:{it:"Si♭ · Do · Fa",en:"B♭ · C · F"}},
+  Bsus2: {sym:"Bsus2", name:{it:"Si sospesa (sus2) (barré)",en:"B suspended (sus2) (barre)"}, frets:['x',2,4,4,2,2], fingers:[0,1,3,4,1,1], deg:"1 · 2 · 5", notes:{it:"Si · Do♯ · Fa♯",en:"B · C♯ · F♯"}},
 
-  F:    {sym:"F",    name:{it:"Fa maggiore (barré)",en:"F major (barre)"},        frets:[1,3,3,2,1,1],   fingers:[1,3,4,2,1,1], deg:"1 · 3 · 5",       notes:{it:"Fa · La · Do",en:"F · A · C"}},
-  Bb:   {sym:"B♭",   name:{it:"Si♭ maggiore (barré)",en:"B♭ major (barre)"},      frets:['x',1,3,3,3,1], fingers:[0,1,3,3,3,1], deg:"1 · 3 · 5",       notes:{it:"Si♭ · Re · Fa",en:"B♭ · D · F"}},
-  Fm:   {sym:"Fm",   name:{it:"Fa minore (barré)",en:"F minor (barre)"},          frets:[1,3,3,1,1,1],   fingers:[1,3,4,1,1,1], deg:"1 · ♭3 · 5",      notes:{it:"Fa · La♭ · Do",en:"F · A♭ · C"}},
-  Fsm:  {sym:"F♯m",  name:{it:"Fa♯ minore (barré)",en:"F♯ minor (barre)"},        frets:[2,4,4,2,2,2],   fingers:[1,3,4,1,1,1], deg:"1 · ♭3 · 5",      notes:{it:"Fa♯ · La · Do♯",en:"F♯ · A · C♯"}},
-  B:    {sym:"B",    name:{it:"Si maggiore (barré)",en:"B major (barre)"},        frets:['x',2,4,4,4,2], fingers:[0,1,3,3,3,1], deg:"1 · 3 · 5",       notes:{it:"Si · Re♯ · Fa♯",en:"B · D♯ · F♯"}},
+  Csus4: {sym:"Csus4", name:{it:"Do sospesa (sus4) (barré)",en:"C suspended (sus4) (barre)"}, frets:['x',3,5,5,6,3], fingers:[0,1,2,3,4,1], deg:"1 · 4 · 5", notes:{it:"Do · Fa · Sol",en:"C · F · G"}},
+  Cssus4: {sym:"C♯sus4", name:{it:"Do♯ sospesa (sus4) (barré)",en:"C♯ suspended (sus4) (barre)"}, frets:['x',4,6,6,7,4], fingers:[0,1,2,3,4,1], deg:"1 · 4 · 5", notes:{it:"Do♯ · Fa♯ · Sol♯",en:"C♯ · F♯ · G♯"}},
+  Dsus4:{sym:"Dsus4",name:{it:"Re sospesa (sus4)",en:"D suspended (sus4)"},       frets:['x','x',0,2,3,3],fingers:[0,0,0,1,2,3],deg:"1 · 4 · 5",       notes:{it:"Re · Sol · La",en:"D · G · A"}},
+  Ebsus4: {sym:"E♭sus4", name:{it:"Mi♭ sospesa (sus4) (barré)",en:"E♭ suspended (sus4) (barre)"}, frets:['x','x',1,3,4,4], fingers:[0,0,1,2,3,4], deg:"1 · 4 · 5", notes:{it:"Mi♭ · La♭ · Si♭",en:"E♭ · A♭ · B♭"}},
+  Esus4:{sym:"Esus4",name:{it:"Mi sospesa (sus4)",en:"E suspended (sus4)"},       frets:[0,2,2,2,0,0],   fingers:[0,1,2,3,0,0], deg:"1 · 4 · 5",       notes:{it:"Mi · La · Si",en:"E · A · B"}},
+  Fsus4: {sym:"Fsus4", name:{it:"Fa sospesa (sus4) (barré)",en:"F suspended (sus4) (barre)"}, frets:[1,3,3,3,1,1], fingers:[1,2,3,4,1,1], deg:"1 · 4 · 5", notes:{it:"Fa · Si♭ · Do",en:"F · B♭ · C"}},
+  Fssus4: {sym:"F♯sus4", name:{it:"Fa♯ sospesa (sus4) (barré)",en:"F♯ suspended (sus4) (barre)"}, frets:[2,4,4,4,2,2], fingers:[1,2,3,4,1,1], deg:"1 · 4 · 5", notes:{it:"Fa♯ · Si · Do♯",en:"F♯ · B · C♯"}},
+  Gsus4: {sym:"Gsus4", name:{it:"Sol sospesa (sus4) (barré)",en:"G suspended (sus4) (barre)"}, frets:[3,5,5,5,3,3], fingers:[1,2,3,4,1,1], deg:"1 · 4 · 5", notes:{it:"Sol · Do · Re",en:"G · C · D"}},
+  Gssus4: {sym:"G♯sus4", name:{it:"Sol♯ sospesa (sus4) (barré)",en:"G♯ suspended (sus4) (barre)"}, frets:[4,6,6,6,4,4], fingers:[1,2,3,4,1,1], deg:"1 · 4 · 5", notes:{it:"Sol♯ · Do♯ · Re♯",en:"G♯ · C♯ · D♯"}},
+  Asus4:{sym:"Asus4",name:{it:"La sospesa (sus4)",en:"A suspended (sus4)"},       frets:['x',0,2,2,3,0], fingers:[0,0,1,2,3,0], deg:"1 · 4 · 5",       notes:{it:"La · Re · Mi",en:"A · D · E"}},
+  Bbsus4: {sym:"B♭sus4", name:{it:"Si♭ sospesa (sus4) (barré)",en:"B♭ suspended (sus4) (barre)"}, frets:['x',1,3,3,4,1], fingers:[0,1,2,3,4,1], deg:"1 · 4 · 5", notes:{it:"Si♭ · Mi♭ · Fa",en:"B♭ · E♭ · F"}},
+  Bsus4: {sym:"Bsus4", name:{it:"Si sospesa (sus4) (barré)",en:"B suspended (sus4) (barre)"}, frets:['x',2,4,4,5,2], fingers:[0,1,2,3,4,1], deg:"1 · 4 · 5", notes:{it:"Si · Mi · Fa♯",en:"B · E · F♯"}},
+
+  Cadd9:{sym:"Cadd9",name:{it:"Do add9",en:"C add9"},                             frets:['x',3,2,0,3,0], fingers:[0,2,1,0,3,0], deg:"1 · 3 · 5 · 9",   notes:{it:"Do · Mi · Sol · Re",en:"C · E · G · D"}},
+  Dbadd9: {sym:"D♭add9", name:{it:"Re♭ add9 (barré)",en:"D♭ add9 (barre)"}, frets:['x',4,6,8,6,4], fingers:[0,1,2,4,3,1], deg:"1 · 3 · 5 · 9", notes:{it:"Re♭ · Fa · La♭ · Mi♭",en:"D♭ · F · A♭ · E♭"}},
+  Dadd9: {sym:"Dadd9", name:{it:"Re add9 (barré)",en:"D add9 (barre)"}, frets:['x',5,7,9,7,5], fingers:[0,1,2,4,3,1], deg:"1 · 3 · 5 · 9", notes:{it:"Re · Fa♯ · La · Mi",en:"D · F♯ · A · E"}},
+  Aadd9: {sym:"Aadd9", name:{it:"La add9",en:"A add9"}, frets:['x',0,2,4,2,0], fingers:[0,0,2,4,3,0], deg:"1 · 3 · 5 · 9", notes:{it:"La · Do♯ · Mi · Si",en:"A · C♯ · E · B"}},
+  Bbadd9: {sym:"B♭add9", name:{it:"Si♭ add9 (barré)",en:"B♭ add9 (barre)"}, frets:['x',1,3,5,3,1], fingers:[0,1,2,4,3,1], deg:"1 · 3 · 5 · 9", notes:{it:"Si♭ · Re · Fa · Do",en:"B♭ · D · F · C"}},
+  Badd9: {sym:"Badd9", name:{it:"Si add9 (barré)",en:"B add9 (barre)"}, frets:['x',2,4,6,4,2], fingers:[0,1,2,4,3,1], deg:"1 · 3 · 5 · 9", notes:{it:"Si · Re♯ · Fa♯ · Do♯",en:"B · D♯ · F♯ · C♯"}},
 };
 
 const DECKS = [
+  {group:"diff", id:"pop",  nm:{it:"Più popolari",en:"Most popular"}, sb:{it:"Gli accordi delle canzoni che conosci",en:"The chords of the songs you know"}, ch:["G","C","D","Em","Am","E","A","Dm","G7","E7","A7","D7","F","Bm"]},
   {group:"diff", id:"beg",  nm:{it:"Principiante",en:"Beginner"}, sb:{it:"Accordi aperti fondamentali",en:"Fundamental open chords"}, ch:["Em","Am","C","G","D","E","A","Dm"]},
   {group:"diff", id:"int",  nm:{it:"Intermedio",en:"Intermediate"}, sb:{it:"Settime aperte e colori",en:"Open sevenths and colors"}, ch:["G7","C7","D7","E7","A7","Em7","Am7","Dm7","Asus2","Dsus4","Cadd9"]},
-  {group:"diff", id:"adv",  nm:{it:"Avanzato",en:"Advanced"}, sb:{it:"Barré e forme mobili",en:"Barre chords and movable shapes"}, ch:["F","Bb","Fm","Fsm","B","Bm"]},
+  {group:"diff", id:"adv",  nm:{it:"Avanzato",en:"Advanced"}, sb:{it:"Barré e forme mobili",en:"Barre chords and movable shapes"}, ch:["F","Bb","Fm","Fsm","B","Bm","Csm","Gsm","Eb","Ab","Db","Fs"]},
 
-  {group:"th", id:"maj",  nm:{it:"Triadi maggiori",en:"Major triads"}, sb:{it:"Costruzione 1 · 3 · 5",en:"Built as 1 · 3 · 5"}, ch:["C","A","G","E","D"]},
-  {group:"th", id:"min",  nm:{it:"Triadi minori",en:"Minor triads"}, sb:{it:"La 3ª si abbassa · 1 · ♭3 · 5",en:"The 3rd drops · 1 · ♭3 · 5"}, ch:["Am","Em","Dm","Bm"]},
-  {group:"th", id:"dom",  nm:{it:"Settime di dominante",en:"Dominant sevenths"}, sb:{it:"Aggiungi la ♭7 · 1 · 3 · 5 · ♭7",en:"Add the ♭7 · 1 · 3 · 5 · ♭7"}, ch:["G7","C7","D7","E7","A7","B7"]},
-  {group:"th", id:"maj7", nm:{it:"Settime maggiori",en:"Major sevenths"}, sb:{it:"7ª naturale · 1 · 3 · 5 · 7",en:"Natural 7th · 1 · 3 · 5 · 7"}, ch:["Cmaj7","Amaj7","Dmaj7","Fmaj7","Gmaj7","Emaj7"]},
-  {group:"th", id:"min7", nm:{it:"Settime minori",en:"Minor sevenths"}, sb:{it:"♭3 e ♭7 · 1 · ♭3 · 5 · ♭7",en:"♭3 and ♭7 · 1 · ♭3 · 5 · ♭7"}, ch:["Am7","Em7","Dm7","Bm7"]},
-  {group:"th", id:"col",  nm:{it:"Accordi di colore",en:"Color chords"}, sb:{it:"sus e add: sostituisci o aggiungi",en:"sus & add: replace or add a note"}, ch:["Asus2","Asus4","Dsus2","Dsus4","Esus4","Cadd9"]},
+  {group:"th", id:"maj",  nm:{it:"Triadi maggiori",en:"Major triads"}, sb:{it:"Costruzione 1 · 3 · 5",en:"Built as 1 · 3 · 5"}, ch:["C","Db","D","Eb","E","F","Fs","G","Ab","A","Bb","B"]},
+  {group:"th", id:"min",  nm:{it:"Triadi minori",en:"Minor triads"}, sb:{it:"La 3ª si abbassa · 1 · ♭3 · 5",en:"The 3rd drops · 1 · ♭3 · 5"}, ch:["Cm","Csm","Dm","Ebm","Em","Fm","Fsm","Gm","Gsm","Am","Bbm","Bm"]},
+  {group:"th", id:"dom",  nm:{it:"Settime di dominante",en:"Dominant sevenths"}, sb:{it:"Aggiungi la ♭7 · 1 · 3 · 5 · ♭7",en:"Add the ♭7 · 1 · 3 · 5 · ♭7"}, ch:["C7","Cs7","D7","Eb7","E7","F7","Fs7","G7","Ab7","A7","Bb7","B7"]},
+  {group:"th", id:"maj7", nm:{it:"Settime maggiori",en:"Major sevenths"}, sb:{it:"7ª naturale · 1 · 3 · 5 · 7",en:"Natural 7th · 1 · 3 · 5 · 7"}, ch:["Cmaj7","Dbmaj7","Dmaj7","Ebmaj7","Emaj7","Fmaj7","Gbmaj7","Gmaj7","Abmaj7","Amaj7","Bbmaj7","Bmaj7"]},
+  {group:"th", id:"min7", nm:{it:"Settime minori",en:"Minor sevenths"}, sb:{it:"♭3 e ♭7 · 1 · ♭3 · 5 · ♭7",en:"♭3 and ♭7 · 1 · ♭3 · 5 · ♭7"}, ch:["Cm7","Csm7","Dm7","Ebm7","Em7","Fm7","Fsm7","Gm7","Gsm7","Am7","Bbm7","Bm7"]},
+  {group:"th", id:"sus4", nm:{it:"Sospesi sus4",en:"Suspended sus4"}, sb:{it:"La 3ª diventa 4ª · 1 · 4 · 5",en:"The 3rd becomes a 4th · 1 · 4 · 5"}, ch:["Csus4","Cssus4","Dsus4","Ebsus4","Esus4","Fsus4","Fssus4","Gsus4","Gssus4","Asus4","Bbsus4","Bsus4"]},
+  {group:"th", id:"sus2", nm:{it:"Sospesi sus2",en:"Suspended sus2"}, sb:{it:"La 3ª diventa 2ª · 1 · 2 · 5",en:"The 3rd becomes a 2nd · 1 · 2 · 5"}, ch:["Csus2","Cssus2","Dsus2","Ebsus2","Esus2","Fsus2","Fssus2","Gsus2","Gssus2","Asus2","Bbsus2","Bsus2"]},
+  {group:"th", id:"add9", nm:{it:"Accordi add9",en:"Add9 chords"}, sb:{it:"La 9ª si aggiunge · 1 · 3 · 5 · 9",en:"The 9th is added · 1 · 3 · 5 · 9"}, ch:["Cadd9","Dbadd9","Dadd9","Aadd9","Bbadd9","Badd9"]},
 ];
 
 /* ============ persistence (safe) ============ */
@@ -655,8 +897,38 @@ const LANGS = [
   {code:"it", flag:"🇮🇹", label:"Italiano"},
   {code:"en", flag:"🇬🇧", label:"English"},
 ];
-const LANG_PICKS = ["langPickHome","langPickStage","langPickTheory"];
+const LANG_PICKS = ["langPickHome","langPickStage","langPickTuner"];
 const langInfo = code => LANGS.find(l=>l.code===code) || LANGS[0];
+
+/* ---------- tema ----------
+   La scelta esplicita vince sulla preferenza di sistema e viene ricordata.
+   Se non c'e' scelta, l'attributo resta vuoto e decide il sistema via CSS. */
+function detectTheme(){
+  const saved = load("chordtrainer.theme.v1");
+  return (saved==="dark" || saved==="light") ? saved : null;
+}
+function systemDark(){
+  try{ return matchMedia("(prefers-color-scheme:dark)").matches; }catch(e){ return false; }
+}
+function currentTheme(){
+  return document.documentElement.getAttribute("data-theme") || (systemDark() ? "dark" : "light");
+}
+function applyTheme(mode){
+  if(mode) document.documentElement.setAttribute("data-theme", mode);
+  else document.documentElement.removeAttribute("data-theme");
+  updateThemeButton();
+}
+function updateThemeButton(){
+  const b=el("themeToggle"); if(!b) return;
+  const scuro = currentTheme()==="dark";
+  b.setAttribute("aria-label", scuro ? t('themeToLight') : t('themeToDark'));
+  b.setAttribute("aria-pressed", String(scuro));
+}
+function toggleTheme(){
+  const nuovo = currentTheme()==="dark" ? "light" : "dark";
+  save("chordtrainer.theme.v1", nuovo);
+  applyTheme(nuovo);
+}
 
 function detectLang(){
   const saved = load("chordtrainer.lang.v1");
@@ -760,7 +1032,18 @@ function miniDiagram(){
   let lines="";
   for(let i=0;i<5;i++){ const x=8+i*6; lines+=`<line x1="${x}" y1="5" x2="${x}" y2="31" stroke="#c9c3b3" stroke-width="1"/>`; }
   for(let r=0;r<4;r++){ const y=5+r*8; lines+=`<line x1="8" y1="${y}" x2="32" y2="${y}" stroke="#d8d3c4" stroke-width="1"/>`; }
-  return `<svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="7" fill="#f2efe6"/>${lines}<circle cx="20" cy="21" r="4" fill="#0f9d84" opacity=".9"/></svg>`;
+  return `<svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="7" fill="var(--surface-2)"/>${lines}<circle cx="20" cy="21" r="4" fill="var(--accent)" opacity=".9"/></svg>`;
+}
+
+function theoryCard(f){
+  const L=f[S.lang];
+  const c=document.createElement("div"); c.className="th-card";
+  c.innerHTML=`<div class="th-eyebrow">${L.eyebrow}</div>
+    <h3>${L.title}</h3>
+    <div class="th-formula">${f.formula.join('<span class="sep"> · </span>')}</div>
+    <div class="th-recipe">${L.recipe} <span class="snd">${L.sound}</span></div>
+    ${ruler(f.tones)}`;
+  return c;
 }
 
 function renderDecks(){
@@ -768,11 +1051,23 @@ function renderDecks(){
   const groups=[{k:"diff",label:t('groupDiff')},{k:"th",label:t('groupTh')}];
   groups.forEach(gr=>{
     const lab=document.createElement("div"); lab.className="group-label"; lab.textContent=gr.label; wrap.appendChild(lab);
+
+    if(gr.k==="th"){   // introduzione comune a tutta la sezione teorica
+      const lead=document.createElement("div");
+      lead.innerHTML=`<p class="th-intro">${t('themeIntro')}</p>
+        <div class="th-ref"><p>${t('thRefP')}</p><div class="scale">`+
+        t('scaleDeg').map(([n,nt])=>`<div class="d">${n}<small>${nt}</small></div>`).join('')+
+        `</div></div><p class="th-switch">${t('thSwitch')}</p>`;
+      wrap.appendChild(lead);
+    }
+
     DECKS.filter(d=>d.group===gr.k).forEach(d=>{
+      const f=THEORY.find(x=>x.deckId===d.id);
+      if(f) wrap.appendChild(theoryCard(f));
       const mastered=d.ch.filter(s=>(S.mastery[s]||1)>=4).length;
       const pct=Math.round(100*mastered/d.ch.length);
       const b=document.createElement("button");
-      b.className="deck"; b.setAttribute("aria-pressed", S.deckId===d.id);
+      b.className="deck"+(f?" attached":""); b.setAttribute("aria-pressed", S.deckId===d.id);
       b.innerHTML=`<span class="mini">${miniDiagram()}</span>
         <span class="txt"><span class="nm">${d.nm[S.lang]}</span><span class="sb">${d.sb[S.lang]}</span></span>
         <span class="ct">${d.ch.length} ${t('chordsSuffix')}</span>
@@ -780,6 +1075,13 @@ function renderDecks(){
       b.onclick=()=>{ S.deckId=d.id; renderDecks(); updateStart(); };
       wrap.appendChild(b);
     });
+
+    if(gr.k==="th"){   // approfondimenti in coda alla sezione
+      const more=document.createElement("div"); more.className="th-more";
+      more.innerHTML=`<h3>${t('thMoreTitle')}</h3><dl>`+
+        t('thMoreItems').map(it=>`<dt>${it.dt}</dt><dd>${it.dd}</dd>`).join('')+`</dl>`;
+      wrap.appendChild(more);
+    }
   });
 }
 function updateStart(){
@@ -996,8 +1298,6 @@ function updateLangButtons(){
 
 function applyLangStatic(){
   el("tagline").textContent=t('tagline');
-  el("thOpenTitle").textContent=t('theoryOpenTitle');
-  el("thOpenSub").textContent=t('theoryOpenSub');
   el("modeHeading").textContent=t('modeHeading');
   el("modeSeg").setAttribute("aria-label", t('modeGroupLabel'));
   el("modeAutoLab").textContent=t('modeAuto');
@@ -1019,9 +1319,14 @@ function applyLangStatic(){
   el("prevBtn").setAttribute("aria-label", t('prevAria'));
   el("nextBtn").setAttribute("aria-label", t('nextAria'));
   setPlayIcon();
-  el("closeTheory").setAttribute("aria-label", t('closeTheoryAria'));
-  el("theoryTopTitle").textContent=t('theoryTitle');
-  el("theoryTopSub").textContent=t('theorySub');
+  el("openTuner").setAttribute("aria-label", t('tunerOpenAria'));
+  updateThemeButton();
+  el("closeTuner").setAttribute("aria-label", t('closeTunerAria'));
+  el("tunerTopTitle").textContent=t('tunerTitle');
+  el("tunerTopSub").textContent=t('tunerSub');
+  el("tnToggleLab").textContent = TN.on ? t('tunerStop') : t('tunerStart');
+  el("tnHint").textContent=t('tunerHint');
+  tunerStrings(); TN.state=""; tunerRender(null);
   document.documentElement.lang = S.lang;
   document.title = t('pageTitle');
   const metaDesc = document.getElementById('metaDescription');
@@ -1061,7 +1366,6 @@ function setLang(code){
   save("chordtrainer.lang.v1", S.lang);
   applyLangStatic();
   renderDecks(); updateStart();
-  if(el("theory").classList.contains("on")) renderTheory();
   refreshCardTexts();
 }
 
@@ -1083,6 +1387,7 @@ LANG_PICKS.forEach(id=>{
     setLang(b.dataset.lang);
   });
 });
+el("themeToggle").onclick = toggleTheme;
 document.addEventListener("click", closeLangMenus);
 document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeLangMenus(); });
 
@@ -1164,7 +1469,7 @@ const THEORY = [
       sound:"Warm, mellow, low tension."},
     tones:[{d:'1',s:0,c:'root'},{d:'♭3',s:3,c:'alt'},{d:'5',s:7,c:''},{d:'♭7',s:10,c:'alt'}] },
 
-  { deckId:"col",
+  { deckId:"sus4",
     formula:['1','<span class="hl">4</span>','5'],
     it:{eyebrow:"Sospeso · niente terza", title:"Sospeso sus4",
       recipe:"Togli la terza e mettila <b>quarta giusta</b> (5 semitoni). Senza terza non è né maggiore né minore.",
@@ -1174,7 +1479,7 @@ const THEORY = [
       sound:"Suspended: it wants to resolve down to the third."},
     tones:[{d:'1',s:0,c:'root'},{d:'4',s:5,c:'alt'},{d:'5',s:7,c:''}] },
 
-  { deckId:"col",
+  { deckId:"sus2",
     formula:['1','<span class="hl">2</span>','5'],
     it:{eyebrow:"Sospeso · niente terza", title:"Sospeso sus2",
       recipe:"Stessa idea, ma la terza è rimpiazzata dalla <b>seconda</b> (2 semitoni).",
@@ -1184,7 +1489,7 @@ const THEORY = [
       sound:"Open and crystalline."},
     tones:[{d:'1',s:0,c:'root'},{d:'2',s:2,c:'alt'},{d:'5',s:7,c:''}] },
 
-  { deckId:"col",
+  { deckId:"add9",
     formula:['1','3','5','<span class="hl">9</span>'],
     it:{eyebrow:"Nota aggiunta · 4 note", title:"Accordo add9",
       recipe:"Triade maggiore + la <b>nona</b> (la seconda un'ottava sopra), <b>senza</b> la settima. “add” = aggiungi solo quel colore.",
@@ -1210,50 +1515,131 @@ function ruler(tones){
   return `<svg class="th-ruler" viewBox="0 0 ${W} ${H}" width="100%" aria-hidden="true">${svgStr}</svg>`;
 }
 
-function renderTheory(){
-  const scaleDeg=t('scaleDeg');
-  let h="";
-  h+=`<p class="th-intro">${t('themeIntro')}</p>`;
-  h+=`<div class="th-ref"><p>${t('thRefP')}</p><div class="scale">`;
-  scaleDeg.forEach(([n,nt])=>{ h+=`<div class="d">${n}<small>${nt}</small></div>`; });
-  h+=`</div></div>`;
-  h+=`<p class="th-switch">${t('thSwitch')}</p>`;
+/* ---------- ACCORDATORE ---------- */
+/* L'interfaccia. Il motore vive tutto in assets/listener.js: qui si accende,
+   si spegne e si traduce in numeri leggibili. */
+const TN = { on:false, bound:false, state:"" };
 
-  THEORY.forEach(f=>{
-    const deck=DECKS.find(d=>d.id===f.deckId);
-    const L=f[S.lang];
-    h+=`<div class="th-card">
-      <div class="th-eyebrow">${L.eyebrow}</div>
-      <h3>${L.title}</h3>
-      <div class="th-formula">${f.formula.join('<span style="color:var(--steel-faint)"> · </span>')}</div>
-      <div class="th-recipe">${L.recipe} <span class="snd">${L.sound}</span></div>
-      ${ruler(f.tones)}
-      <button class="th-link" data-deck="${f.deckId}">${t('trainLink')} · ${deck.nm[S.lang]}
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </button>
-    </div>`;
+/* La riga delle sei corde. Ognuna è un pulsante: toccarla suona la nota giusta,
+   per accordare a orecchio quando il microfono non serve o non si può usare.
+   I nomi non sono scritti a mano, escono dai numeri MIDI del motore. */
+function tunerNeck(){
+  const W=320, H=84, X=i=>(i+.5)*W/6;
+  const spess=[2.6,2.2,1.9,1.6,1.35,1.1];   // le corde gravi sono più spesse
+  let g=`<line class="tn-nut" x1="${X(0)-5}" y1="7" x2="${X(5)+5}" y2="7"/>`;
+  [33,59].forEach(y=>{ g+=`<line class="tn-fret" x1="${X(0)-5}" y1="${y}" x2="${X(5)+5}" y2="${y}"/>`; });
+  Listener.STRINGS.forEach((st,i)=>{
+    g+=`<line class="tn-str" data-midi="${st.midi}" x1="${X(i)}" y1="7" x2="${X(i)}" y2="${H}" stroke-width="${spess[i]}"/>`;
   });
-
-  h+=`<div class="th-more"><h3>${t('thMoreTitle')}</h3><dl>`;
-  t('thMoreItems').forEach(item=>{ h+=`<dt>${item.dt}</dt><dd>${item.dd}</dd>`; });
-  h+=`</dl></div>`;
-
-  el("theoryBody").innerHTML=h;
+  el("tnNeck").innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" aria-hidden="true">${g}</svg>`;
 }
 
-el("openTheory").onclick=()=>{ if(!el("theoryBody").innerHTML) renderTheory(); el("theory").classList.add("on"); el("theoryBody").scrollTop=0; };
-el("closeTheory").onclick=()=>el("theory").classList.remove("on");
-el("theoryBody").addEventListener("click",e=>{
-  const b=e.target.closest(".th-link"); if(!b) return;
-  S.deckId=b.dataset.deck; renderDecks(); updateStart();
-  el("theory").classList.remove("on");
-  const sel=document.querySelector('.deck[aria-pressed="true"]');
-  if(sel) sel.scrollIntoView({behavior:"smooth",block:"center"});
+function tunerStrings(){
+  if(!window.Listener) return;
+  tunerNeck();
+  el("tnStrings").innerHTML = Listener.STRINGS.map(st=>{
+    const n = Listener.noteFromFreq(Listener.midiToFreq(st.midi));
+    return `<button type="button" data-midi="${st.midi}" aria-current="false" aria-pressed="false" `+
+           `aria-label="${t('tunerPlayAria')} · ${n.name[S.lang]} ${n.sci}">${n.name[S.lang]}</button>`;
+  }).join("");
+}
+
+/* La riga di stato è in aria-live: si riscrive solo quando cambia davvero,
+   altrimenti uno screen reader la rileggerebbe venti volte al secondo. */
+function tunerState(html, tuned){
+  if(TN.state===html) return;
+  TN.state=html;
+  el("tnState").innerHTML=html;
+  el("tnState").classList.toggle("tuned", !!tuned);
+}
+
+function tunerMarkString(midi){
+  document.querySelectorAll("#tnStrings button").forEach(b=>
+    b.setAttribute("aria-current", String(+b.dataset.midi===midi)));
+  document.querySelectorAll("#tnNeck .tn-str").forEach(l=>
+    l.classList.toggle("on", +l.dataset.midi===midi));
+}
+
+function tunerRender(r){
+  const n = r && r.stableNote;
+  if(!n){
+    el("tnNote").textContent="—"; el("tnNote").classList.add("idle");
+    el("tnNeedle").classList.remove("on"); el("tnMeter").classList.remove("tuned");
+    tunerMarkString(null);
+    tunerState(TN.on ? t('tunerListening') : t('tunerIdle'), false);
+    return;
+  }
+  const c = n.cents;
+  const tuned = Math.abs(c) <= 3;              // ±3 cent: sotto la soglia dell'orecchio
+  el("tnNote").textContent = n.name[S.lang];
+  el("tnNote").classList.remove("idle");
+  el("tnNeedle").classList.add("on");
+  el("tnNeedle").style.left = (50 + Math.max(-50, Math.min(50, c))) + "%";
+  el("tnMeter").classList.toggle("tuned", tuned);
+  tunerMarkString(n.midi);
+  /* Una riga sola: quanto sei fuori e cosa fare. Lo stato non è solo il colore
+     dell'ago, così resta leggibile anche a chi i colori non li distingue. */
+  tunerState(tuned ? t('tunerInTune')
+    : `<span class="mono">${c>0?"+":""}${c.toFixed(0)} ${t('tunerCents')}</span> · ${c<0?t('tunerFlat'):t('tunerSharp')}`,
+    tuned);
+}
+
+/* Toccare una corda la fa suonare. Il pulsante resta acceso finché la nota
+   dura, e si spegne da solo quando finisce. */
+el("tnStrings").addEventListener("click", e=>{
+  const b = e.target.closest("button[data-midi]"); if(!b || !window.Listener) return;
+  const giaAcceso = b.getAttribute("aria-pressed")==="true";
+  document.querySelectorAll("#tnStrings button").forEach(x=>x.setAttribute("aria-pressed","false"));
+  Listener.stopReference();
+  if(giaAcceso) return;                        // secondo tocco: silenzio
+  if(TN.on) tunerStop();                       // suonare e ascoltare si escludono
+  b.setAttribute("aria-pressed","true");
+  Listener.playReference(+b.dataset.midi, { onEnd: ()=>b.setAttribute("aria-pressed","false") });
+});
+
+async function tunerStart(){
+  if(!window.Listener || !navigator.mediaDevices){ tunerState(t('tunerNoMic'), false); return; }
+  Listener.stopReference();
+  document.querySelectorAll("#tnStrings button").forEach(x=>x.setAttribute("aria-pressed","false"));
+  if(!TN.bound){ Listener.onDetect(r=>{ if(TN.on) tunerRender(r); }); TN.bound=true; }
+  try{
+    await Listener.start();                    // il permesso si chiede qui, sul tocco
+  }catch(err){
+    tunerState(err && err.name==="NotAllowedError" ? t('tunerDenied') : t('tunerNoMic'), false);
+    return;
+  }
+  TN.on=true;
+  el("tnToggleLab").textContent=t('tunerStop');
+  tunerRender(null);
+}
+
+function tunerStop(){
+  if(window.Listener) Listener.stop();         // chiude davvero il microfono
+  TN.on=false;
+  el("tnToggleLab").textContent=t('tunerStart');
+  tunerRender(null);
+}
+
+el("openTuner").onclick=()=>{ el("tuner").classList.add("on"); tunerStrings(); tunerStop(); };
+el("closeTuner").onclick=()=>{
+  tunerStop();
+  if(window.Listener) Listener.stopReference();
+  document.querySelectorAll("#tnStrings button").forEach(x=>x.setAttribute("aria-pressed","false"));
+  el("tuner").classList.remove("on");
+};
+el("tnToggle").onclick=()=>{ TN.on ? tunerStop() : tunerStart(); };
+/* Telefono in tasca, schermo spento, microfono ancora aperto: no. */
+document.addEventListener("visibilitychange",()=>{
+  if(!document.hidden) return;
+  if(TN.on) tunerStop();
+  if(window.Listener) Listener.stopReference();
 });
 
 /* init */
+applyTheme(detectTheme());
 applyLangStatic();
 renderDecks(); updateStart();
 </script>
+<script src="assets/listener.js" defer></script>
 </body>
 </html>

@@ -1,86 +1,101 @@
 ---
 name: design-manico
-description: Regole visive del sito Manico (guitarchords) — palette, tipografia, spaziature, componenti e accessibilità. Da caricare prima di toccare CSS o markup di index.html, prima di aggiungere un componente o una schermata, e ogni volta che si sceglie un colore, una dimensione di testo o un raggio di bordo per questo sito.
+description: Regole visive del sito Manico (guitarchords) — i due temi, i token di colore, tipografia, componenti e accessibilità. Da caricare prima di toccare CSS o markup di index.html, prima di aggiungere un componente o una schermata, e ogni volta che si sceglie un colore, una dimensione di testo o un raggio di bordo per questo sito.
 ---
 
 # Design del sito Manico
 
-Il sito ha una sua identità già definita: **carta chiara, verde smeraldo come
-unico accento, ambra per le etichette tecniche**. L'aspetto deve richiamare un
-manuale di musica ben stampato, non un'app generica. Prima di introdurre
-qualcosa di nuovo, verifica che non esista già un componente che fa il lavoro.
+Il sito ha **due temi**: nero con accenti blu, e bianco con accenti azzurri.
+L'aspetto è asciutto e tipografico — un manuale ben stampato, non un'app
+decorata. Prima di introdurre qualcosa di nuovo, verifica che non esista già un
+componente che fa il lavoro.
 
-## Non inventare colori
+## Regola numero uno: mai un colore scritto a mano
 
-I colori esistono **solo** come variabili in `:root`. Non scrivere mai un valore
-esadecimale nuovo nelle regole CSS: se serve una tinta che non c'è, la si
-aggiunge come token e si spiega perché.
+Nel CSS **non esiste un solo valore esadecimale** fuori dai blocchi dei temi in
+cima al file. Ogni regola usa `var(--nome)`. Se scrivi `#fff` da qualche parte,
+quel punto resterà bianco anche sul tema nero: è esattamente così che un tema si
+rompe.
 
-| Token | Valore | Uso |
-|---|---|---|
-| `--wood` | `#f5f2ea` | sfondo carta |
-| `--wood-2` | `#ffffff` | superficie di pannelli e card |
-| `--wood-3` | `#e6e1d3` | bordi sottili |
-| `--bone` | `#171310` | testo primario ad alto contrasto |
-| `--steel` | `#3d382f` | testo corrente |
-| `--steel-dim` | `#847d6d` | testo attenuato, sottotitoli |
-| `--steel-faint` | `#b7b0a0` | etichette di gruppo, testo terziario |
-| `--abalone` | `#0f9d84` | accento primario: selezione, stati attivi |
-| `--abalone-deep` | `#0a7562` | accento su fondo chiaro, valori numerici |
-| `--abalone-soft` | `rgba(15,157,132,.12)` | alone, sfondi di evidenziazione |
-| `--brass` | `#b3781a` | etichette maiuscole, numeri, dati tecnici |
-| `--danger` | `#d9503a` | errore, "non ricordavo" |
+I nomi sono semantici, non descrivono il colore ma il ruolo. Questo è ciò che
+permette a una sola regola di funzionare su entrambi i temi.
 
-`--shadow` e `--r` (raggio 20px) sono i valori di default: usali invece di
-riscrivere ombre e raggi a mano.
+| Token | Ruolo |
+|---|---|
+| `--bg`, `--bg-1`, `--bg-2` | fondo pagina e le due tinte del suo alone |
+| `--surface` | card e pannelli |
+| `--surface-2` | superficie incassata (segmenti, chip, riquadri) |
+| `--line` | bordi sottili |
+| `--text` | testo primario, massimo contrasto |
+| `--text-2` | testo primario secondario |
+| `--body` | testo corrente |
+| `--dim` | testo attenuato, sottotitoli |
+| `--faint` | testo terziario, etichette di gruppo |
+| `--accent` | accento: selezione e stati attivi |
+| `--accent-deep` | accento per testo e bordi su fondo |
+| `--accent-soft` | alone, sfondi di evidenziazione |
+| `--accent-2` | dati e etichette tecniche (gradi, note, numeri) |
+| `--on-accent` | testo e simboli **sopra** l'accento |
+| `--ink` | testo sul diagramma del manico |
+| `--diagram-line`, `--diagram-string` | tasti e corde del diagramma |
+| `--danger`, `--danger-soft` | errore, "non ricordavo" |
+| `--shadow`, `--shadow-sm`, `--shadow-knob` | ombre |
+| `--accent-glow`, `--accent-glow-strong` | aloni colorati dei pulsanti attivi |
+| `--r` | raggio di default (20px) |
 
-**L'accento è uno solo.** Il verde segnala ciò che è attivo o selezionato. Se in
-una schermata compaiono tre elementi verdi in competizione, due sono di troppo.
-L'ambra non è un secondo accento decorativo: marca i dati tecnici (gradi, note,
-etichette di sezione).
+**Aggiungere un token significa definirlo in tutti e tre i blocchi**: `:root`
+(chiaro), il blocco `@media (prefers-color-scheme:dark)` e il blocco
+`:root[data-theme="dark"]`. Saltarne uno lascia un buco che si vede solo in un
+tema, cioè quello che non stai guardando.
+
+**L'accento è uno solo.** Il blu segnala ciò che è attivo o selezionato. Se in
+una schermata compaiono tre elementi blu in competizione, due sono di troppo.
+`--accent-2` non è un secondo accento decorativo: marca i dati tecnici.
 
 ## Tipografia
 
-Tre famiglie, con ruoli non intercambiabili:
+Una sola famiglia, **Roboto**, con due ruoli distinti:
 
-- **Space Grotesk** (classe `.slab`) — titoli e simboli degli accordi.
-- **Inter** — testo dell'interfaccia. È il default del `body`.
-- **IBM Plex Mono** (classe `.mono`) — tutto ciò che è dato: numeri, gradi,
-  nomi delle corde, etichette maiuscole spaziate.
+- **Roboto** — interfaccia e titoli. I titoli usano la classe `.slab`
+  (peso 900, `letter-spacing:-.02em`); il testo corrente è il default del `body`.
+- **Roboto Mono** (classe `.mono`) — tutto ciò che è dato: numeri, gradi, nomi
+  delle corde, etichette maiuscole spaziate.
 
-Le etichette di sezione seguono un unico stile ricorrente: mono, 11px, peso 600,
-`letter-spacing:.18em`, maiuscolo, colore `--brass`. Le dimensioni del testo
-d'interfaccia stanno tra 10,5px e 14px; sotto i 10,5px non si scende.
+La gerarchia si costruisce con **peso e dimensione**, non cambiando famiglia.
+Le etichette di sezione hanno un unico stile ricorrente: mono, 11px, peso 600,
+`letter-spacing:.18em`, maiuscolo, colore `--accent-2`. Il testo d'interfaccia
+sta fra 10,5px e 14px; sotto i 10,5px non si scende.
 
 ## Componenti che esistono già
 
-`.panel` (card con bordo e ombra) · `.seg` (selettore segmentato) ·
-`.chip` (interruttore con `aria-pressed`) · `.deck` (riga di un insieme) ·
-`.group-label` (etichetta di gruppo con filetto sfumato) ·
-`input[type=range]` con riempimento progressivo via `--pct`.
+`.panel` (card) · `.seg` (selettore segmentato) · `.chip` (interruttore con
+`aria-pressed`) · `.deck` (riga di un insieme) · `.deck.attached` (riga agganciata
+sotto la sua scheda di teoria) · `.th-card` (scheda di teoria) · `.group-label`
+(etichetta di gruppo col filetto) · `.iconbtn` (40×40) e `.iconbtn.hdr` (tondo,
+in testata) · `.langpick` (menu a tendina) · `input[type=range]` con riempimento
+via `--pct`.
 
-Riusa questi. Un nuovo componente si giustifica solo se nessuno di questi regge
+Riusa questi. Un componente nuovo si giustifica solo se nessuno di questi regge
 il contenuto.
 
 ## Regole non negoziabili
 
 1. **Mobile first.** `.app` è largo al massimo 460px, con `env(safe-area-inset-*)`
-   già gestito. Il sito si usa in piedi, con la chitarra in mano: i bersagli
-   toccabili non scendono sotto i 44px di lato.
+   già gestito. Si usa in piedi con la chitarra in mano: i bersagli toccabili non
+   scendono sotto i 40px, e nei menu stanno a 44.
 2. **Lo stato non è mai solo colore.** Ogni stato attivo si esprime anche con
-   `aria-pressed`, peso del testo o bordo. Chi non distingue il verde deve
-   comunque capire cosa è selezionato.
-3. **Contrasto.** Testo corrente su fondo carta almeno 4.5:1; `--steel-faint` è
-   ammesso solo per testo decorativo o già ridondante.
-4. **`:focus-visible` non si tocca.** L'outline verde è la navigazione da
-   tastiera.
-5. **Movimento sobrio.** Le transizioni stanno tra 0,15s e 0,2s. Rispetta
+   `aria-pressed`, peso del testo o bordo.
+3. **Contrasto.** Testo corrente almeno 4.5:1 sul fondo, **in tutti e due i
+   temi**. `--faint` solo per testo decorativo o già ridondante.
+4. **`:focus-visible` non si tocca.**
+5. **Movimento sobrio.** Transizioni fra 0,15s e 0,2s. Rispetta
    `prefers-reduced-motion` per qualsiasi animazione nuova.
 6. **Ogni stringa passa da `t()`**, in italiano e in inglese. Un testo scritto
-   direttamente nel markup è un bug, non una scorciatoia.
+   nel markup è un bug. E non nominare i colori nei testi: "in verde" è diventato
+   falso il giorno in cui l'accento è passato al blu.
 
 ## Prima di dire che è finito
 
-Guarda il risultato a 360px di larghezza, non solo a 460. Controlla che il
-diagramma del manico (SVG generato da `svgChord`, 280×286) non venga compresso.
-Verifica che nulla finisca sotto la barra di sistema su iPhone.
+Guarda il risultato **nei due temi** e a 360px di larghezza, non solo a 460.
+Controlla che il diagramma del manico (SVG di `svgChord`, 280×286) resti
+leggibile sul nero. Verifica che nulla finisca sotto la barra di sistema.

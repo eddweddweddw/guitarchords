@@ -5,23 +5,28 @@ Online su <https://guitarchords.duckdns.org>.
 
 ## Architettura
 
-Tutto il sito è **un unico file**, `index.html` (~1.180 righe), senza build step,
-senza dipendenze, senza framework:
+Il sito è quasi tutto in `index.html`, senza build step, senza dipendenze,
+senza framework. L'unico file a parte è `assets/listener.js`, il motore audio
+dell'accordatore, collegato con un solo `<script src>`.
 
-| Zona | Righe (indicative) | Contenuto |
-|---|---|---|
-| `<style>` | 14 – 311 | CSS completo, token in `:root` |
-| markup | 312 – 426 | struttura, nessun handler inline |
-| `<script>` | 427 – 1174 | logica, dati, i18n |
+`index.html` è diviso in tre zone: il `<style>`, il markup (nessun handler
+inline) e lo `<script>`. In cima al CSS stanno i **tre blocchi dei temi**: sono
+l'unico posto del file dove compaiono valori di colore.
 
 Strutture dati principali dentro lo script:
 
 - **`I18N`** — tutte le stringhe visibili, in `it` e `en`.
-- **`CH`** — dizionario degli accordi: `sym`, `name`, `frets` (6 valori,
+- **`CH`** — dizionario degli accordi (90 voci): `sym`, `name`, `frets` (6 valori,
   `'x'` = corda muta, `0` = a vuoto), `fingers`, `deg`, `notes`.
 - **`DECKS`** — gli insiemi di esercizi, raggruppati per difficoltà (`diff`)
   e per costruzione teorica (`th`).
+- **`THEORY`** — le schede di teoria, una per ogni insieme del gruppo `th`.
+  Vengono mostrate **dentro la home**, sopra l'insieme a cui si riferiscono:
+  non esiste una pagina di teoria separata.
 - **`S`** — stato della sessione, persistito in `localStorage`.
+
+Le pagine a tutto schermo (`.stage`) sono l'esercizio e l'accordatore: si aprono
+aggiungendo la classe `on`.
 
 ## Regole di lavoro
 
@@ -32,6 +37,12 @@ Strutture dati principali dentro lo script:
   già presenti.
 - **Mobile first.** Il contenitore `.app` è largo al massimo 460px. Il sito si usa
   in piedi con la chitarra in mano.
+- **Due temi.** Nessun colore scritto a mano nelle regole CSS: solo `var(--nome)`.
+  Un valore esadecimale sparso nel foglio resta identico su entrambi i temi ed è
+  il modo tipico in cui il tema scuro si rompe.
+- **Gli accordi si verificano, non si scrivono a occhio.** Le note di un accordo
+  sono calcolabili dai `frets`: prima di aggiungerne uno, controlla che le note
+  che dichiari siano davvero quelle che suona.
 - **Accessibilità.** Gli stati si esprimono con `aria-pressed` / `aria-label`, non
   solo col colore. `:focus-visible` è già stilizzato: non rimuoverlo.
 - Per le regole visive (palette, tipografia, spaziature) carica la skill
