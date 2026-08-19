@@ -133,6 +133,34 @@
   .langtgl .flag{font-size:16px;line-height:1}
   .iconbtn.langtgl-icon{font-size:17px;line-height:1}
 
+  /* selettore lingua a tendina */
+  .langpick{position:relative;flex:none}
+  .langpick.at-home{margin-left:auto;align-self:center}
+  .langmenu{
+    position:absolute;top:calc(100% + 6px);right:0;z-index:50;
+    min-width:158px;margin:0;padding:5px;list-style:none;
+    background:var(--wood-2);border:1px solid var(--wood-3);border-radius:14px;
+    box-shadow:var(--shadow);
+    opacity:0;visibility:hidden;transform:translateY(-4px);
+    transition:opacity .15s, transform .15s, visibility .15s;
+  }
+  /* ponte invisibile: il cursore attraversa lo stacco senza chiudere il menu */
+  .langmenu::before{content:"";position:absolute;top:-8px;left:0;right:0;height:8px}
+  .langpick:hover .langmenu,
+  .langpick:focus-within .langmenu,
+  .langpick.open .langmenu{opacity:1;visibility:visible;transform:none}
+  .langmenu li{margin:0}
+  .langmenu button{
+    display:flex;align-items:center;gap:9px;width:100%;text-align:left;
+    padding:10px;border-radius:10px;font-size:13.5px;color:var(--steel);transition:.15s;
+  }
+  .langmenu button:hover{background:#f2efe6}
+  .langmenu button[aria-current="true"]{background:var(--abalone-soft);color:var(--bone);font-weight:600}
+  .langmenu .flag{font-size:16px;line-height:1}
+  .langmenu .tick{margin-left:auto;color:var(--abalone-deep);font-size:12px;opacity:0}
+  .langmenu button[aria-current="true"] .tick{opacity:1}
+  @media (prefers-reduced-motion:reduce){ .langmenu{transition:none} }
+
   .startbar{position:sticky;bottom:0;margin-top:8px;padding-top:10px;
     background:linear-gradient(180deg,transparent, var(--wood) 40%);}
   .start{width:100%;padding:16px;border-radius:16px;background:var(--abalone);color:#ffffff;
@@ -314,7 +342,10 @@
 
 <div class="app" id="home">
   <div class="brand"><h1 class="slab">Manico</h1><span class="dot"></span>
-    <button class="langtgl" id="langToggle" style="margin-left:auto;align-self:center" aria-label="Change language"><span class="flag">🇬🇧</span><span class="langcode">EN</span></button>
+    <div class="langpick at-home" id="langPickHome">
+      <button class="langtgl" id="langToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Change language"><span class="flag">🇮🇹</span><span class="langcode">IT</span></button>
+      <ul class="langmenu" role="menu"></ul>
+    </div>
   </div>
   <p class="tagline" id="tagline">Vedi il nome dell'accordo, richiama la posizione a memoria, poi verifica sul manico. Gli insiemi sono ordinati per difficoltà e per come l'accordo è costruito.</p>
 
@@ -366,7 +397,10 @@
     <button class="iconbtn" id="shuffleBtn" aria-label="Rimescola">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
     </button>
-    <button class="iconbtn langtgl-icon" id="langToggleStage" aria-label="Change language"><span class="flag">🇬🇧</span></button>
+    <div class="langpick" id="langPickStage">
+      <button class="iconbtn langtgl-icon" id="langToggleStage" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Change language"><span class="flag">🇮🇹</span></button>
+      <ul class="langmenu" role="menu"></ul>
+    </div>
   </div>
 
   <div class="center">
@@ -417,7 +451,10 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <div class="deckname"><div class="nm" id="theoryTopTitle">Come nascono gli accordi</div><div class="pos mono" id="theoryTopSub">costruzione degli accordi</div></div>
-    <button class="iconbtn langtgl-icon" id="langToggleTheory" aria-label="Change language"><span class="flag">🇬🇧</span></button>
+    <div class="langpick" id="langPickTheory">
+      <button class="iconbtn langtgl-icon" id="langToggleTheory" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Change language"><span class="flag">🇮🇹</span></button>
+      <ul class="langmenu" role="menu"></ul>
+    </div>
   </div>
   <div class="body" id="theoryBody"></div>
 </div>
@@ -484,7 +521,7 @@ const I18N = {
     scaleDeg: [['1','Do'],['2','Re'],['3','Mi'],['4','Fa'],['5','Sol'],['6','La'],['7','Si']],
     stringNames: ["MI","LA","RE","SOL","SI","mi"],
     chordDiagramAria: "Diagramma accordo",
-    langSwitchAria: "Passa all'inglese",
+    langPickAria: "Scegli la lingua",
     metaDescription: "Allenatore di accordi per chitarra: esercizi interattivi per imparare e memorizzare le diteggiature sul manico.",
   },
   en: {
@@ -542,7 +579,7 @@ const I18N = {
     scaleDeg: [['1','C'],['2','D'],['3','E'],['4','F'],['5','G'],['6','A'],['7','B']],
     stringNames: ["E","A","D","G","B","e"],
     chordDiagramAria: "Chord diagram",
-    langSwitchAria: "Switch to Italian",
+    langPickAria: "Choose language",
     metaDescription: "Guitar chord trainer: interactive exercises to learn and memorize fretboard fingerings.",
   },
 };
@@ -612,11 +649,24 @@ const DECKS = [
 function load(k){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
 function save(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
 
+/* Registro delle lingue. Per aggiungerne una basta una riga qui, più le
+   stringhe corrispondenti in I18N e i campi nm/sb/name/notes dei dati. */
+const LANGS = [
+  {code:"it", flag:"🇮🇹", label:"Italiano"},
+  {code:"en", flag:"🇬🇧", label:"English"},
+];
+const LANG_PICKS = ["langPickHome","langPickStage","langPickTheory"];
+const langInfo = code => LANGS.find(l=>l.code===code) || LANGS[0];
+
 function detectLang(){
   const saved = load("chordtrainer.lang.v1");
-  if(saved==="it" || saved==="en") return saved;
-  try{ if(navigator.language && navigator.language.toLowerCase().startsWith("en")) return "en"; }catch(e){}
-  return "it";
+  if(LANGS.some(l=>l.code===saved)) return saved;
+  try{
+    const nav=(navigator.language||"").toLowerCase();
+    const hit=LANGS.find(l=>nav.startsWith(l.code));
+    if(hit) return hit.code;
+  }catch(e){}
+  return LANGS[0].code;
 }
 
 /* ============ STATE ============ */
@@ -929,14 +979,18 @@ function toast(msg){ const box=el("toast"); box.textContent=msg; box.classList.a
 
 /* ============ LANGUAGE SWITCHING ============ */
 function updateLangButtons(){
-  const other = S.lang==="it" ? "en" : "it";
-  const flag = other==="it" ? "🇮🇹" : "🇬🇧";
-  const code = other==="it" ? "IT" : "EN";
-  ["langToggle","langToggleStage","langToggleTheory"].forEach(id=>{
-    const b=el(id); if(!b) return;
-    const f=b.querySelector(".flag"); if(f) f.textContent=flag;
-    const cd=b.querySelector(".langcode"); if(cd) cd.textContent=code;
-    b.setAttribute("aria-label", t('langSwitchAria'));
+  const cur = langInfo(S.lang);
+  LANG_PICKS.forEach(id=>{
+    const pick=el(id); if(!pick) return;
+    const b=pick.querySelector(".langtgl, .langtgl-icon"); if(!b) return;
+    const f=b.querySelector(".flag"); if(f) f.textContent=cur.flag;
+    const cd=b.querySelector(".langcode"); if(cd) cd.textContent=cur.code.toUpperCase();
+    b.setAttribute("aria-label", t('langPickAria')+" \u00b7 "+cur.label);
+    const menu=pick.querySelector(".langmenu");
+    menu.innerHTML = LANGS.map(l=>
+      `<li role="none"><button type="button" role="menuitem" data-lang="${l.code}" aria-current="${l.code===S.lang}">`+
+      `<span class="flag">${l.flag}</span><span>${l.label}</span><span class="tick" aria-hidden="true">\u2713</span></button></li>`
+    ).join("");
   });
 }
 
@@ -991,17 +1045,46 @@ function refreshCardTexts(){
   updatePos();
 }
 
-function toggleLang(){
-  S.lang = S.lang==="it" ? "en" : "it";
+function closeLangMenus(){
+  LANG_PICKS.forEach(id=>{
+    const p=el(id); if(!p) return;
+    p.classList.remove("open");
+    const b=p.querySelector(".langtgl, .langtgl-icon");
+    if(b) b.setAttribute("aria-expanded","false");
+  });
+}
+
+function setLang(code){
+  closeLangMenus();
+  if(!LANGS.some(l=>l.code===code) || code===S.lang) return;
+  S.lang = code;
   save("chordtrainer.lang.v1", S.lang);
   applyLangStatic();
   renderDecks(); updateStart();
   if(el("theory").classList.contains("on")) renderTheory();
   refreshCardTexts();
 }
-["langToggle","langToggleStage","langToggleTheory"].forEach(id=>{
-  const b=el(id); if(b) b.onclick=toggleLang;
+
+/* Il menu si apre al passaggio del cursore (CSS). Il clic serve al touch,
+   dove l'hover non esiste, e alla tastiera. */
+LANG_PICKS.forEach(id=>{
+  const pick=el(id); if(!pick) return;
+  const btn=pick.querySelector(".langtgl, .langtgl-icon");
+  if(btn) btn.onclick=e=>{
+    e.stopPropagation();
+    const open=!pick.classList.contains("open");
+    closeLangMenus();
+    pick.classList.toggle("open",open);
+    btn.setAttribute("aria-expanded", String(open));
+  };
+  pick.querySelector(".langmenu").addEventListener("click", e=>{
+    const b=e.target.closest("button[data-lang]"); if(!b) return;
+    e.stopPropagation();
+    setLang(b.dataset.lang);
+  });
 });
+document.addEventListener("click", closeLangMenus);
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeLangMenus(); });
 
 /* stage events */
 el("startBtn").onclick=()=>{ if(S.deckId) startSession(); };
