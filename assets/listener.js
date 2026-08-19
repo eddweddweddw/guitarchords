@@ -39,10 +39,15 @@
        decadono. */
     chordSize:     32768, // campioni tenuti in memoria: 0,68 s a 48 kHz
     chordWindows:      3, // finestre di chroma da mediare
+    chordHopMs:      120, // distanza fra una finestra e la successiva
     chordGate:     0.012, // sotto questo livello non è una pennata
     chordRise:       2.5, // di quanto deve salire il livello per essere un attacco
     chordWaitMs:     800, // attesa dall'attacco prima di giudicare
-    chordHoldMs:    1300  // pausa dopo un verdetto, prima di ascoltarne un altro
+    chordHoldMs:     700  // pausa dopo un verdetto, prima di ascoltarne un altro
+    /* La pausa è tarata, non scelta: a 1300 ms finiva a metà della pennata
+       successiva, e l'attacco veniva riconosciuto con mezzo secondo di ritardo
+       sul suono ormai spento (81% di esecuzioni corrette accettate). A 250 ms
+       la stessa pennata veniva giudicata due volte (61%). A 700 ms: 92,8%. */
   };
 
   /* Nomi delle note come dato, non come stringa d'interfaccia: chi disegna
@@ -423,7 +428,7 @@
         attesaFino = 0;
         fermoFino = now + cfg.chordHoldMs;
         const ch = chromaAverage(frame, sampleRate,
-                                 { size: 16384, windows: cfg.chordWindows, hopMs: 120 });
+                                 { size: 16384, windows: cfg.chordWindows, hopMs: cfg.chordHopMs });
         const esito = richiesto
           ? verifyChord(ch, richiesto.frets, richiesto.candidates || [])
           : { ok: false, score: 0, reason: "nessun accordo richiesto" };

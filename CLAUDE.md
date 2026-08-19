@@ -42,7 +42,10 @@ aggiungendo la classe `on`.
   il modo tipico in cui il tema scuro si rompe.
 - **Gli accordi si verificano, non si scrivono a occhio.** Le note di un accordo
   sono calcolabili dai `frets`: prima di aggiungerne uno, controlla che le note
-  che dichiari siano davvero quelle che suona.
+  che dichiari siano davvero quelle che suona. Due controlli che il diagramma non
+  fa da solo: **un solo dito può fare barré** (se un numero diverso da 1 compare
+  su più corde, `svgChord` disegna una seconda sbarra e la diteggiatura diventa
+  impossibile), e **lo stesso dito non può stare su due tasti diversi**.
 - **Accessibilità.** Gli stati si esprimono con `aria-pressed` / `aria-label`, non
   solo col colore. `:focus-visible` è già stilizzato: non rimuoverlo.
 - Per le regole visive (palette, tipografia, spaziature) carica la skill
