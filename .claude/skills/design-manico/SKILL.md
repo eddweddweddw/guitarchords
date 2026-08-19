@@ -78,6 +78,33 @@ via `--pct`.
 Riusa questi. Un componente nuovo si giustifica solo se nessuno di questi regge
 il contenuto.
 
+## Le icone degli insiemi
+
+Ogni insieme ha la sua icona (`DECK_ICONS`), 40×40, dentro un riquadro
+`--surface-2`. Non sono decorazioni scelte a caso: sono **due alfabeti**, uno per
+gruppo, e una nuova icona deve parlare la lingua del suo.
+
+**Per difficoltà — dove si suona sul manico.** Capotasto spesso e corda a vuoto
+per le posizioni aperte, nessun capotasto e sbarra orizzontale per il barré
+mobile. La stella dei "più popolari" sta apposta fuori dal sistema: è una
+selezione, non un livello.
+
+**Per costruzione teorica — la forma dell'accordo:**
+
+| Segno | Significato |
+|---|---|
+| triangolo in su | triade maggiore |
+| triangolo in giù | triade minore |
+| + pallino vuoto | settima minore (♭7) |
+| + pallino pieno | settima maggiore |
+| vertice aperto + freccia | la terza è sostituita (sus4 su, sus2 giù) |
+| segno più | nota aggiunta (add9) |
+
+La struttura è in `--body`, ciò che caratterizza la famiglia è in `--accent`:
+guardando l'icona si vede subito *che cosa* distingue quell'insieme dagli altri.
+Se aggiungi una famiglia (diminuiti, seste…), componi il suo segno con questo
+alfabeto invece di disegnare un simbolo nuovo.
+
 ## Regole non negoziabili
 
 1. **Mobile first.** `.app` è largo al massimo 460px, con `env(safe-area-inset-*)`
