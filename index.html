@@ -9,6 +9,14 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <title>Manico · allenatore di accordi</title>
 <meta name="description" id="metaDescription" content="Allenatore di accordi per chitarra: esercizi interattivi per imparare e memorizzare le diteggiature sul manico." />
+<!-- Lo stesso sito è servito da due indirizzi (GitHub Pages e il telefono di
+     casa). Senza canonical Google li vede come due copie in concorrenza. -->
+<link rel="canonical" href="https://eddweddweddw.github.io/guitarchords/" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://eddweddweddw.github.io/guitarchords/" />
+<meta property="og:title" content="Manico · allenatore di accordi" />
+<meta property="og:description" content="Allenatore di accordi per chitarra: esercizi interattivi, accordatore dal microfono e modalità gioco." />
+<meta name="robots" content="index,follow" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -133,6 +141,17 @@
   button{font-family:inherit;color:inherit;cursor:pointer;border:none;background:none}
   :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
 
+  /* ---------- GIOCO ---------- */
+  .gm-score{font-size:19px;font-weight:600;color:var(--accent-deep);min-width:34px;text-align:right;flex:none}
+  .gm-state{font-size:14px;color:var(--dim);text-align:center;min-height:22px;line-height:1.4}
+  .gm-state.ok{color:var(--accent-deep);font-weight:600}
+  .gm-state.ko{color:var(--danger);font-weight:600}
+  .gm-card.hide{display:none}
+  #gmCheck{width:min(320px,86vw)}
+  #gmFinal.hide{display:none}
+  .gm-again{width:min(284px,80vw)}
+  .gm-again.hide{display:none}
+
   /* ---------- ACCORDATORE ---------- */
   .tuner .center{justify-content:center;gap:20px}
   .tn-note{font-family:"Roboto";font-weight:700;color:var(--text);text-align:center;
@@ -213,6 +232,13 @@
     background:var(--surface);border:3px solid var(--accent-deep);margin-top:-8px;box-shadow:var(--shadow-knob)}
   input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;
     background:var(--surface);border:3px solid var(--accent-deep)}
+
+  /* La scatola del gioco è staccata dalle impostazioni: bordo nell'accento e
+     un filo d'aria in più sotto, perché è un'altra cosa, non un'altra opzione. */
+  .gamebox{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent-soft), var(--shadow);margin-bottom:22px}
+  .gamebox h2{color:var(--accent-deep)}
+  .gamelead{font-size:13px;color:var(--dim);line-height:1.55;margin:0 0 13px}
+  .gamebox .chip{width:100%}
 
   .toggles{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
   .chip{display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--line);
@@ -480,6 +506,12 @@
   </div>
   <p class="tagline" id="tagline">Vedi il nome dell'accordo, richiama la posizione a memoria, poi verifica sul manico. Gli insiemi sono ordinati per difficoltà e per come l'accordo è costruito.</p>
 
+  <div class="panel gamebox">
+    <h2 id="gameHeading">Modalità gioco</h2>
+    <p class="gamelead" id="gameLead"></p>
+    <button class="chip" id="gameToggle" aria-pressed="false"><span class="sw"></span><span id="gameToggleLab">Gioca</span></button>
+  </div>
+
   <div class="panel">
     <h2 id="modeHeading">Modalità</h2>
     <div class="seg" id="modeSeg" role="group" aria-label="Modalità">
@@ -532,7 +564,7 @@
       <div class="itname" id="itname"></div>
     </div>
     <div class="ring" id="ring">
-      <svg width="52" height="52"><circle cx="26" cy="26" r="21" fill="none" stroke="#e6e1d3" stroke-width="4"/><circle id="ringArc" cx="26" cy="26" r="21" fill="none" stroke="#0f9d84" stroke-width="4" stroke-linecap="round" stroke-dasharray="131.9" stroke-dashoffset="0"/></svg>
+      <svg width="52" height="52"><circle cx="26" cy="26" r="21" fill="none" stroke="var(--line)" stroke-width="4"/><circle id="ringArc" cx="26" cy="26" r="21" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="131.9" stroke-dashoffset="0"/></svg>
       <div class="num mono" id="ringNum"></div>
     </div>
     <div class="card">
@@ -567,6 +599,30 @@
 </div>
 
 <!-- THEORY -->
+<!-- GIOCO -->
+<div class="stage game" id="game">
+  <div class="top">
+    <button class="iconbtn" id="closeGame" aria-label="Chiudi">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="deckname"><div class="nm" id="gmDeck">—</div><div class="pos mono" id="gmPos"></div></div>
+    <div class="gm-score mono" id="gmScore">0</div>
+  </div>
+
+  <div class="center">
+    <manico-chord-check id="gmCheck"></manico-chord-check>
+    <div class="itname" id="gmName"></div>
+    <div class="gm-state" id="gmState" aria-live="polite"></div>
+    <div class="symbol slab hide" id="gmFinal"></div>
+    <div class="card gm-card hide" id="gmCard"><div id="gmDiagram"></div></div>
+    <div class="ring hide" id="gmRing">
+      <svg width="52" height="52"><circle cx="26" cy="26" r="21" fill="none" stroke="var(--line)" stroke-width="4"/><circle id="gmRingArc" cx="26" cy="26" r="21" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="131.9" stroke-dashoffset="0"/></svg>
+      <div class="num mono" id="gmRingNum"></div>
+    </div>
+    <button class="start gm-again hide" id="gmAgain"></button>
+  </div>
+</div>
+
 <!-- ACCORDATORE -->
 <div class="stage tuner" id="tuner">
   <div class="top">
@@ -609,6 +665,19 @@ const I18N = {
     tagline: "Vedi il nome dell'accordo, richiama la posizione a memoria, poi verifica sul manico. Gli insiemi sono ordinati per difficoltà e per come l'accordo è costruito.",
     theoryOpenTitle: "Come nascono gli accordi",
     theoryOpenSub: "La teoria dietro ogni insieme, in breve",
+    gameHeading: "Modalità gioco",
+    gameLead: "Il sito ti ascolta. Compare il nome di un accordo, tu lo suoni: dieci accordi in tutto, un punto per ognuno indovinato e uno in meno per ogni errore. Se sbagli, il gioco si ferma e ti mostra la posizione giusta.",
+    gameToggleLab: "Gioca invece di allenarti",
+    gameCloseAria: "Esci dal gioco",
+    gameRight: "Giusto",
+    gameWrong: "Sbagliato",
+    gameLook: "guarda la posizione",
+    gameNextIn: "Il prossimo sta arrivando",
+    gameOver: "partita finita",
+    gameFinal: "{n} punti su {tot}",
+    gameAgain: "Gioca ancora",
+    gameMicDenied: "Senza microfono non si può giocare. Concedi il permesso e riprova.",
+    gameStarting: "Accendo il microfono…",
     tunerOpenAria: "Apri l'accordatore",
     themeAria: "Cambia tema",
     themeToLight: "Passa al tema chiaro",
@@ -685,6 +754,19 @@ const I18N = {
     tagline: "See the chord's name, recall the shape from memory, then check it on the neck. The sets are ordered by difficulty and by how each chord is built.",
     theoryOpenTitle: "How chords are built",
     theoryOpenSub: "The theory behind each set, in brief",
+    gameHeading: "Game mode",
+    gameLead: "The site listens to you. A chord name appears and you play it: ten chords in all, one point for each one you get right and one less for every mistake. When you miss, the game stops and shows you the correct shape.",
+    gameToggleLab: "Play instead of practising",
+    gameCloseAria: "Leave the game",
+    gameRight: "Right",
+    gameWrong: "Wrong",
+    gameLook: "look at the shape",
+    gameNextIn: "The next one is coming",
+    gameOver: "game over",
+    gameFinal: "{n} points out of {tot}",
+    gameAgain: "Play again",
+    gameMicDenied: "The game needs the microphone. Allow it and try again.",
+    gameStarting: "Turning on the microphone…",
     tunerOpenAria: "Open the tuner",
     themeAria: "Change theme",
     themeToLight: "Switch to the light theme",
@@ -1099,13 +1181,13 @@ function renderDecks(){
       const pct=Math.round(100*mastered/d.ch.length);
       const b=document.createElement("button");
       b.className="deck";
-      b.setAttribute("aria-label", `${t('startBegin')} · ${d.nm[S.lang]}`);
+      b.setAttribute("aria-label", `${G.on ? t('gameHeading') : t('startBegin')} · ${d.nm[S.lang]}`);
       b.innerHTML=`<span class="mini">${deckIcon(d.id)}</span>
         <span class="txt"><span class="nm">${d.nm[S.lang]}</span><span class="sb">${d.sb[S.lang]}</span></span>
         <span class="ct">${d.ch.length} ${t('chordsSuffix')}</span>
         <svg class="go" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
         <span class="prog"><i style="width:${pct}%"></i></span>`;
-      b.onclick=()=>{ S.deckId=d.id; startSession(); };
+      b.onclick=()=>{ S.deckId=d.id; if(G.on) startGame(d); else startSession(); };
       wrap.appendChild(b);
     });
 
@@ -1346,6 +1428,10 @@ function applyLangStatic(){
   el("prevBtn").setAttribute("aria-label", t('prevAria'));
   el("nextBtn").setAttribute("aria-label", t('nextAria'));
   setPlayIcon();
+  el("gameHeading").textContent=t('gameHeading');
+  el("gameLead").textContent=t('gameLead');
+  el("gameToggleLab").textContent=t('gameToggleLab');
+  el("closeGame").setAttribute("aria-label", t('gameCloseAria'));
   el("openTuner").setAttribute("aria-label", t('tunerOpenAria'));
   updateThemeButton();
   el("closeTuner").setAttribute("aria-label", t('closeTunerAria'));
@@ -1541,6 +1627,149 @@ function ruler(tones){
   return `<svg class="th-ruler" viewBox="0 0 ${W} ${H}" width="100%" aria-hidden="true">${svgStr}</svg>`;
 }
 
+/* ============ MODALITÀ GIOCO ============
+   Dieci accordi. Il nome compare, il sito ascolta, il motore di
+   assets/listener.js dice se quello suonato è davvero quello richiesto.
+   Giusto: un punto e si va avanti. Sbagliato: il gioco si ferma dieci secondi
+   mostrando la posizione, poi cinque secondi di conto alla rovescia, poi
+   l'accordo dopo con un punto in meno.
+
+   Una sola macchina a stati (G.phase) decide chi ha diritto di parlare: i
+   verdetti che arrivano dal microfono fuori da "listening" vengono ignorati,
+   altrimenti una pennata di troppo durante la pausa conterebbe come risposta. */
+const GAME = { rounds:10, blockMs:10000, countdownMs:5000, rightMs:900, arc:131.9 };
+const G = { on:load("chordtrainer.game.v1")===true, deck:null, queue:[], i:0, score:0,
+            phase:"off", timers:[], legato:false };
+
+function gLater(fn,ms){ const h=setTimeout(fn,ms); G.timers.push(h); return h; }
+function gClear(){ G.timers.forEach(clearTimeout); G.timers=[]; }
+function gState(html,cls){ const e=el("gmState"); e.innerHTML=html; e.className="gm-state"+(cls?" "+cls:""); }
+function gScore(){ el("gmScore").textContent=String(G.score); }
+
+/* Dieci estrazioni: si mescola l'insieme e lo si ripercorre, così un insieme da
+   sei accordi non ne ripete uno due volte di fila. */
+function gQueue(deck){
+  const out=[];
+  while(out.length<GAME.rounds){
+    const m=deck.ch.slice();
+    for(let i=m.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [m[i],m[j]]=[m[j],m[i]]; }
+    out.push(...m);
+  }
+  return out.slice(0,GAME.rounds);
+}
+
+/* L'ascolto non lo fa il gioco: lo fa <manico-chord-check>, il componente che
+   la sessione del motore aggiorna per conto suo. Qui si guarda solo l'esito. */
+function gCheck(){ return el("gmCheck"); }
+
+async function startGame(deck){
+  const check=gCheck();
+  if(!check || typeof check.start!=="function") return;   // componente non caricato
+  G.deck=deck; G.queue=gQueue(deck); G.i=0; G.score=0; G.phase="avvio";
+  gClear(); gScore();
+  el("gmDeck").textContent=deck.nm[S.lang];
+  el("gmPos").textContent="— / "+GAME.rounds;
+  el("gmName").textContent="";
+  el("gmCard").classList.add("hide"); el("gmRing").classList.add("hide");
+  el("gmAgain").classList.add("hide"); el("gmFinal").classList.add("hide");
+  check.classList.remove("hide");
+  el("game").classList.add("on");
+  gState(t('gameStarting'),"");
+
+  if(!G.legato){
+    check.addEventListener("chord-result", e=>gVerdict(e.detail));
+    check.addEventListener("chord-error", ()=>{ G.phase="off"; gState(t('gameMicDenied'),"ko"); });
+    G.legato=true;
+  }
+  try{ await check.start(); }catch(e){ /* il componente annuncia l'errore da sé */ }
+  gRound();
+}
+
+function gRound(){
+  gClear();
+  const sym=G.queue[G.i], c=CH[sym];
+  G.phase="listening";
+  el("gmName").textContent=c.name[S.lang];
+  el("gmPos").textContent=`${G.i+1} / ${GAME.rounds}`;
+  el("gmCard").classList.add("hide");
+  el("gmRing").classList.add("hide");
+  gState("","");
+  /* I rivali sono gli altri accordi dell'insieme, non tutti e novanta: il motore
+     deve distinguere il Do dal Lam di questo esercizio. */
+  gCheck().setChord(c.sym, c.frets,
+    G.deck.ch.filter(x=>x!==sym).map(x=>({sym:CH[x].sym, frets:CH[x].frets})));
+}
+
+function gVerdict(ev){
+  if(G.phase!=="listening" || !ev) return;
+  if(ev.ok){
+    G.phase="giusto"; G.score++; gScore();
+    gState(t('gameRight'),"ok");
+    gLater(gNext, GAME.rightMs);
+  }else{
+    G.phase="bloccato";
+    gState(`${t('gameWrong')} · ${t('gameLook')}`,"ko");
+    el("gmDiagram").innerHTML=svgChord(CH[G.queue[G.i]]);
+    /* i pallini delle dita nascono invisibili: senza questa classe il diagramma
+       resta un manico vuoto, che è il contrario di "guarda la posizione". */
+    const svg=el("gmDiagram").querySelector("svg"); if(svg) svg.classList.add("is-revealed");
+    el("gmCard").classList.remove("hide");
+    gLater(gCountdown, GAME.blockMs);
+  }
+}
+
+function gCountdown(){
+  G.phase="conto";
+  el("gmRing").classList.remove("hide");
+  gState(t('gameNextIn'),"ko");
+  const arc=el("gmRingArc"), t0=Date.now();
+
+  /* Chi comanda è il timer, non l'animazione: requestAnimationFrame si ferma
+     quando la pagina va in secondo piano, e con lui si fermerebbe la partita.
+     Il giro di rAF disegna soltanto, e se resta indietro non fa danno. */
+  gLater(()=>{ if(G.phase!=="conto") return; G.score--; gScore(); gNext(); }, GAME.countdownMs);
+
+  (function tick(){
+    if(G.phase!=="conto") return;
+    const resta=Math.max(0, GAME.countdownMs-(Date.now()-t0));
+    el("gmRingNum").textContent=String(Math.ceil(resta/1000));
+    arc.setAttribute("stroke-dashoffset", String(GAME.arc*(1-resta/GAME.countdownMs)));
+    if(resta>0) requestAnimationFrame(tick);
+  })();
+}
+
+function gNext(){
+  G.i++;
+  if(G.i>=GAME.rounds) return gOver();
+  gRound();
+}
+
+function gOver(){
+  G.phase="fine"; gClear();
+  gCheck().stop(); gCheck().classList.add("hide");
+  el("gmCard").classList.add("hide"); el("gmRing").classList.add("hide");
+  el("gmFinal").textContent=String(G.score); el("gmFinal").classList.remove("hide");
+  el("gmName").textContent=t('gameOver');
+  el("gmPos").textContent=`${GAME.rounds} / ${GAME.rounds}`;
+  gState(t('gameFinal').replace("{n}",G.score).replace("{tot}",GAME.rounds),"");
+  const b=el("gmAgain"); b.textContent=t('gameAgain'); b.classList.remove("hide");
+}
+
+function gClose(){
+  gClear(); G.phase="off";
+  const c=gCheck(); if(c && typeof c.stop==="function") c.stop();
+  el("game").classList.remove("on");
+}
+
+el("gameToggle").onclick=()=>{
+  G.on=!G.on;
+  el("gameToggle").setAttribute("aria-pressed", String(G.on));
+  save("chordtrainer.game.v1", G.on);
+  renderDecks();                 // cambiano le etichette degli insiemi
+};
+el("closeGame").onclick=gClose;
+el("gmAgain").onclick=()=>startGame(G.deck);
+
 /* ---------- ACCORDATORE ---------- */
 /* L'interfaccia. Il motore vive tutto in assets/listener.js: qui si accende,
    si spegne e si traduce in numeri leggibili. */
@@ -1662,10 +1891,13 @@ document.addEventListener("visibilitychange",()=>{
 });
 
 /* init */
+el("gameToggle").setAttribute("aria-pressed", String(G.on));
 applyTheme(detectTheme());
 applyLangStatic();
 renderDecks();
 </script>
 <script src="assets/listener.js" defer></script>
+<script src="assets/chord-check.js" defer></script>
+<script src="assets/chord-check.js" defer></script>
 </body>
 </html>
