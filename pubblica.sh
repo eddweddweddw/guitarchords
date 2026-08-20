@@ -22,12 +22,16 @@ ko(){   printf '\033[31m✗\033[0m %s\n' "$1"; }
 info(){ printf '\033[2m·\033[0m %s\n' "$1"; }
 
 # Se la richiesta fallisce non deve uscire l'impronta del vuoto, che sembrerebbe
-# una versione diversa invece che un sito irraggiungibile.
+# una versione diversa invece che un sito irraggiungibile. E si passa da un file:
+# $(...) mangia l'a-capo finale, e l'impronta non tornerebbe mai.
+# La CDN di GitHub Pages tiene in cache l'indirizzo pulito: serve un parametro
+# che cambia a ogni chiamata, altrimenti si confronta la versione di prima.
 impronta(){
-  local corpo
-  corpo=$(curl -fsS --max-time 15 "$1" 2>/dev/null) || return 0
-  [ -n "$corpo" ] || return 0
-  printf '%s' "$corpo" | shasum -a 256 | cut -c1-12
+  local tmp; tmp=$(mktemp)
+  if curl -fsS --max-time 15 "$1?cb=$RANDOM$$" -o "$tmp" 2>/dev/null && [ -s "$tmp" ]; then
+    shasum -a 256 "$tmp" | cut -c1-12
+  fi
+  rm -f "$tmp"
 }
 
 locale=$(shasum -a 256 index.html | cut -c1-12)
