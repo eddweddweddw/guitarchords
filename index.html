@@ -11,12 +11,47 @@
 <meta name="description" id="metaDescription" content="Allenatore di accordi per chitarra: esercizi interattivi per imparare e memorizzare le diteggiature sul manico." />
 <!-- Lo stesso sito è servito da due indirizzi (GitHub Pages e il telefono di
      casa). Senza canonical Google li vede come due copie in concorrenza. -->
-<link rel="canonical" href="https://eddweddweddw.github.io/guitarchords/" />
+<link rel="canonical" id="canonical" href="https://eddweddweddw.github.io/guitarchords/" />
+
+<!-- Due lingue, due indirizzi. Senza questo Google indicizza solo l'italiano,
+     perche' la lingua la cambia il JavaScript e l'indirizzo resterebbe uno solo. -->
+<link rel="alternate" hreflang="it" href="https://eddweddweddw.github.io/guitarchords/" />
+<link rel="alternate" hreflang="en" href="https://eddweddweddw.github.io/guitarchords/?lang=en" />
+<link rel="alternate" hreflang="x-default" href="https://eddweddweddw.github.io/guitarchords/" />
+
+<link rel="icon" href="icon.svg" type="image/svg+xml" />
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://eddweddweddw.github.io/guitarchords/" />
 <meta property="og:title" content="Manico · allenatore di accordi" />
 <meta property="og:description" content="Allenatore di accordi per chitarra: esercizi interattivi, accordatore dal microfono e modalità gioco." />
 <meta name="robots" content="index,follow" />
+
+<!-- Dati strutturati: dicono a Google che cos'e' questa pagina, invece di
+     lasciarglielo dedurre dal testo. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Manico",
+  "url": "https://eddweddweddw.github.io/guitarchords/",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Qualsiasi browser",
+  "browserRequirements": "Richiede JavaScript",
+  "inLanguage": ["it", "en"],
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+  "description": "Allenatore di accordi per chitarra: 90 diteggiature, esercizi a memoria, teoria degli accordi, accordatore dal microfono e modalita' gioco con riconoscimento dell'accordo suonato.",
+  "featureList": [
+    "90 accordi con diteggiatura verificata",
+    "Esercizi a tempo e adattivi",
+    "Teoria della costruzione degli accordi",
+    "Accordatore dal microfono",
+    "Modalita' gioco con riconoscimento dell'accordo"
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -1002,7 +1037,16 @@ function toggleTheme(){
   applyTheme(nuovo);
 }
 
+function langDaUrl(){
+  try{
+    const v=new URLSearchParams(location.search).get("lang");
+    return LANGS.some(l=>l.code===v) ? v : null;
+  }catch(e){ return null; }
+}
+
 function detectLang(){
+  const url = langDaUrl();
+  if(url) return url;                       // ?lang=en vince su tutto
   const saved = load("chordtrainer.lang.v1");
   if(LANGS.some(l=>l.code===saved)) return saved;
   try{
@@ -1472,11 +1516,23 @@ function closeLangMenus(){
   });
 }
 
+const BASE_URL = "https://eddweddweddw.github.io/guitarchords/";
+
+/* L'indirizzo e il canonical seguono la lingua mostrata: due lingue, due pagine
+   per chi indicizza, una sola per chi naviga. */
+function segnaLingua(){
+  const en = S.lang === "en";
+  const c = el("canonical");
+  if(c) c.setAttribute("href", en ? BASE_URL + "?lang=en" : BASE_URL);
+  try{ history.replaceState(null, "", en ? "?lang=en" : location.pathname); }catch(e){}
+}
+
 function setLang(code){
   closeLangMenus();
   if(!LANGS.some(l=>l.code===code) || code===S.lang) return;
   S.lang = code;
   save("chordtrainer.lang.v1", S.lang);
+  segnaLingua();
   applyLangStatic();
   renderDecks();
   refreshCardTexts();
@@ -1891,6 +1947,7 @@ document.addEventListener("visibilitychange",()=>{
 });
 
 /* init */
+segnaLingua();
 el("gameToggle").setAttribute("aria-pressed", String(G.on));
 applyTheme(detectTheme());
 applyLangStatic();
