@@ -264,9 +264,15 @@
      un filo d'aria in più sotto, perché è un'altra cosa, non un'altra opzione. */
   /* In modalità gioco basta una riga: la spiegazione lunga stava in cima alla
      home anche a chi non giocava. */
-  .gamelead{font-size:13px;color:var(--dim);line-height:1.55;margin:0 0 14px;
-    background:var(--accent-soft);border-radius:12px;padding:11px 13px}
-  .gamelead.hide{display:none}
+  .tutorial{display:flex;flex-direction:column;gap:11px;margin:0 0 16px;
+    background:var(--accent-soft);border-radius:14px;padding:14px 15px}
+  .tutorial.hide{display:none}
+  .passo{display:flex;gap:11px;align-items:flex-start}
+  .passo .n{flex:none;width:21px;height:21px;border-radius:50%;background:var(--accent);
+    color:var(--on-accent);font-size:11.5px;font-weight:600;
+    display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .passo b{display:block;font-size:13.5px;color:var(--text);font-weight:600;line-height:1.25}
+  .passo span{display:block;font-size:12.5px;color:var(--dim);line-height:1.45;margin-top:1px}
 
   /* ---------- I TRE MODI ---------- */
   /* Sta dentro la testata nel documento, ma sul telefono vive in fondo allo
@@ -315,6 +321,7 @@
     transition:.15s;position:relative;box-shadow:var(--shadow-sm)}
   .deck:active{transform:scale(.995)}
   .deck .go{color:var(--faint);flex:none;transition:.15s}
+  .deck.con-info .go{display:none}
   .deck:hover .go{color:var(--accent)}
   .deck .mini{flex:none}
   .deck .txt{flex:1;min-width:0}
@@ -522,9 +529,18 @@
     border-radius:18px;padding:15px 15px 13px;margin:8px 0 4px;box-shadow:var(--shadow)}
   .th-card.hide{display:none}
   .blocco{margin-bottom:9px}
+  .blocco .riga{display:flex;align-items:center;gap:7px}
+  .blocco .deck{margin-bottom:0;flex:1;min-width:0}
   .apribile{margin-bottom:6px}
   .th-lead.hide, .th-more.hide{display:none}
-  .blocco .deck{margin-bottom:0}
+  /* La teoria di una categoria sta dietro un bottone piccolo accanto alla riga:
+     c'è per chi la cerca, e non occupa spazio per tutti gli altri. */
+  .infobtn{flex:none;width:44px;height:44px;border-radius:22px;background:var(--surface);
+    border:1px solid var(--line);color:var(--faint);box-shadow:var(--shadow-sm);
+    display:flex;align-items:center;justify-content:center;transition:.15s}
+  .infobtn:hover{color:var(--accent)}
+  .infobtn[aria-expanded="true"]{color:var(--accent);border-color:var(--accent);
+    background:var(--accent-soft)}
   .th-formula .sep{color:var(--faint)}
   .th-eyebrow{font-family:"Roboto Mono";font-weight:600;font-size:10.5px;letter-spacing:.16em;
     text-transform:uppercase;color:var(--accent-2)}
@@ -566,10 +582,6 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 6.5h16"/><path d="M5.5 6.5v12M10 6.5v12M14 6.5v12M18.5 6.5v12"/><circle cx="10" cy="13" r="1.9" fill="currentColor" stroke="none"/></svg>
     <span id="tabTrainLab">Allena</span>
   </button>
-  <button class="tab" data-tab="tune">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v8a3 3 0 0 0 6 0V3"/><path d="M12 14v7"/><circle cx="12" cy="21" r="1.3" fill="currentColor" stroke="none"/></svg>
-    <span id="tabTuneLab">Accorda</span>
-  </button>
   <button class="tab" data-tab="play">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M10.2 9.1l5 2.9-5 2.9z"/></svg>
     <span id="tabPlayLab">Gioca</span>
@@ -578,6 +590,9 @@
     <div class="brandtools">
       <button class="iconbtn hdr" id="openSettings" type="button" aria-label="Impostazioni">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.1"/><path d="M19.1 14.8a1.5 1.5 0 0 0 .3 1.66l.05.05a1.9 1.9 0 1 1-2.69 2.69l-.05-.05a1.5 1.5 0 0 0-1.66-.3 1.5 1.5 0 0 0-.91 1.38v.14a1.9 1.9 0 0 1-3.8 0v-.07a1.5 1.5 0 0 0-.98-1.38 1.5 1.5 0 0 0-1.66.3l-.05.05a1.9 1.9 0 1 1-2.69-2.69l.05-.05a1.5 1.5 0 0 0 .3-1.66 1.5 1.5 0 0 0-1.38-.91H4.2a1.9 1.9 0 0 1 0-3.8h.07a1.5 1.5 0 0 0 1.38-.98 1.5 1.5 0 0 0-.3-1.66l-.05-.05A1.9 1.9 0 1 1 8 4.29l.05.05a1.5 1.5 0 0 0 1.66.3h.07a1.5 1.5 0 0 0 .91-1.38V3.1a1.9 1.9 0 0 1 3.8 0v.07a1.5 1.5 0 0 0 .91 1.38 1.5 1.5 0 0 0 1.66-.3l.05-.05a1.9 1.9 0 1 1 2.69 2.69l-.05.05a1.5 1.5 0 0 0-.3 1.66v.07a1.5 1.5 0 0 0 1.38.91h.14a1.9 1.9 0 0 1 0 3.8h-.07a1.5 1.5 0 0 0-1.38.91z"/></svg>
+      </button>
+      <button class="iconbtn hdr" id="openTuner" type="button" aria-label="Accordatore">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v8a3 3 0 0 0 6 0V3"/><path d="M12 14v7"/><circle cx="12" cy="21" r="1.3" fill="currentColor" stroke="none"/></svg>
       </button>
       <button class="iconbtn hdr" id="themeToggle" type="button" aria-label="Tema">
         <svg class="ic-sun" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"/></svg>
@@ -591,7 +606,7 @@
   </div>
   <p class="tagline" id="tagline">Il nome dell'accordo, poi la posizione a memoria.</p>
 
-  <div class="gamelead hide" id="gameLead"></div>
+  <div class="tutorial hide" id="gameLead"></div>
 
   <div id="deckList"></div>
   <div style="height:96px"></div>
@@ -749,11 +764,13 @@ const I18N = {
     theoryOpenTitle: "Come nascono gli accordi",
     theoryOpenSub: "La teoria dietro ogni insieme, in breve",
     gameHeading: "Modalità gioco",
-    tabTrain: "Allena", tabTune: "Accorda", tabPlay: "Gioca",
+    tabTrain: "Allena", tabPlay: "Gioca",
     settingsTitle: "Impostazioni", settingsAria: "Apri le impostazioni",
     theoryOpen: "Come si costruisce",
     theoryIntroOpen: "Come nascono gli accordi",
-    gameLead: "Il sito ti ascolta. Compare il nome di un accordo, tu lo suoni: dieci accordi in tutto, un punto per ognuno indovinato e uno in meno per ogni errore. Se sbagli, il gioco si ferma e ti mostra la posizione giusta.",
+    gameSteps: [["Scegli un insieme","Tocca una delle righe qui sotto: la partita è di dieci accordi."],
+                ["Suona quello che compare","Appare il nome, il microfono ascolta. Pizzica una volta sola e lascia suonare."],
+                ["Un punto, o la posizione","Se è giusto vai avanti. Se sbagli, il gioco si ferma e ti mostra la diteggiatura."]],
     gameCloseAria: "Esci dal gioco",
     gameRight: "Giusto",
     gameWrong: "Sbagliato",
@@ -814,7 +831,7 @@ const I18N = {
     settingsCloseAria: "Chiudi le impostazioni",
     themeIntro: "Le note hanno un ordine fisso, come i pioli di una scala: <b>do re mi fa sol la si</b>, e poi si ricomincia da capo. Un accordo si costruisce partendo da una nota qualsiasi — la <em>fondamentale</em>, quella che dà il nome all'accordo — e salendo di piolo in piolo, saltandone uno ogni volta.",
     thRefP: "I sette pioli a partire dal Do. Il numero dice quanto sei lontano dalla nota di partenza, contando la partenza come 1: dal Do, il <b>Mi</b> è la <b>terza</b> e il <b>Sol</b> è la <b>quinta</b>. Un Do maggiore è fatto esattamente di queste tre note.",
-    thSwitch: "Sulla chitarra la distanza si conta in tasti, e un tasto è il gradino più piccolo che esista: si chiama <b>semitono</b>. Due semitoni fanno un <b>tono</b>. I pioli della scala non sono tutti alla stessa altezza: da <b>mi a fa</b> e da <b>si a do</b> c\u0027è un semitono, fra tutti gli altri un tono. Ecco perché fra la fondamentale e la terza ci sono <b>quattro semitoni</b> se l\u0027accordo è maggiore e <b>tre</b> se è minore. Cambia una nota sola, e da sola decide se l\u0027accordo suona luminoso o malinconico. Aggiungendone una quarta nascono le famiglie qui sotto: nei righelli, che contano proprio i semitoni, la nota che caratterizza ciascuna è <span style=\"color:var(--accent)\">in evidenza</span>.",
+    thSwitch: "Sulla chitarra la distanza si conta in tasti, e un tasto è il gradino più piccolo che esista: si chiama <b>semitono</b>. Due semitoni fanno un <b>tono</b>. I pioli della scala non sono tutti alla stessa altezza: da <b>mi a fa</b> e da <b>si a do</b> c\u0027è un semitono, fra tutti gli altri un tono. Ecco perché fra la fondamentale e la terza ci sono <b>quattro semitoni</b> se l\u0027accordo è maggiore e <b>tre</b> se è minore. Cambia una nota sola, e da sola decide se l\u0027accordo suona luminoso o malinconico. Aggiungendo una quarta nota nascono le famiglie qui sotto.",
     rulerRoot: "partenza",
     rulerOctave: "ottava",
     trainLink: "Allenati",
@@ -837,11 +854,13 @@ const I18N = {
     theoryOpenTitle: "How chords are built",
     theoryOpenSub: "The theory behind each set, in brief",
     gameHeading: "Game mode",
-    tabTrain: "Practise", tabTune: "Tune", tabPlay: "Play",
+    tabTrain: "Practise", tabPlay: "Play",
     settingsTitle: "Settings", settingsAria: "Open settings",
     theoryOpen: "How it's built",
     theoryIntroOpen: "How chords are born",
-    gameLead: "The site listens to you. A chord name appears and you play it: ten chords in all, one point for each one you get right and one less for every mistake. When you miss, the game stops and shows you the correct shape.",
+    gameSteps: [["Pick a set","Tap one of the rows below: a game is ten chords."],
+                ["Play what appears","The name shows up and the microphone listens. Strum once and let it ring."],
+                ["A point, or the shape","Right, and you move on. Wrong, and the game stops to show you the fingering."]],
     gameCloseAria: "Leave the game",
     gameRight: "Right",
     gameWrong: "Wrong",
@@ -902,7 +921,7 @@ const I18N = {
     settingsCloseAria: "Close settings",
     themeIntro: "Notes come in a fixed order, like the rungs of a ladder: <b>C D E F G A B</b>, and then it starts over. A chord is built from any one note — the <em>root</em>, the note that gives the chord its name — climbing the rungs and skipping every other one.",
     thRefP: "The seven rungs starting from C. The number tells you how far you are from the starting note, counting the start as 1: from C, <b>E</b> is the <b>third</b> and <b>G</b> is the <b>fifth</b>. A C major chord is exactly those three notes.",
-    thSwitch: "On a guitar distance is counted in frets, and one fret is the smallest step there is: it is called a <b>semitone</b>. Two semitones make a <b>tone</b>. The rungs of the scale are not evenly spaced: from <b>E to F</b> and from <b>B to C</b> there is one semitone, everywhere else a tone. That is why between the root and the third there are <b>four semitones</b> if the chord is major and <b>three</b> if it is minor. One note changes, and on its own it decides whether the chord sounds bright or wistful. Add a fourth note and you get the families below: in the rulers, which count those very semitones, the note that defines each one is <span style=\"color:var(--accent)\">highlighted</span>.",
+    thSwitch: "On a guitar distance is counted in frets, and one fret is the smallest step there is: it is called a <b>semitone</b>. Two semitones make a <b>tone</b>. The rungs of the scale are not evenly spaced: from <b>E to F</b> and from <b>B to C</b> there is one semitone, everywhere else a tone. That is why between the root and the third there are <b>four semitones</b> if the chord is major and <b>three</b> if it is minor. One note changes, and on its own it decides whether the chord sounds bright or wistful. Add a fourth note and you get the families below.",
     rulerRoot: "start",
     rulerOctave: "octave",
     trainLink: "Practice",
@@ -1277,7 +1296,7 @@ function renderDecks(){
         <div class="th-ref"><p>${t('thRefP')}</p><div class="scale">`+
         t('scaleDeg').map(([n,nt])=>`<div class="d">${n}<small>${nt}</small></div>`).join('')+
         `</div></div><p class="th-switch">${t('thSwitch')}</p>`;
-      wrap.appendChild(apribile(t('theoryIntroOpen'), "", lead));
+      wrap.appendChild(lead);   // l'introduzione resta aperta: è il punto di partenza
     }
 
     DECKS.filter(d=>d.group===gr.k).forEach(d=>{
@@ -1286,18 +1305,35 @@ function renderDecks(){
          il blocco è la cella della griglia, e i tre pezzi non si separano. */
       const blocco=document.createElement("div");
       blocco.className="blocco"+(gr.k==="top"?" pieno":"");   // l'insieme in evidenza prende tutta la riga
+      const riga=document.createElement("div"); riga.className="riga";
       const b=document.createElement("button");
-      b.className="deck";
+      b.className="deck"+(f?" con-info":"");
       b.setAttribute("aria-label", `${G.on ? t('gameHeading') : t('startBegin')} · ${d.nm[S.lang]}`);
       b.innerHTML=`<span class="mini">${deckIcon(d.id)}</span>
         <span class="txt"><span class="nm">${d.nm[S.lang]}</span><span class="sb">${d.sb[S.lang]}</span></span>
         <span class="ct">${d.ch.length} ${t('chordsSuffix')}</span>
         <svg class="go" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>`;
       b.onclick=()=>{ S.deckId=d.id; if(G.on) startGame(d); else startSession(); };
-      blocco.appendChild(b);
+      riga.appendChild(b);
 
-      if(f) blocco.appendChild(apribile(t('theoryOpen'),
-              f.formula.map(x=>x.replace(/<[^>]*>/g,"")).join(" · "), theoryCard(f)));
+      let card=null;
+      if(f){
+        /* La teoria di una categoria sta dietro un bottone piccolo accanto alla
+           riga: c'è per chi la cerca, e non ruba spazio a tutti gli altri. */
+        card=theoryCard(f); card.classList.add("hide");
+        const info=document.createElement("button");
+        info.className="infobtn"; info.type="button"; info.setAttribute("aria-expanded","false");
+        info.setAttribute("aria-label", `${t('theoryOpen')} · ${d.nm[S.lang]}`);
+        info.innerHTML=`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11.2v4.6"/><circle cx="12" cy="7.9" r="1" fill="currentColor" stroke="none"/></svg>`;
+        info.onclick=()=>{
+          const aperto = info.getAttribute("aria-expanded")==="true";
+          info.setAttribute("aria-expanded", String(!aperto));
+          card.classList.toggle("hide", aperto);
+        };
+        riga.appendChild(info);
+      }
+      blocco.appendChild(riga);
+      if(card) blocco.appendChild(card);
       wrap.appendChild(blocco);
     });
 
@@ -1476,12 +1512,12 @@ function applyLangStatic(){
   el("nextBtn").setAttribute("aria-label", t('nextAria'));
   setPlayIcon();
   el("tabTrainLab").textContent=t('tabTrain');
-  el("tabTuneLab").textContent=t('tabTune');
   el("tabPlayLab").textContent=t('tabPlay');
   el("settingsTitle").textContent=t('settingsTitle');
   el("openSettings").setAttribute("aria-label", t('settingsAria'));
+  el("openTuner").setAttribute("aria-label", t('tunerOpenAria'));
   el("closeSettings").setAttribute("aria-label", t('settingsCloseAria'));
-  el("gameLead").textContent=t('gameLead');
+  renderTutorial();
   el("closeGame").setAttribute("aria-label", t('gameCloseAria'));
   updateThemeButton();
   el("closeTuner").setAttribute("aria-label", t('closeTunerAria'));
@@ -1676,8 +1712,8 @@ function ruler(tones){
   let svgStr="";
   svgStr+=`<line class="rl-axis" x1="${X(0)}" y1="44" x2="${X(12)}" y2="44"/>`;
   for(let s=0;s<=12;s++){ const oct=(s===0||s===12); svgStr+=`<line class="rl-tick ${oct?'oct':''}" x1="${X(s)}" y1="${oct?36:40}" x2="${X(s)}" y2="48"/>`; }
-  svgStr+=`<text class="rl-cap" x="${X(0)}" y="62">${t('rulerRoot')}</text>`;
-  svgStr+=`<text class="rl-cap" x="${X(12)}" y="62">${t('rulerOctave')}</text>`;
+  svgStr+=`<text class="rl-cap" style="text-anchor:start" x="${X(0)-2}" y="62">${t('rulerRoot')}</text>`;
+  svgStr+=`<text class="rl-cap" style="text-anchor:end" x="${X(12)+2}" y="62">${t('rulerOctave')}</text>`;
   tones.forEach(o=>{
     svgStr+=`<circle class="rl-dot ${o.c}" cx="${X(o.s)}" cy="44" r="6"/>`;
     svgStr+=`<text class="rl-lab ${o.c}" x="${X(o.s)}" y="22">${o.d}</text>`;
@@ -1719,6 +1755,14 @@ function gQueue(deck){
 
 /* L'ascolto non lo fa il gioco: lo fa <manico-chord-check>, il componente che
    la sessione del motore aggiorna per conto suo. Qui si guarda solo l'esito. */
+/* Il tutorial del gioco: tre passi, non un paragrafo. Si vede solo quando
+   la modalità gioco è attiva, quindi solo a chi gli serve. */
+function renderTutorial(){
+  el("gameLead").innerHTML = t('gameSteps').map(([titolo,testo],i)=>
+    `<div class="passo"><span class="n mono">${i+1}</span><div><b>${titolo}</b><span>${testo}</span></div></div>`
+  ).join("");
+}
+
 function gCheck(){ return el("gmCheck"); }
 
 async function startGame(deck){
@@ -1944,7 +1988,6 @@ function tunerStop(){
 function apriAccordatore(){ el("tuner").classList.add("on"); tunerStrings(); tunerStop(); }
 
 function setTab(nome){
-  if(nome==="tune"){ apriAccordatore(); return; }
   G.on = (nome==="play");
   save("chordtrainer.game.v1", G.on);
   el("gameLead").classList.toggle("hide", !G.on);
@@ -1955,10 +1998,12 @@ function setTab(nome){
   });
   renderDecks();
 }
+renderTutorial();
 el("tabbar").addEventListener("click", e=>{
   const b=e.target.closest("button[data-tab]"); if(b) setTab(b.dataset.tab);
 });
 
+el("openTuner").onclick=apriAccordatore;
 el("openSettings").onclick=()=>el("settings").classList.add("on");
 el("closeSettings").onclick=()=>el("settings").classList.remove("on");
 el("closeTuner").onclick=()=>{
