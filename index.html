@@ -86,6 +86,7 @@
     --ok:var(--accent);
     --diagram-line:#c8d3df;    /* tasti */
     --diagram-string:#93a1b0;  /* corde */
+    --velo:rgba(10,22,40,.34);
     --shadow:0 14px 32px -18px rgba(10,22,40,.20);
     --shadow-sm:0 2px 8px -6px rgba(10,22,40,.18);
     --shadow-knob:0 1px 3px rgba(10,22,40,.28);
@@ -118,7 +119,9 @@
       --danger-soft:rgba(240,112,95,.14);
       --diagram-line:#2c3644;
       --diagram-string:#697787;
-      --shadow:0 14px 32px -18px rgba(0,0,0,.85);
+      --velo:rgba(0,0,0,.66);
+      --velo:rgba(0,0,0,.66);
+    --shadow:0 14px 32px -18px rgba(0,0,0,.85);
       --shadow-sm:0 2px 8px -6px rgba(0,0,0,.8);
       --shadow-knob:0 1px 3px rgba(0,0,0,.7);
       --accent-glow:0 12px 26px -14px rgba(75,142,247,.55);
@@ -147,6 +150,7 @@
     --danger-soft:rgba(240,112,95,.14);
     --diagram-line:#2c3644;
     --diagram-string:#697787;
+    --velo:rgba(0,0,0,.66);
     --shadow:0 14px 32px -18px rgba(0,0,0,.85);
     --shadow-sm:0 2px 8px -6px rgba(0,0,0,.8);
     --shadow-knob:0 1px 3px rgba(0,0,0,.7);
@@ -533,8 +537,20 @@
   .blocco .deck{margin-bottom:0;flex:1;min-width:0}
   .apribile{margin-bottom:6px}
   .th-lead.hide, .th-more.hide{display:none}
-  /* La teoria di una categoria sta dietro un bottone piccolo accanto alla riga:
-     c'è per chi la cerca, e non occupa spazio per tutti gli altri. */
+  /* La teoria si apre in una finestra sopra la pagina: non sposta nulla di
+     quello che stavi guardando, e se ne va com'è arrivata. */
+  .modale{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;padding:18px}
+  .modale.on{display:flex}
+  .modale .velo{position:absolute;inset:0;background:var(--velo)}
+  .modale .foglio{position:relative;width:100%;max-width:420px;max-height:84vh;overflow-y:auto;
+    -webkit-overflow-scrolling:touch;animation:salita .18s ease-out both}
+  .modale .foglio .th-card{margin:0}
+  .modale .chiudi{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:17px;
+    background:var(--surface-2);border:1px solid var(--line);color:var(--dim);z-index:1}
+  @keyframes salita{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){ .modale .foglio{animation:none} }
+
+  /* Il bottone che la richiama, accanto alla riga della categoria. */
   .infobtn{flex:none;width:44px;height:44px;border-radius:22px;background:var(--surface);
     border:1px solid var(--line);color:var(--faint);box-shadow:var(--shadow-sm);
     display:flex;align-items:center;justify-content:center;transition:.15s}
@@ -665,6 +681,17 @@
 </div>
 
 <!-- THEORY -->
+
+<!-- TEORIA IN FINESTRA -->
+<div class="modale" id="theoryModal" role="dialog" aria-modal="true" aria-labelledby="theoryModalTitle">
+  <div class="velo" id="theoryVelo"></div>
+  <div class="foglio">
+    <button class="iconbtn chiudi" id="closeTheoryModal" aria-label="Chiudi">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div id="theoryModalBody"></div>
+  </div>
+</div>
 
 <!-- IMPOSTAZIONI -->
 <div class="stage settings" id="settings">
@@ -829,7 +856,7 @@ const I18N = {
     theoryTitle: "Come nascono gli accordi",
     theorySub: "costruzione degli accordi",
     settingsCloseAria: "Chiudi le impostazioni",
-    themeIntro: "Le note hanno un ordine fisso, come i pioli di una scala: <b>do re mi fa sol la si</b>, e poi si ricomincia da capo. Un accordo si costruisce partendo da una nota qualsiasi — la <em>fondamentale</em>, quella che dà il nome all'accordo — e salendo di piolo in piolo, saltandone uno ogni volta.",
+    themeIntro: "Le note hanno un ordine fisso, come i pioli di una scala: <b>do re mi fa sol la si</b>, e poi si ricomincia da capo. Un accordo si costruisce partendo da una nota qualsiasi, la <em>fondamentale</em>, quella che dà il nome all'accordo, e salendo di piolo in piolo, saltandone uno ogni volta.",
     thRefP: "I sette pioli a partire dal Do. Il numero dice quanto sei lontano dalla nota di partenza, contando la partenza come 1: dal Do, il <b>Mi</b> è la <b>terza</b> e il <b>Sol</b> è la <b>quinta</b>. Un Do maggiore è fatto esattamente di queste tre note.",
     thSwitch: "Sulla chitarra la distanza si conta in tasti, e un tasto è il gradino più piccolo che esista: si chiama <b>semitono</b>. Due semitoni fanno un <b>tono</b>. I pioli della scala non sono tutti alla stessa altezza: da <b>mi a fa</b> e da <b>si a do</b> c\u0027è un semitono, fra tutti gli altri un tono. Ecco perché fra la fondamentale e la terza ci sono <b>quattro semitoni</b> se l\u0027accordo è maggiore e <b>tre</b> se è minore. Cambia una nota sola, e da sola decide se l\u0027accordo suona luminoso o malinconico. Aggiungendo una quarta nota nascono le famiglie qui sotto.",
     rulerRoot: "partenza",
@@ -840,7 +867,7 @@ const I18N = {
       {dt:"Estensioni", dd:"Continuando a impilare terze oltre la settima si ottengono <b>9ª, 11ª, 13ª</b>: sono le note “alte” che aggiungono tensione e colore."},
       {dt:"“add” contro accordo di nona", dd:"<b>add9</b> aggiunge solo la nona senza la settima; l'accordo di <b>nona</b> (es. C9) include anche la ♭7. Stessa nota in cima, costruzione diversa."},
       {dt:"Power chord (5)", dd:"Solo fondamentale e quinta, <b>senza la terza</b>: proprio perché manca la terza non è né maggiore né minore. È il suono del rock distorto."},
-      {dt:"Forme mobili e barré", dd:"Una forma sulla tastiera “congela” il pattern di intervalli: se la sposti lungo il manico cambia solo la fondamentale, non la qualità. È il motivo per cui gli accordi barré funzionano — vedi l'insieme <b>Avanzato</b>."}
+      {dt:"Forme mobili e barré", dd:"Una forma sulla tastiera “congela” il pattern di intervalli: se la sposti lungo il manico cambia solo la fondamentale, non la qualità. È il motivo per cui gli accordi barré funzionano: vedi l'insieme <b>Avanzato</b>."}
     ],
     scaleDeg: [['1','Do'],['2','Re'],['3','Mi'],['4','Fa'],['5','Sol'],['6','La'],['7','Si']],
     stringNames: ["MI","LA","RE","SOL","SI","mi"],
@@ -919,7 +946,7 @@ const I18N = {
     theoryTitle: "How chords are built",
     theorySub: "chord construction",
     settingsCloseAria: "Close settings",
-    themeIntro: "Notes come in a fixed order, like the rungs of a ladder: <b>C D E F G A B</b>, and then it starts over. A chord is built from any one note — the <em>root</em>, the note that gives the chord its name — climbing the rungs and skipping every other one.",
+    themeIntro: "Notes come in a fixed order, like the rungs of a ladder: <b>C D E F G A B</b>, and then it starts over. A chord is built from any one note, the <em>root</em>, the note that gives the chord its name, climbing the rungs and skipping every other one.",
     thRefP: "The seven rungs starting from C. The number tells you how far you are from the starting note, counting the start as 1: from C, <b>E</b> is the <b>third</b> and <b>G</b> is the <b>fifth</b>. A C major chord is exactly those three notes.",
     thSwitch: "On a guitar distance is counted in frets, and one fret is the smallest step there is: it is called a <b>semitone</b>. Two semitones make a <b>tone</b>. The rungs of the scale are not evenly spaced: from <b>E to F</b> and from <b>B to C</b> there is one semitone, everywhere else a tone. That is why between the root and the third there are <b>four semitones</b> if the chord is major and <b>three</b> if it is minor. One note changes, and on its own it decides whether the chord sounds bright or wistful. Add a fourth note and you get the families below.",
     rulerRoot: "start",
@@ -930,7 +957,7 @@ const I18N = {
       {dt:"Extensions", dd:"Stacking thirds further past the seventh gives you the <b>9th, 11th and 13th</b>: the “upper” notes that add tension and color."},
       {dt:"“add” vs. a ninth chord", dd:"<b>add9</b> adds only the ninth, without the seventh; a ninth chord (e.g. C9) also includes the ♭7. Same top note, different construction."},
       {dt:"Power chord (5)", dd:"Just the root and the fifth, <b>no third</b>: because the third is missing, it's neither major nor minor. It's the sound of distorted rock."},
-      {dt:"Movable shapes & barre chords", dd:"A shape on the fretboard “freezes” a pattern of intervals: slide it along the neck and only the root changes, not the quality. That's why barre chords work — see the <b>Advanced</b> set."}
+      {dt:"Movable shapes & barre chords", dd:"A shape on the fretboard “freezes” a pattern of intervals: slide it along the neck and only the root changes, not the quality. That's why barre chords work: see the <b>Advanced</b> set."}
     ],
     scaleDeg: [['1','C'],['2','D'],['3','E'],['4','F'],['5','G'],['6','A'],['7','B']],
     stringNames: ["E","A","D","G","B","e"],
@@ -1271,6 +1298,23 @@ function apribile(etichetta, dettaglio, contenuto){
   return box;
 }
 
+/* La finestra della teoria. Ricorda chi l'ha aperta per restituirgli il fuoco:
+   chi naviga da tastiera altrimenti si ritroverebbe a inizio pagina. */
+let chiHaAperto = null;
+function apriTeoria(f, sorgente){
+  const corpo = el("theoryModalBody");
+  corpo.innerHTML = "";
+  corpo.appendChild(theoryCard(f));
+  const titolo = corpo.querySelector("h3"); if(titolo) titolo.id = "theoryModalTitle";
+  chiHaAperto = sorgente || null;
+  el("theoryModal").classList.add("on");
+  el("closeTheoryModal").focus();
+}
+function chiudiTeoria(){
+  el("theoryModal").classList.remove("on");
+  if(chiHaAperto){ chiHaAperto.focus(); chiHaAperto = null; }
+}
+
 function theoryCard(f){
   const L=f[S.lang];
   const c=document.createElement("div"); c.className="th-card";
@@ -1316,24 +1360,17 @@ function renderDecks(){
       b.onclick=()=>{ S.deckId=d.id; if(G.on) startGame(d); else startSession(); };
       riga.appendChild(b);
 
-      let card=null;
       if(f){
         /* La teoria di una categoria sta dietro un bottone piccolo accanto alla
            riga: c'è per chi la cerca, e non ruba spazio a tutti gli altri. */
-        card=theoryCard(f); card.classList.add("hide");
         const info=document.createElement("button");
-        info.className="infobtn"; info.type="button"; info.setAttribute("aria-expanded","false");
+        info.className="infobtn"; info.type="button"; info.setAttribute("aria-haspopup","dialog");
         info.setAttribute("aria-label", `${t('theoryOpen')} · ${d.nm[S.lang]}`);
         info.innerHTML=`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11.2v4.6"/><circle cx="12" cy="7.9" r="1" fill="currentColor" stroke="none"/></svg>`;
-        info.onclick=()=>{
-          const aperto = info.getAttribute("aria-expanded")==="true";
-          info.setAttribute("aria-expanded", String(!aperto));
-          card.classList.toggle("hide", aperto);
-        };
+        info.onclick=()=>apriTeoria(f, info);
         riga.appendChild(info);
       }
       blocco.appendChild(riga);
-      if(card) blocco.appendChild(card);
       wrap.appendChild(blocco);
     });
 
@@ -1600,7 +1637,11 @@ LANG_PICKS.forEach(id=>{
 });
 el("themeToggle").onclick = toggleTheme;
 document.addEventListener("click", closeLangMenus);
-document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeLangMenus(); });
+document.addEventListener("keydown", e=>{
+  if(e.key!=="Escape") return;
+  closeLangMenus();
+  if(el("theoryModal").classList.contains("on")) chiudiTeoria();
+});
 
 /* stage events */
 el("exitBtn").onclick=exitSession;
@@ -2003,6 +2044,8 @@ el("tabbar").addEventListener("click", e=>{
   const b=e.target.closest("button[data-tab]"); if(b) setTab(b.dataset.tab);
 });
 
+el("closeTheoryModal").onclick=chiudiTeoria;
+el("theoryVelo").onclick=chiudiTeoria;
 el("openTuner").onclick=apriAccordatore;
 el("openSettings").onclick=()=>el("settings").classList.add("on");
 el("closeSettings").onclick=()=>el("settings").classList.remove("on");
