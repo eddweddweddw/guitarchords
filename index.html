@@ -729,7 +729,10 @@ const I18N = {
     tunerInTune: "in accordo",
     tunerPlayAria: "Suona la nota di riferimento",
     tunerDenied: "Microfono negato. Puoi consentirlo dalle impostazioni del browser.",
-    tunerNoMic: "Microfono non disponibile su questa connessione.",
+    tunerNoMic: "Il microfono richiede una connessione sicura (https).",
+    tunerNoDevice: "Nessun microfono collegato.",
+    tunerBusy: "Microfono occupato da un'altra scheda o applicazione. Chiudila e riprova.",
+    tunerFailed: "Il microfono non si è aperto ({e}).",
     tunerHint: "Tocca una corda per sentirla.",
     tunerCents: "cent",
     modeHeading: "Modalità",
@@ -818,7 +821,10 @@ const I18N = {
     tunerInTune: "in tune",
     tunerPlayAria: "Play the reference note",
     tunerDenied: "Microphone denied. You can allow it in your browser settings.",
-    tunerNoMic: "Microphone not available on this connection.",
+    tunerNoMic: "The microphone needs a secure connection (https).",
+    tunerNoDevice: "No microphone connected.",
+    tunerBusy: "Microphone busy in another tab or app. Close it and try again.",
+    tunerFailed: "The microphone didn't open ({e}).",
     tunerHint: "Tap a string to hear it.",
     tunerCents: "cents",
     modeHeading: "Mode",
@@ -1908,6 +1914,17 @@ el("tnStrings").addEventListener("click", e=>{
   Listener.playReference(+b.dataset.midi, { onEnd: ()=>b.setAttribute("aria-pressed","false") });
 });
 
+/* Il guasto del microfono, detto com'è. Prima qualunque errore diventava
+   «non disponibile su questa connessione», che con la connessione a posto manda
+   a cercare la causa dove non è. */
+function micMessage(err){
+  const nome = (err && err.name) || "Error";
+  if(nome==="NotAllowedError") return t('tunerDenied');
+  if(nome==="NotFoundError" || nome==="OverconstrainedError") return t('tunerNoDevice');
+  if(nome==="NotReadableError" || nome==="TrackStartError") return t('tunerBusy');
+  return t('tunerFailed').replace("{e}", nome);
+}
+
 async function tunerStart(){
   if(!window.Listener || !navigator.mediaDevices){ tunerState(t('tunerNoMic'), false); return; }
   Listener.stopReference();
@@ -1916,7 +1933,7 @@ async function tunerStart(){
   try{
     await Listener.start();                    // il permesso si chiede qui, sul tocco
   }catch(err){
-    tunerState(err && err.name==="NotAllowedError" ? t('tunerDenied') : t('tunerNoMic'), false);
+    tunerState(micMessage(err), false);
     return;
   }
   TN.on=true;
@@ -1954,7 +1971,6 @@ applyLangStatic();
 renderDecks();
 </script>
 <script src="assets/listener.js" defer></script>
-<script src="assets/chord-check.js" defer></script>
 <script src="assets/chord-check.js" defer></script>
 </body>
 </html>

@@ -376,6 +376,10 @@
   let mode = "pitch";                 // "pitch" = accordatore · "chord" = accordi
   let atteso = null;                  // cosa il sito ha chiesto di suonare
   let watcher = null;
+  /* Ogni avvio prende un numero. Se nel frattempo qualcuno chiama stop(), il
+     numero cambia e l'avvio in corso sa di essere stato sorpassato: si pulisce
+     invece di pubblicare uno stato che nessuno vuole più. */
+  let generazione = 0;
   const callbacks = [], chordCallbacks = [];
 
   function onDetect(cb) {
@@ -456,6 +460,23 @@
     if (evento) for (const cb of chordCallbacks) cb(evento);
   }
 
+  /* Un giro di analisi dell'accordatore: prende i campioni freschi, li misura,
+     li annuncia. Il ramo degli accordi ha un giro suo, qui si smista. */
+  function analyseFrame(now) {
+    if (!running) return;
+    if (mode === "chord") {
+      analyseChordFrame(now || (typeof performance !== "undefined" ? performance.now() : Date.now()));
+      schedule();
+      return;
+    }
+    analyser.getFloatTimeDomainData(frame);
+    const res = detectPitch(frame, ctx.sampleRate);
+    res.stable = stabilise(res.freq, res.clarity);
+    res.stableNote = res.stable ? noteFromFreq(res.stable) : null;
+    emit(res);
+    schedule();
+  }
+
   /* Il ritmo dell'analisi.
      requestAnimationFrame invece di setTimeout per una ragione precisa: quando
      la pagina finisce in secondo piano, rAF si ferma del tutto, mentre setTimeout
@@ -478,66 +499,96 @@
   /* start() si chiama SOLO da un gesto esplicito dell'utente: il permesso
      microfono chiesto all'apertura della pagina è un modo sicuro di farselo
      negare per sempre. */
+  function abortito() {
+    const e = new Error("avvio annullato mentre si apriva il microfono");
+    e.name = "AbortError";
+    return e;
+  }
+
   async function start(opts) {
     if (running) return true;
     /* Con echoCancellation disattivata l'altoparlante rientra dritto nel
        microfono: se restassero accesi insieme, l'accordatore accorderebbe la
        propria nota di riferimento. Le due cose si escludono a vicenda. */
     stopReference();
+
+    const mio = ++generazione;
     const o = Object.assign({ filter: true, source: null, mode: "pitch" }, opts || {});
-    mode = o.mode;
     /* Per gli accordi il passa-basso dell'accordatore va tolto: lì gli armonici
        sono un disturbo, qui sono la materia prima del chroma. */
-    if (mode === "chord") o.filter = false;
+    if (o.mode === "chord") o.filter = false;
 
-    ctx = new (root.AudioContext || root.webkitAudioContext)();
-    if (ctx.state === "suspended") await ctx.resume();
+    /* Tutto resta in variabili locali fino all'ultima riga. Scrivere lo stato
+       del modulo prima di aver finito significa lasciarlo a metà se qualcosa
+       va storto — ed è come nasceva il microfono che restava acceso per sempre:
+       stop() azzerava il contesto mentre eravamo fermi sul permesso, e al
+       ritorno il flusso appena ottenuto non aveva più nessuno che lo fermasse. */
+    let ctxL = null, streamL = null, nodeL = null;
+    try {
+      ctxL = new (root.AudioContext || root.webkitAudioContext)();
+      if (ctxL.state === "suspended") await ctxL.resume();
+      if (mio !== generazione) throw abortito();
 
-    if (o.source) {
-      /* Sorgente di prova. Si accetta una funzione che riceve il contesto e
-         restituisce un nodo: gli OscillatorNode appartengono al contesto in cui
-         nascono, e il contesto lo crea start(). */
-      node = typeof o.source === "function" ? o.source(ctx) : o.source;
-    } else {
-      /* Le tre elaborazioni disattivate sono pensate per la voce al telefono:
-         inseguono il parlato, comprimono il livello e mangiano gli armonici.
-         Su una chitarra falsano tutto quello che stiamo per misurare. */
-      stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
-      });
-      node = ctx.createMediaStreamSource(stream);
+      if (o.source) {
+        /* Sorgente di prova. Si accetta una funzione che riceve il contesto e
+           restituisce un nodo: gli OscillatorNode appartengono al contesto in
+           cui nascono, e il contesto lo crea start(). */
+        nodeL = typeof o.source === "function" ? o.source(ctxL) : o.source;
+      } else {
+        /* Le tre elaborazioni disattivate sono pensate per la voce al telefono:
+           inseguono il parlato, comprimono il livello e mangiano gli armonici.
+           Su una chitarra falsano tutto quello che stiamo per misurare. */
+        streamL = await navigator.mediaDevices.getUserMedia({
+          audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+        });
+        if (mio !== generazione) throw abortito();   // fermati mentre chiedevamo
+        nodeL = ctxL.createMediaStreamSource(streamL);
+      }
+
+      const an = ctxL.createAnalyser();
+      an.fftSize = o.mode === "chord" ? CFG.chordSize : CFG.fftSize;
+
+      if (o.filter) {
+        /* Passa-alto: via il rombo di rete e il rumore di maneggio sotto le corde.
+           Passa-basso a 900 Hz: gli armonici alti di una corda vera non sono
+           multipli esatti della fondamentale (inarmonicità), e trascinano la
+           lettura verso l'acuto. Tagliarli riduce la deriva misurata da 3,7 a
+           2,0 cent sul Mi basso simulato. La fondamentale più acuta che ci
+           interessa è il Mi4 a 329,6 Hz: sotto i 900 Hz c'è spazio abbondante. */
+        const hp = ctxL.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 55;
+        const lp = ctxL.createBiquadFilter(); lp.type = "lowpass";  lp.frequency.value = 900;
+        nodeL.connect(hp); hp.connect(lp); lp.connect(an);
+      } else {
+        nodeL.connect(an);
+      }
+
+      /* Solo adesso, che non può più fallire, lo stato diventa quello del modulo. */
+      mode = o.mode;
+      ctx = ctxL; stream = streamL; node = nodeL; analyser = an;
+      frame = new Float32Array(an.fftSize);
+      stabilise = makeStabiliser(o.stabiliser);
+      running = true;
+      lastAt = 0; watcher = null;
+      analyseFrame();
+      return true;
+
+    } catch (err) {
+      /* Pulizia completa: nessun microfono orfano, nessun contesto orfano.
+         È la parte che mancava. */
+      if (streamL) streamL.getTracks().forEach(t => { try { t.stop(); } catch (e) {} });
+      if (ctxL && ctxL.state !== "closed") { try { ctxL.close(); } catch (e) {} }
+      if (mio === generazione) {
+        ctx = null; stream = null; node = null; analyser = null;
+        frame = null; stabilise = null; running = false;
+      }
+      throw err;
     }
-
-    analyser = ctx.createAnalyser();
-    analyser.fftSize = mode === "chord" ? CFG.chordSize : CFG.fftSize;
-
-    if (o.filter) {
-      /* Passa-alto: via il rombo di rete e il rumore di maneggio sotto le corde.
-         Passa-basso a 900 Hz: gli armonici alti di una corda vera non sono multipli
-         esatti della fondamentale (inarmonicità), e trascinano la lettura verso
-         l'acuto. Tagliarli riduce la deriva misurata da 3,7 a 2,0 cent sul Mi
-         basso simulato. La fondamentale più acuta che ci interessa è il Mi4 a
-         329,6 Hz: sotto i 900 Hz c'è spazio abbondante.
-         Al punto 2 (accordi) questo ramo va escluso, perché lì gli armonici
-         servono a costruire il chroma. */
-      const hp = ctx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 55;
-      const lp = ctx.createBiquadFilter(); lp.type = "lowpass";  lp.frequency.value = 900;
-      node.connect(hp); hp.connect(lp); lp.connect(analyser);
-    } else {
-      node.connect(analyser);
-    }
-
-    frame  = new Float32Array(analyser.fftSize);
-    stabilise = makeStabiliser(o.stabiliser);
-    running = true;
-    lastAt = 0; watcher = null;
-    analyseFrame();
-    return true;
   }
 
   /* stop() chiude davvero il microfono: finché una traccia resta viva, Android
      tiene acceso l'indicatore e il consumo. */
   function stop() {
+    generazione++;              // un avvio in attesa del permesso saprà di essere sorpassato
     running = false;
     if (timer) { clearTimeout(timer); timer = null; }
     if (raf !== null && typeof root.cancelAnimationFrame === "function") { root.cancelAnimationFrame(raf); raf = null; }

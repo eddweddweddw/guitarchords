@@ -49,13 +49,19 @@
           listening:"In ascolto…", heard:"Sentito", checking:"Controllo…",
           ok:"è giusto", rival:"sembra piuttosto {r}", weak:"non l'ho capito, riprova",
           denied:"Microfono negato: puoi consentirlo dalle impostazioni del browser.",
-          nomic:"Microfono non disponibile su questa connessione.",
+          nomic:"Il microfono richiede una connessione sicura (https).",
+          nodevice:"Nessun microfono collegato.",
+          busy:"Microfono occupato da un'altra scheda o applicazione. Chiudila e riprova.",
+          failed:"Il microfono non si è aperto ({e}).",
           unknown:"Accordo sconosciuto: {s}", play:"Suona" },
     en: { listen:"Listen", stop:"Stop", idle:"Tap “Listen”, then play",
           listening:"Listening…", heard:"Heard", checking:"Checking…",
           ok:"that's right", rival:"sounds more like {r}", weak:"didn't catch that, try again",
           denied:"Microphone denied: you can allow it in your browser settings.",
-          nomic:"Microphone not available on this connection.",
+          nomic:"The microphone needs a secure connection (https).",
+          nodevice:"No microphone connected.",
+          busy:"Microphone busy in another tab or app. Close it and try again.",
+          failed:"The microphone didn't open ({e}).",
           unknown:"Unknown chord: {s}", play:"Play" }
   };
 
@@ -193,6 +199,8 @@
        passando {source: ...}. Senza argomenti apre il microfono. */
     async start(opzioni) {
       const L = window.Listener;
+      /* navigator.mediaDevices manca solo fuori da un contesto sicuro: lì il
+         messaggio sulla connessione è quello giusto, e solo lì. */
       if (!L || !navigator.mediaDevices) { this._stato(this._t("nomic"), "no"); return false; }
       if (!this._frets) { this._stato(this._t("unknown", { s: this._sym || "?" }), "no"); return false; }
       if (this._on) return true;
@@ -209,13 +217,30 @@
       try {
         await L.start(Object.assign({ mode: "chord" }, opzioni || {}));  // il permesso si chiede qui, sul tocco
       } catch (err) {
-        this._stato(err && err.name === "NotAllowedError" ? this._t("denied") : this._t("nomic"), "no");
-        this.dispatchEvent(new CustomEvent("chord-error", { detail: { name: err && err.name }, bubbles: true }));
+        const nome = (err && err.name) || "Error";
+        /* Un avvio annullato non è un guasto: qualcuno ha chiuso o fermato
+           mentre chiedevamo il permesso. Si torna in silenzio allo stato di
+           partenza, senza allarmare nessuno. */
+        if (nome === "AbortError") { this._on = false; this._disegna(); return false; }
+        this._stato(this._messaggioErrore(nome), "no");
+        this.dispatchEvent(new CustomEvent("chord-error", { detail: { name: nome }, bubbles: true }));
         return false;
       }
       this._on = true; this._puntini(1); this._esitoMostrato = false;
       this._disegna(); this._stato(this._t("listening"));
       return true;
+    }
+
+    /* Dire la verità sul guasto. Il messaggio precedente dava la colpa alla
+       connessione qualunque cosa fosse successa — e con la connessione a posto
+       e il permesso concesso mandava a caccia della causa sbagliata. Quando il
+       nome non è fra quelli noti, si mostra il nome: meglio una parola tecnica
+       vera che una spiegazione inventata. */
+    _messaggioErrore(nome) {
+      if (nome === "NotAllowedError")  return this._t("denied");
+      if (nome === "NotFoundError" || nome === "OverconstrainedError") return this._t("nodevice");
+      if (nome === "NotReadableError" || nome === "TrackStartError") return this._t("busy");
+      return this._t("failed", { e: nome });
     }
 
     stop() {
