@@ -54,7 +54,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&family=Roboto+Mono:wght@400;500;600&family=Instrument+Serif&display=swap" rel="stylesheet" />
 <style>
   /* ============================================================
      DUE TEMI, UN SOLO INSIEME DI NOMI.
@@ -189,8 +189,7 @@
 
   /* ---------- ACCORDATORE ---------- */
   .tuner .center{justify-content:center;gap:20px}
-  .tn-note{font-family:"Roboto";font-weight:700;color:var(--text);text-align:center;
-    font-size:clamp(54px,17vw,72px);line-height:1;letter-spacing:-.5px}
+  .tn-note{color:var(--text);text-align:center;font-size:clamp(58px,17vw,78px);line-height:1}
   .tn-note.idle{color:var(--faint)}
   .tn-meter{position:relative;width:100%;max-width:320px;height:40px;margin:0 auto}
   .tn-meter .track{position:absolute;left:0;right:0;top:19px;height:2px;border-radius:2px;background:var(--line)}
@@ -245,18 +244,11 @@
     text-transform:uppercase;color:var(--accent-2);margin:0 0 12px;
   }
 
-  .seg{display:flex;gap:4px;background:var(--surface-2);border:1px solid var(--line);
-    border-radius:12px;padding:4px}
-  .seg button{flex:1;padding:9px 6px;border-radius:9px;font-size:13.5px;font-weight:500;
-    color:var(--dim);transition:.18s}
-  .seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);font-weight:600}
-  .seg .sub{display:block;font-size:10.5px;font-weight:400;opacity:.8;margin-top:1px}
 
   .ctrl{margin-top:14px}
   .ctrl .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
   .ctrl label{font-size:13.5px;color:var(--body)}
   .ctrl .val{font-family:"Roboto Mono";font-size:13px;color:var(--accent-deep);font-weight:600}
-  .ctrl.dim{opacity:.4;pointer-events:none;filter:grayscale(.4)}
 
   input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent}
   input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:4px;
@@ -270,10 +262,36 @@
 
   /* La scatola del gioco è staccata dalle impostazioni: bordo nell'accento e
      un filo d'aria in più sotto, perché è un'altra cosa, non un'altra opzione. */
-  .gamebox{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent-soft), var(--shadow);margin-bottom:22px}
-  .gamebox h2{color:var(--accent-deep)}
-  .gamelead{font-size:13px;color:var(--dim);line-height:1.55;margin:0 0 13px}
-  .gamebox .chip{width:100%}
+  /* In modalità gioco basta una riga: la spiegazione lunga stava in cima alla
+     home anche a chi non giocava. */
+  .gamelead{font-size:13px;color:var(--dim);line-height:1.55;margin:0 0 14px;
+    background:var(--accent-soft);border-radius:12px;padding:11px 13px}
+  .gamelead.hide{display:none}
+
+  /* ---------- I TRE MODI ---------- */
+  .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:15;display:flex;
+    background:var(--bg);border-top:1px solid var(--line);
+    padding-bottom:env(safe-area-inset-bottom)}
+  .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    min-height:56px;padding:8px 0 6px;color:var(--faint);font-size:10.5px;transition:.15s}
+  .tab svg{width:22px;height:22px}
+  .tab.on{color:var(--accent)}
+  .tab.on span{font-weight:600}
+
+  /* ---------- IMPOSTAZIONI ---------- */
+  .settings{z-index:28}
+  .settings .body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    max-width:460px;width:100%;margin:0 auto;padding:8px 0 28px}
+
+  /* ---------- TEORIA RICHIUDIBILE ---------- */
+  .th-toggle{display:flex;align-items:center;gap:9px;width:100%;text-align:left;
+    padding:9px 14px 9px 15px;margin-top:6px;border-radius:12px;color:var(--dim);font-size:12.5px;
+    border:1px solid transparent;transition:.15s}
+  .th-toggle:hover{border-color:var(--line);background:var(--surface)}
+  .th-toggle .f{font-family:"Roboto Mono";font-size:11.5px;color:var(--accent-deep);letter-spacing:.02em}
+  .th-toggle .chev{margin-left:auto;transition:transform .18s;color:var(--faint)}
+  .th-toggle[aria-expanded="true"] .chev{transform:rotate(180deg)}
+  @media (prefers-reduced-motion:reduce){ .th-toggle .chev{transition:none} }
 
   .toggles{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
   .chip{display:flex;align-items:center;gap:8px;background:var(--surface-2);border:1px solid var(--line);
@@ -301,8 +319,6 @@
   .deck .nm{display:block;font-family:"Roboto";font-weight:600;font-size:17px;color:var(--text);line-height:1.15}
   .deck .sb{display:block;font-size:12px;color:var(--dim);margin-top:2px;line-height:1.35}
   .deck .ct{font-family:"Roboto Mono";font-size:11px;color:var(--accent-2);white-space:nowrap}
-  .deck .prog{position:absolute;left:13px;right:13px;bottom:6px;height:2px;border-radius:2px;background:var(--line);overflow:hidden}
-  .deck .prog i{display:block;height:100%;background:var(--accent);width:0%}
 
   .langtgl{display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;
     background:var(--surface);border:1px solid var(--line);
@@ -374,8 +390,12 @@
     gap:10px;max-width:460px;width:100%;margin:0 auto;padding:6px 0}
 
   .prompt{text-align:center;min-height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
-  .symbol{font-family:"Roboto";font-weight:700;color:var(--text);
-    font-size:clamp(52px,17vw,74px);line-height:.95;letter-spacing:-.5px}
+  /* Direzione A: il simbolo dell'accordo in una serif da manuale di musica.
+     È l'elemento più guardato del sito, ed è l'unico posto dove compare questo
+     carattere: tutto il resto resta Roboto. */
+  .symbol, .tn-note, #gmFinal{font-family:"Instrument Serif",Georgia,"Times New Roman",serif;
+    font-weight:400;letter-spacing:0}
+  .symbol{color:var(--text);font-size:clamp(58px,17vw,82px);line-height:.95}
   .symbol sup{font-size:.44em;font-weight:600;color:var(--accent-2);vertical-align:super;margin-left:1px}
   .itname{font-family:"Roboto Mono";font-size:13px;color:var(--dim);letter-spacing:.03em}
 
@@ -407,26 +427,11 @@
     box-shadow:var(--accent-glow-strong)}
   .tbtn:disabled{opacity:.35}
 
-  .rate{display:flex;gap:9px}
-  .rate button{flex:1;padding:15px 8px;border-radius:15px;font-weight:600;font-size:14.5px;
-    display:flex;flex-direction:column;align-items:center;gap:3px;border:1px solid var(--line);
-    background:var(--surface);transition:.12s}
-  .rate button .k{font-family:"Roboto Mono";font-size:10px;font-weight:500;color:var(--faint)}
-  .rate button:active{transform:translateY(1px)}
-  .rate .no{color:var(--danger)}.rate .no:active{background:var(--danger-soft)}
-  .rate .mid{color:var(--accent-2)}
-  .rate .yes{color:var(--accent-deep)}.rate .yes:active{background:var(--accent-soft)}
-  .rate.hide{display:none}
 
   .hintbtn{align-self:center;font-family:"Roboto Mono";font-size:12px;color:var(--dim);
     padding:10px 14px;border-radius:11px;border:1px dashed var(--line)}
   .hintbtn.hide{display:none}
 
-  /* mastery leitner pips */
-  .pips{display:flex;gap:4px;justify-content:center;align-items:center;min-height:14px}
-  .pips i{width:16px;height:5px;border-radius:3px;background:var(--line)}
-  .pips i.f{background:var(--accent)}
-  .pips.hide{display:none}
 
   /* SVG element classes */
   .fret{stroke:var(--diagram-line);stroke-width:1.4}
@@ -457,7 +462,21 @@
     .is-revealed .dotg{animation:none;opacity:1}
     *{transition-duration:.001ms !important}
   }
-  @media (min-height:760px){ .symbol{font-size:clamp(58px,17vw,84px)} }
+  @media (min-height:760px){ .symbol{font-size:clamp(64px,18vw,92px)} }
+
+  /* ---------- COMPUTER ----------
+     Non un layout separato: la stessa pagina che usa la larghezza che trova.
+     I modi salgono in testa, gli insiemi vanno su due colonne. */
+  @media (min-width:900px){
+    .app{max-width:1000px;padding-left:28px;padding-right:28px}
+    .tabbar{position:sticky;top:0;bottom:auto;border-top:none;border-bottom:1px solid var(--line);
+      max-width:1000px;margin:0 auto;padding-bottom:0}
+    .tab{flex:none;flex-direction:row;gap:9px;padding:12px 20px;font-size:14px;min-height:52px}
+    .tab svg{width:19px;height:19px}
+    #deckList{display:grid;grid-template-columns:repeat(2, minmax(0,1fr));gap:0 22px;align-items:start}
+    .group-label, .th-lead, .th-more{grid-column:1 / -1}
+    .settings .body{max-width:560px}
+  }
 
   /* ---------- THEORY ---------- */
   .th-open{width:100%;display:flex;align-items:center;gap:12px;text-align:left;
@@ -488,7 +507,12 @@
   .th-switch b{color:var(--text);font-weight:600}
 
   .th-card{background:var(--surface);border:1px solid var(--line);
-    border-radius:18px;padding:15px 15px 13px;margin:20px 0 10px;box-shadow:var(--shadow)}
+    border-radius:18px;padding:15px 15px 13px;margin:8px 0 4px;box-shadow:var(--shadow)}
+  .th-card.hide{display:none}
+  .blocco{margin-bottom:9px}
+  .apribile{margin-bottom:6px}
+  .th-lead.hide, .th-more.hide{display:none}
+  .blocco .deck{margin-bottom:0}
   .th-formula .sep{color:var(--faint)}
   .th-eyebrow{font-family:"Roboto Mono";font-weight:600;font-size:10.5px;letter-spacing:.16em;
     text-transform:uppercase;color:var(--accent-2)}
@@ -526,8 +550,8 @@
 <div class="app" id="home">
   <div class="brand"><h1 class="slab">Manico</h1><span class="dot"></span>
     <div class="brandtools">
-      <button class="iconbtn hdr" id="openTuner" type="button" aria-label="Accordatore">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v8a3 3 0 0 0 6 0V3"/><path d="M12 14v7"/><circle cx="12" cy="21" r="1.4" fill="currentColor" stroke="none"/></svg>
+      <button class="iconbtn hdr" id="openSettings" type="button" aria-label="Impostazioni">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.6v2.6M12 18.8v2.6M2.6 12h2.6M18.8 12h2.6M5.3 5.3l1.9 1.9M16.8 16.8l1.9 1.9M18.7 5.3l-1.9 1.9M7.2 16.8l-1.9 1.9"/></svg>
       </button>
       <button class="iconbtn hdr" id="themeToggle" type="button" aria-label="Tema">
         <svg class="ic-sun" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"/></svg>
@@ -539,40 +563,12 @@
       </div>
     </div>
   </div>
-  <p class="tagline" id="tagline">Vedi il nome dell'accordo, richiama la posizione a memoria, poi verifica sul manico. Gli insiemi sono ordinati per difficoltà e per come l'accordo è costruito.</p>
+  <p class="tagline" id="tagline">Il nome dell'accordo, poi la posizione a memoria.</p>
 
-  <div class="panel gamebox">
-    <h2 id="gameHeading">Modalità gioco</h2>
-    <p class="gamelead" id="gameLead"></p>
-    <button class="chip" id="gameToggle" aria-pressed="false"><span class="sw"></span><span id="gameToggleLab">Gioca</span></button>
-  </div>
-
-  <div class="panel">
-    <h2 id="modeHeading">Modalità</h2>
-    <div class="seg" id="modeSeg" role="group" aria-label="Modalità">
-      <button data-mode="auto" aria-pressed="true"><span id="modeAutoLab">Automatica</span><span class="sub" id="modeAutoSub">a tempo, scorre da sola</span></button>
-      <button data-mode="adaptive" aria-pressed="false"><span id="modeAdaptiveLab">Adattiva</span><span class="sub" id="modeAdaptiveSub">si regola su di te</span></button>
-    </div>
-
-    <div class="ctrl" id="revealCtrl">
-      <div class="row"><label id="revealLab">Attesa prima della posizione</label><span class="val" id="revealVal">3.0 s</span></div>
-      <input type="range" id="revealRange" min="0.5" max="8" step="0.5" value="3" />
-    </div>
-
-    <div class="ctrl" id="studyCtrl">
-      <div class="row"><label id="studyLab">Tempo per studiare la posizione</label><span class="val" id="studyVal">4.0 s</span></div>
-      <input type="range" id="studyRange" min="1" max="10" step="0.5" value="4" />
-    </div>
-
-    <div class="toggles">
-      <button class="chip" id="tglShuffle" aria-pressed="true"><span class="sw"></span><span id="tglShuffleLab">Ordine casuale</span></button>
-      <button class="chip" id="tglLoop" aria-pressed="true"><span class="sw"></span><span id="tglLoopLab">Ripeti in ciclo</span></button>
-      <button class="chip" id="tglSpell" aria-pressed="true"><span class="sw"></span><span id="tglSpellLab">Mostra note e gradi</span></button>
-    </div>
-  </div>
+  <div class="gamelead hide" id="gameLead"></div>
 
   <div id="deckList"></div>
-  <div style="height:70px"></div>
+  <div style="height:96px"></div>
 
 </div>
 
@@ -593,7 +589,6 @@
   </div>
 
   <div class="center">
-    <div class="pips hide" id="pips"></div>
     <div class="prompt">
       <div class="symbol slab" id="symbol">—</div>
       <div class="itname" id="itname"></div>
@@ -614,11 +609,6 @@
 
   <div class="controls">
     <button class="hintbtn hide" id="hintBtn">Mostra la posizione ora</button>
-    <div class="rate hide" id="rateRow">
-      <button class="no" data-rate="0"><span id="rateNoLab">Non ricordavo</span><span class="k">1</span></button>
-      <button class="mid" data-rate="1"><span id="rateMidLab">Quasi</span><span class="k">2</span></button>
-      <button class="yes" data-rate="2"><span id="rateYesLab">Sì, sapevo</span><span class="k">3</span></button>
-    </div>
     <div class="transport" id="transport">
       <button class="tbtn" id="prevBtn" aria-label="Precedente">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
@@ -634,6 +624,52 @@
 </div>
 
 <!-- THEORY -->
+<nav class="tabbar" id="tabbar" aria-label="Modi">
+  <button class="tab on" data-tab="train" aria-current="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 6.5h16"/><path d="M5.5 6.5v12M10 6.5v12M14 6.5v12M18.5 6.5v12"/><circle cx="10" cy="13" r="1.9" fill="currentColor" stroke="none"/></svg>
+    <span id="tabTrainLab">Allena</span>
+  </button>
+  <button class="tab" data-tab="tune">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v8a3 3 0 0 0 6 0V3"/><path d="M12 14v7"/><circle cx="12" cy="21" r="1.3" fill="currentColor" stroke="none"/></svg>
+    <span id="tabTuneLab">Accorda</span>
+  </button>
+  <button class="tab" data-tab="play">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M10.2 9.1l5 2.9-5 2.9z"/></svg>
+    <span id="tabPlayLab">Gioca</span>
+  </button>
+</nav>
+
+<!-- IMPOSTAZIONI -->
+<div class="stage settings" id="settings">
+  <div class="top">
+    <button class="iconbtn" id="closeSettings" aria-label="Chiudi">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="deckname"><div class="nm" id="settingsTitle">Impostazioni</div></div>
+  </div>
+  <div class="body">
+  <div class="panel">
+    <h2 id="practiceHeading">Esercizio</h2>
+
+    <div class="ctrl" id="revealCtrl">
+      <div class="row"><label id="revealLab">Attesa prima della posizione</label><span class="val" id="revealVal">3.0 s</span></div>
+      <input type="range" id="revealRange" min="0.5" max="8" step="0.5" value="3" />
+    </div>
+
+    <div class="ctrl" id="studyCtrl">
+      <div class="row"><label id="studyLab">Tempo per studiare la posizione</label><span class="val" id="studyVal">4.0 s</span></div>
+      <input type="range" id="studyRange" min="1" max="10" step="0.5" value="4" />
+    </div>
+
+    <div class="toggles">
+      <button class="chip" id="tglShuffle" aria-pressed="true"><span class="sw"></span><span id="tglShuffleLab">Ordine casuale</span></button>
+      <button class="chip" id="tglLoop" aria-pressed="true"><span class="sw"></span><span id="tglLoopLab">Ripeti in ciclo</span></button>
+      <button class="chip" id="tglSpell" aria-pressed="true"><span class="sw"></span><span id="tglSpellLab">Mostra note e gradi</span></button>
+    </div>
+  </div>
+  </div>
+</div>
+
 <!-- GIOCO -->
 <div class="stage game" id="game">
   <div class="top">
@@ -697,12 +733,15 @@
 const I18N = {
   it: {
     pageTitle: "Manico · allenatore di accordi",
-    tagline: "Vedi il nome dell'accordo, richiama la posizione a memoria, poi verifica sul manico. Gli insiemi sono ordinati per difficoltà e per come l'accordo è costruito.",
+    tagline: "Il nome dell'accordo, poi la posizione a memoria.",
     theoryOpenTitle: "Come nascono gli accordi",
     theoryOpenSub: "La teoria dietro ogni insieme, in breve",
     gameHeading: "Modalità gioco",
+    tabTrain: "Allena", tabTune: "Accorda", tabPlay: "Gioca",
+    settingsTitle: "Impostazioni", settingsAria: "Apri le impostazioni",
+    theoryOpen: "Come si costruisce",
+    theoryIntroOpen: "Come nascono gli accordi",
     gameLead: "Il sito ti ascolta. Compare il nome di un accordo, tu lo suoni: dieci accordi in tutto, un punto per ognuno indovinato e uno in meno per ogni errore. Se sbagli, il gioco si ferma e ti mostra la posizione giusta.",
-    gameToggleLab: "Gioca invece di allenarti",
     gameCloseAria: "Esci dal gioco",
     gameRight: "Giusto",
     gameWrong: "Sbagliato",
@@ -735,12 +774,8 @@ const I18N = {
     tunerFailed: "Il microfono non si è aperto ({e}).",
     tunerHint: "Tocca una corda per sentirla.",
     tunerCents: "cent",
-    modeHeading: "Modalità",
-    modeGroupLabel: "Modalità",
-    modeAuto: "Automatica", modeAutoSub: "a tempo, scorre da sola",
-    modeAdaptive: "Adattiva", modeAdaptiveSub: "si regola su di te",
-    revealLabAuto: "Attesa prima della posizione",
-    revealLabAdaptive: "Attesa base (si accorcia con la padronanza)",
+    practiceHeading: "Esercizio",
+    revealLab: "Attesa prima della posizione",
     studyLab: "Tempo per studiare la posizione",
     tglShuffle: "Ordine casuale",
     tglLoop: "Ripeti in ciclo",
@@ -753,9 +788,6 @@ const I18N = {
     shuffleAria: "Rimescola",
     neckCap: "Visualizza la diteggiatura",
     hintBtn: "Mostra la posizione ora",
-    rateNo: "Non ricordavo",
-    rateMid: "Quasi",
-    rateYes: "Sì, sapevo",
     prevAria: "Precedente",
     pauseAria: "Pausa",
     resumeAria: "Riprendi",
@@ -767,11 +799,11 @@ const I18N = {
     shuffleToast: "Rimescolato",
     theoryTitle: "Come nascono gli accordi",
     theorySub: "costruzione degli accordi",
-    closeTheoryAria: "Chiudi teoria",
-    themeIntro: "Quasi tutti gli accordi nascono impilando <b>terze</b> a partire da una nota, la <em>fondamentale</em>, prendendo le note da una scala. Non conta il nome assoluto delle note ma la loro <b>distanza</b> dalla fondamentale: è l'intervallo a decidere il colore. Come metro si usa la <b>scala maggiore</b>.",
-    thRefP: "I sette gradi della scala maggiore (qui in Do). I numeri sono i mattoni con cui si scrivono tutti gli accordi qui sotto.",
-    thSwitch: "Due “interruttori” governano quasi tutto: la <b>terza</b> distingue maggiore da minore, e la <b>settima</b> — con la sua misura — aggiunge la quarta nota e definisce la famiglia. Nei righelli qui sotto, la nota che caratterizza ciascun tipo è <span style=\"color:var(--accent)\">in evidenza</span>.",
-    rulerRoot: "fond.",
+    settingsCloseAria: "Chiudi le impostazioni",
+    themeIntro: "Le note hanno un ordine fisso, come i pioli di una scala: <b>do re mi fa sol la si</b>, e poi si ricomincia da capo. Un accordo si costruisce partendo da una nota qualsiasi — la <em>fondamentale</em>, quella che dà il nome all'accordo — e salendo di piolo in piolo, saltandone uno ogni volta.",
+    thRefP: "I sette pioli a partire dal Do. Il numero dice quanto sei lontano dalla nota di partenza, contando la partenza come 1: dal Do, il <b>Mi</b> è la <b>terza</b> e il <b>Sol</b> è la <b>quinta</b>. Un Do maggiore è fatto esattamente di queste tre note.",
+    thSwitch: "Sulla chitarra questa distanza si conta in tasti: un tasto è il gradino più piccolo che esista. I pioli però non sono tutti alla stessa altezza — da <b>mi a fa</b> e da <b>si a do</b> c\u0027è un tasto solo, fra gli altri due. Fra la fondamentale e la terza ci sono <b>quattro tasti</b> se l'accordo è maggiore e <b>tre</b> se è minore. Cambia una nota sola, e da sola decide se l'accordo suona luminoso o malinconico. Aggiungendone una quarta nascono le famiglie qui sotto: nei righelli, la nota che caratterizza ciascuna è <span style=\"color:var(--accent)\">in evidenza</span>.",
+    rulerRoot: "partenza",
     rulerOctave: "ottava",
     trainLink: "Allenati",
     thMoreTitle: "Oltre le basi",
@@ -789,12 +821,15 @@ const I18N = {
   },
   en: {
     pageTitle: "Manico · chord trainer",
-    tagline: "See the chord's name, recall the shape from memory, then check it on the neck. The sets are ordered by difficulty and by how each chord is built.",
+    tagline: "The chord name, then the shape from memory.",
     theoryOpenTitle: "How chords are built",
     theoryOpenSub: "The theory behind each set, in brief",
     gameHeading: "Game mode",
+    tabTrain: "Practise", tabTune: "Tune", tabPlay: "Play",
+    settingsTitle: "Settings", settingsAria: "Open settings",
+    theoryOpen: "How it's built",
+    theoryIntroOpen: "How chords are born",
     gameLead: "The site listens to you. A chord name appears and you play it: ten chords in all, one point for each one you get right and one less for every mistake. When you miss, the game stops and shows you the correct shape.",
-    gameToggleLab: "Play instead of practising",
     gameCloseAria: "Leave the game",
     gameRight: "Right",
     gameWrong: "Wrong",
@@ -827,12 +862,8 @@ const I18N = {
     tunerFailed: "The microphone didn't open ({e}).",
     tunerHint: "Tap a string to hear it.",
     tunerCents: "cents",
-    modeHeading: "Mode",
-    modeGroupLabel: "Mode",
-    modeAuto: "Automatic", modeAutoSub: "timed, moves on its own",
-    modeAdaptive: "Adaptive", modeAdaptiveSub: "adjusts to you",
-    revealLabAuto: "Wait before showing the shape",
-    revealLabAdaptive: "Base wait (shortens as you improve)",
+    practiceHeading: "Practice",
+    revealLab: "Wait before showing the shape",
     studyLab: "Time to study the shape",
     tglShuffle: "Random order",
     tglLoop: "Loop",
@@ -845,9 +876,6 @@ const I18N = {
     shuffleAria: "Shuffle",
     neckCap: "Reveals the fingering",
     hintBtn: "Show the shape now",
-    rateNo: "Didn't remember",
-    rateMid: "Almost",
-    rateYes: "Yes, I knew it",
     prevAria: "Previous",
     pauseAria: "Pause",
     resumeAria: "Resume",
@@ -859,11 +887,11 @@ const I18N = {
     shuffleToast: "Shuffled",
     theoryTitle: "How chords are built",
     theorySub: "chord construction",
-    closeTheoryAria: "Close theory",
-    themeIntro: "Almost every chord is built by stacking <b>thirds</b> on top of a starting note, the <em>root</em>, taking notes from a scale. What matters isn't the absolute name of a note but its <b>distance</b> from the root: it's the interval that decides the color. The <b>major scale</b> is used as the ruler.",
-    thRefP: "The seven degrees of the major scale (here in C). These numbers are the building blocks used to write every chord below.",
-    thSwitch: "Two “switches” govern almost everything: the <b>third</b> tells major from minor, and the <b>seventh</b> — with its size — adds the fourth note and defines the family. In the rulers below, the note <span style=\"color:var(--accent)\">highlighted</span> is the one that defines each type.",
-    rulerRoot: "root",
+    settingsCloseAria: "Close settings",
+    themeIntro: "Notes come in a fixed order, like the rungs of a ladder: <b>C D E F G A B</b>, and then it starts over. A chord is built from any one note — the <em>root</em>, the note that gives the chord its name — climbing the rungs and skipping every other one.",
+    thRefP: "The seven rungs starting from C. The number tells you how far you are from the starting note, counting the start as 1: from C, <b>E</b> is the <b>third</b> and <b>G</b> is the <b>fifth</b>. A C major chord is exactly those three notes.",
+    thSwitch: "On a guitar that distance is counted in frets: one fret is the smallest step there is. The rungs are not evenly spaced, though — from <b>E to F</b> and from <b>B to C</b> there is only one fret, elsewhere two. Between the root and the third there are <b>four frets</b> if the chord is major and <b>three</b> if it is minor. One note changes, and on its own it decides whether the chord sounds bright or wistful. Add a fourth note and you get the families below: in the rulers, the note that defines each one is <span style=\"color:var(--accent)\">highlighted</span>.",
+    rulerRoot: "start",
     rulerOctave: "octave",
     trainLink: "Practice",
     thMoreTitle: "Beyond the basics",
@@ -1065,7 +1093,6 @@ function detectLang(){
 
 /* ============ STATE ============ */
 const S = {
-  mode:"auto",
   lang: detectLang(),
   revealMs:3000, studyMs:4000,
   shuffle:true, loop:true, spell:true,
@@ -1074,7 +1101,6 @@ const S = {
   phase:"idle",       // prompt | reveal
   paused:false,
   timers:[],
-  mastery:load("chordtrainer.mastery.v1") || {}, // sym -> box 1..5
 };
 
 /* ============ translation helper ============ */
@@ -1196,6 +1222,24 @@ function deckIcon(id){
   return `<svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">${ICO_BOX}${DECK_ICONS[id]||''}</svg>`;
 }
 
+/* Un interruttore, tre usi: la scheda di un insieme, l'introduzione della
+   sezione e gli approfondimenti. Tutto chiuso di partenza. */
+function apribile(etichetta, dettaglio, contenuto){
+  const box=document.createElement("div"); box.className="apribile";
+  contenuto.classList.add("hide");
+  const tog=document.createElement("button");
+  tog.className="th-toggle"; tog.type="button"; tog.setAttribute("aria-expanded","false");
+  tog.innerHTML=`<span>${etichetta}</span>`+(dettaglio?`<span class="f">${dettaglio}</span>`:"")+
+    `<svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`;
+  tog.onclick=()=>{
+    const aperto = tog.getAttribute("aria-expanded")==="true";
+    tog.setAttribute("aria-expanded", String(!aperto));
+    contenuto.classList.toggle("hide", aperto);
+  };
+  box.appendChild(tog); box.appendChild(contenuto);
+  return box;
+}
+
 function theoryCard(f){
   const L=f[S.lang];
   const c=document.createElement("div"); c.className="th-card";
@@ -1216,50 +1260,45 @@ function renderDecks(){
     }
 
     if(gr.k==="th"){   // introduzione comune a tutta la sezione teorica
-      const lead=document.createElement("div");
+      const lead=document.createElement("div"); lead.className="th-lead";
       lead.innerHTML=`<p class="th-intro">${t('themeIntro')}</p>
         <div class="th-ref"><p>${t('thRefP')}</p><div class="scale">`+
         t('scaleDeg').map(([n,nt])=>`<div class="d">${n}<small>${nt}</small></div>`).join('')+
         `</div></div><p class="th-switch">${t('thSwitch')}</p>`;
-      wrap.appendChild(lead);
+      wrap.appendChild(apribile(t('theoryIntroOpen'), "", lead));
     }
 
     DECKS.filter(d=>d.group===gr.k).forEach(d=>{
       const f=THEORY.find(x=>x.deckId===d.id);
-      if(f) wrap.appendChild(theoryCard(f));
-      const mastered=d.ch.filter(s=>(S.mastery[s]||1)>=4).length;
-      const pct=Math.round(100*mastered/d.ch.length);
+      /* insieme, interruttore e scheda stanno in un blocco solo: su schermo largo
+         il blocco è la cella della griglia, e i tre pezzi non si separano. */
+      const blocco=document.createElement("div"); blocco.className="blocco";
       const b=document.createElement("button");
       b.className="deck";
       b.setAttribute("aria-label", `${G.on ? t('gameHeading') : t('startBegin')} · ${d.nm[S.lang]}`);
       b.innerHTML=`<span class="mini">${deckIcon(d.id)}</span>
         <span class="txt"><span class="nm">${d.nm[S.lang]}</span><span class="sb">${d.sb[S.lang]}</span></span>
         <span class="ct">${d.ch.length} ${t('chordsSuffix')}</span>
-        <svg class="go" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
-        <span class="prog"><i style="width:${pct}%"></i></span>`;
+        <svg class="go" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>`;
       b.onclick=()=>{ S.deckId=d.id; if(G.on) startGame(d); else startSession(); };
-      wrap.appendChild(b);
+      blocco.appendChild(b);
+
+      if(f) blocco.appendChild(apribile(t('theoryOpen'),
+              f.formula.map(x=>x.replace(/<[^>]*>/g,"")).join(" · "), theoryCard(f)));
+      wrap.appendChild(blocco);
     });
 
     if(gr.k==="th"){   // approfondimenti in coda alla sezione
       const more=document.createElement("div"); more.className="th-more";
-      more.innerHTML=`<h3>${t('thMoreTitle')}</h3><dl>`+
+      more.innerHTML=`<dl>`+
         t('thMoreItems').map(it=>`<dt>${it.dt}</dt><dd>${it.dd}</dd>`).join('')+`</dl>`;
-      wrap.appendChild(more);
+      wrap.appendChild(apribile(t('thMoreTitle'), "", more));
     }
   });
 }
 /* ============ controls wiring ============ */
 function setPct(input){ const p=(input.value-input.min)/(input.max-input.min)*100; input.style.setProperty("--pct",p+"%"); }
 
-el("modeSeg").addEventListener("click",e=>{
-  const btn=e.target.closest("button"); if(!btn) return;
-  S.mode=btn.dataset.mode;
-  [...el("modeSeg").children].forEach(b=>b.setAttribute("aria-pressed", b===btn));
-  const adaptive=S.mode==="adaptive";
-  el("studyCtrl").classList.toggle("dim", adaptive);
-  el("revealLab").textContent = adaptive ? t('revealLabAdaptive') : t('revealLabAuto');
-});
 
 el("revealRange").addEventListener("input",e=>{ S.revealMs=e.target.value*1000; el("revealVal").textContent=(+e.target.value).toFixed(1)+" s"; setPct(e.target); });
 el("studyRange").addEventListener("input",e=>{ S.studyMs=e.target.value*1000; el("studyVal").textContent=(+e.target.value).toFixed(1)+" s"; setPct(e.target); });
@@ -1274,26 +1313,10 @@ function later(fn,ms){ const t=setTimeout(fn,ms); S.timers.push(t); return t; }
 
 function buildQueue(){
   const d=DECKS.find(x=>x.id===S.deckId); let list=d.ch.slice();
-  if(S.mode==="adaptive"){
-    // weighted by Leitner box: lower box -> more likely; sort-shuffle by weight
-    list = weightedOrder(list);
-  } else if(S.shuffle){
+  if(S.shuffle){
     for(let i=list.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [list[i],list[j]]=[list[j],list[i]]; }
   }
   S.queue=list; S.qi=-1;
-}
-function weightedOrder(list){
-  // produce an order where low-mastery chords appear earlier / more often
-  const pool=[];
-  list.forEach(s=>{ const box=S.mastery[s]||1; const w=6-box; for(let k=0;k<w;k++) pool.push(s); });
-  const order=[]; const guard=list.length*8;
-  let last=null,c=0;
-  while(order.length<Math.max(list.length,8) && c++<guard){
-    const s=pool[Math.floor(Math.random()*pool.length)];
-    if(s===last && pool.length>1) continue;
-    order.push(s); last=s;
-  }
-  return order;
 }
 
 function startSession(){
@@ -1302,9 +1325,6 @@ function startSession(){
   el("stage").classList.add("on");
   const d=DECKS.find(x=>x.id===S.deckId);
   el("stDeck").textContent=d.nm[S.lang];
-  const adaptive=S.mode==="adaptive";
-  el("pips").classList.toggle("hide", !adaptive);
-  el("transport").style.display = adaptive ? "none" : "flex";
   S.paused=false; setPlayIcon();
   nextCard();
 }
@@ -1330,12 +1350,6 @@ function prevCard(){
   showPrompt(S.queue[S.qi]);
 }
 
-function effectiveReveal(sym){
-  if(S.mode!=="adaptive") return S.revealMs;
-  const box=S.mastery[sym]||1;              // 1..5
-  const factor=[1,1,.8,.62,.48,.4][box];     // shrink with mastery
-  return Math.max(500, S.revealMs*factor);
-}
 
 function showPrompt(sym){
   const c=CH[sym]; S.phase="prompt";
@@ -1345,11 +1359,10 @@ function showPrompt(sym){
   el("neckCap").textContent=t('neckCap');
   el("neckCap").style.opacity="1";
   el("spell").classList.remove("show");
-  el("rateRow").classList.add("hide");
   el("hintBtn").classList.remove("hide");
-  updatePos(); updatePips(sym);
+  updatePos();
 
-  const dur=effectiveReveal(sym);
+  const dur=S.revealMs;
   // countdown ring
   const arc=el("ringArc"), C=2*Math.PI*21;
   el("ring").classList.remove("hide");
@@ -1364,8 +1377,7 @@ function showPrompt(sym){
   const tick=()=>{ remain-=250; if(remain>0){ el("ringNum").textContent=Math.ceil(remain/1000); later(tick,250);} };
   if(!S.paused) later(tick,250);
 
-  if(!S.paused && S.mode==="auto") later(()=>reveal(), dur);
-  if(!S.paused && S.mode==="adaptive") later(()=>reveal(), dur);
+  if(!S.paused) later(()=>reveal(), dur);
 }
 
 function reveal(){
@@ -1383,23 +1395,9 @@ function reveal(){
     el("spellNotes").innerHTML=`<b>${t('spellNotes')}</b>${c.notes[S.lang]}`;
     el("spell").classList.add("show");
   }
-  if(S.mode==="adaptive"){
-    el("rateRow").classList.remove("hide");
-  } else {
-    if(!S.paused) later(()=>nextCard(), S.studyMs);
-  }
+  if(!S.paused) later(()=>nextCard(), S.studyMs);
 }
 
-function rate(v){
-  const sym=S.queue[S.qi];
-  let box=S.mastery[sym]||1;
-  if(v===0) box=Math.max(1,box-1);
-  else if(v===2) box=Math.min(5,box+1);
-  S.mastery[sym]=box;
-  save("chordtrainer.mastery.v1", S.mastery);
-  el("rateRow").classList.add("hide");
-  later(()=>nextCard(), 120);
-}
 
 function finishSession(){
   const d=DECKS.find(x=>x.id===S.deckId);
@@ -1409,11 +1407,6 @@ function finishSession(){
 
 function updatePos(){
   el("stPos").textContent = `${S.qi+1} / ${S.queue.length}` + (S.loop?" · "+t('loopingSuffix'):"");
-}
-function updatePips(sym){
-  if(S.mode!=="adaptive") return;
-  const box=S.mastery[sym]||1; const p=el("pips"); p.innerHTML="";
-  for(let i=1;i<=5;i++){ const s=document.createElement("i"); if(i<=box) s.className="f"; p.appendChild(s); }
 }
 
 /* transport */
@@ -1430,7 +1423,7 @@ function togglePlay(){
     const arc=el("ringArc"); const cs=getComputedStyle(arc).strokeDashoffset; arc.style.transition="none"; arc.style.strokeDashoffset=cs;
   } else {
     if(S.phase==="prompt") showPrompt(S.queue[S.qi]);
-    else if(S.phase==="reveal" && S.mode==="auto") later(()=>nextCard(), S.studyMs);
+    else if(S.phase==="reveal") later(()=>nextCard(), S.studyMs);
   }
 }
 
@@ -1457,14 +1450,8 @@ function updateLangButtons(){
 
 function applyLangStatic(){
   el("tagline").textContent=t('tagline');
-  el("modeHeading").textContent=t('modeHeading');
-  el("modeSeg").setAttribute("aria-label", t('modeGroupLabel'));
-  el("modeAutoLab").textContent=t('modeAuto');
-  el("modeAutoSub").textContent=t('modeAutoSub');
-  el("modeAdaptiveLab").textContent=t('modeAdaptive');
-  el("modeAdaptiveSub").textContent=t('modeAdaptiveSub');
-  const adaptive=S.mode==="adaptive";
-  el("revealLab").textContent = adaptive ? t('revealLabAdaptive') : t('revealLabAuto');
+  el("practiceHeading").textContent=t('practiceHeading');
+  el("revealLab").textContent=t('revealLab');
   el("studyLab").textContent=t('studyLab');
   el("tglShuffleLab").textContent=t('tglShuffle');
   el("tglLoopLab").textContent=t('tglLoop');
@@ -1472,17 +1459,17 @@ function applyLangStatic(){
   el("exitBtn").setAttribute("aria-label", t('exitAria'));
   el("shuffleBtn").setAttribute("aria-label", t('shuffleAria'));
   el("hintBtn").textContent=t('hintBtn');
-  el("rateNoLab").textContent=t('rateNo');
-  el("rateMidLab").textContent=t('rateMid');
-  el("rateYesLab").textContent=t('rateYes');
   el("prevBtn").setAttribute("aria-label", t('prevAria'));
   el("nextBtn").setAttribute("aria-label", t('nextAria'));
   setPlayIcon();
-  el("gameHeading").textContent=t('gameHeading');
+  el("tabTrainLab").textContent=t('tabTrain');
+  el("tabTuneLab").textContent=t('tabTune');
+  el("tabPlayLab").textContent=t('tabPlay');
+  el("settingsTitle").textContent=t('settingsTitle');
+  el("openSettings").setAttribute("aria-label", t('settingsAria'));
+  el("closeSettings").setAttribute("aria-label", t('settingsCloseAria'));
   el("gameLead").textContent=t('gameLead');
-  el("gameToggleLab").textContent=t('gameToggleLab');
   el("closeGame").setAttribute("aria-label", t('gameCloseAria'));
-  el("openTuner").setAttribute("aria-label", t('tunerOpenAria'));
   updateThemeButton();
   el("closeTuner").setAttribute("aria-label", t('closeTunerAria'));
   el("tunerTopTitle").textContent=t('tunerTitle');
@@ -1573,21 +1560,18 @@ el("playBtn").onclick=togglePlay;
 el("nextBtn").onclick=()=>nextCard();
 el("prevBtn").onclick=()=>prevCard();
 el("hintBtn").onclick=()=>reveal();
-el("rateRow").addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) rate(+b.dataset.rate); });
-
 // tap the card area to reveal / advance (auto mode convenience)
 el("diagram").parentElement.addEventListener("click",()=>{
   if(S.phase==="prompt") reveal();
-  else if(S.phase==="reveal" && S.mode==="auto") nextCard();
+  else if(S.phase==="reveal") nextCard();
 });
 
 // keyboard (desktop)
 document.addEventListener("keydown",e=>{
   if(!el("stage").classList.contains("on")) return;
-  if(e.key===" "){ e.preventDefault(); if(S.mode==="auto") togglePlay(); }
+  if(e.key===" "){ e.preventDefault(); togglePlay(); }
   if(e.key==="ArrowRight") nextCard();
   if(e.key==="ArrowLeft") prevCard();
-  if(S.mode==="adaptive" && S.phase==="reveal" && ["1","2","3"].includes(e.key)) rate(+e.key-1);
   if((e.key==="Enter"||e.key==="ArrowDown") && S.phase==="prompt") reveal();
 });
 
@@ -1823,12 +1807,6 @@ function gClose(){
   el("game").classList.remove("on");
 }
 
-el("gameToggle").onclick=()=>{
-  G.on=!G.on;
-  el("gameToggle").setAttribute("aria-pressed", String(G.on));
-  save("chordtrainer.game.v1", G.on);
-  renderDecks();                 // cambiano le etichette degli insiemi
-};
 el("closeGame").onclick=gClose;
 el("gmAgain").onclick=()=>startGame(G.deck);
 
@@ -1948,7 +1926,28 @@ function tunerStop(){
   tunerRender(null);
 }
 
-el("openTuner").onclick=()=>{ el("tuner").classList.add("on"); tunerStrings(); tunerStop(); };
+/* I tre modi. "Accorda" apre una pagina e non è uno stato: la barra resta su
+   quello di prima, così tornando indietro si è dove si era. */
+function apriAccordatore(){ el("tuner").classList.add("on"); tunerStrings(); tunerStop(); }
+
+function setTab(nome){
+  if(nome==="tune"){ apriAccordatore(); return; }
+  G.on = (nome==="play");
+  save("chordtrainer.game.v1", G.on);
+  el("gameLead").classList.toggle("hide", !G.on);
+  [...el("tabbar").children].forEach(b=>{
+    const attivo = b.dataset.tab===nome;
+    b.classList.toggle("on", attivo);
+    if(attivo) b.setAttribute("aria-current","true"); else b.removeAttribute("aria-current");
+  });
+  renderDecks();
+}
+el("tabbar").addEventListener("click", e=>{
+  const b=e.target.closest("button[data-tab]"); if(b) setTab(b.dataset.tab);
+});
+
+el("openSettings").onclick=()=>el("settings").classList.add("on");
+el("closeSettings").onclick=()=>el("settings").classList.remove("on");
 el("closeTuner").onclick=()=>{
   tunerStop();
   if(window.Listener) Listener.stopReference();
@@ -1965,7 +1964,7 @@ document.addEventListener("visibilitychange",()=>{
 
 /* init */
 segnaLingua();
-el("gameToggle").setAttribute("aria-pressed", String(G.on));
+setTab(G.on ? "play" : "train");
 applyTheme(detectTheme());
 applyLangStatic();
 renderDecks();
