@@ -5,7 +5,9 @@ description: Regole visive del sito Manico (guitarchords) — i due temi, i toke
 
 # Design del sito Manico
 
-Il sito ha **due temi**: nero con accenti blu, e carta avorio con accenti blu.
+Il sito ha **due temi, che sono lo stesso materiale sotto due luci**: carta
+avorio di giorno, nero caldo di notte. Non un tema di carta e uno di acciaio:
+i neutri virano al bruno in tutti e due, e l'accento resta blu.
 L'aspetto è quello di un manuale di musica ben stampato, non di un'app decorata:
 carta calda con una grana appena percettibile, fogli bianchi posati sopra, e il
 simbolo dell'accordo in una serif. Prima di introdurre qualcosa di nuovo, verifica che non esista già un
