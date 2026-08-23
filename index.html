@@ -64,18 +64,20 @@
      Nessuna regola piu' in basso conosce i colori: usa solo questi nomi.
      ============================================================ */
   :root{
-    --bg:#f7f4ee;              /* fondo: carta avorio */
-    --bg-1:#fbfaf7;            /* alone alto del fondo */
-    --bg-2:#efe9dd;            /* alone basso, più caldo */
+    --bg:#ece0c9;              /* il legno: acero */
+    --bg-1:#f3e9d6;            /* alone alto */
+    --bg-2:#e2d3b7;            /* alone basso */
+    --vena-scura:rgba(120,86,44,.085);   /* le due venature */
+    --vena-chiara:rgba(255,250,238,.22);
     --surface:#ffffff;         /* card e pannelli: fogli posati sulla carta */
-    --surface-2:#f1ece2;       /* superficie incassata */
+    --surface-2:#f3ece0;       /* superficie incassata */
     --line:#e3dccf;            /* bordi sottili */
     --grana:.30;               /* quanto si vede la fibra della carta */
     --text:#14110b;            /* testo primario: nero caldo */
     --text-2:#241f17;
     --ink:#14110b;             /* testo sul diagramma del manico */
     --body:#443d32;            /* testo corrente */
-    --dim:#776f61;             /* testo attenuato */
+    --dim:#6a6152;             /* testo attenuato: scurito, ora sta sul legno */
     --faint:#b3aa98;           /* testo terziario */
     --accent:#1667d1;          /* accento: blu */
     --accent-deep:#0f4d9e;     /* accento su fondo chiaro */
@@ -99,9 +101,11 @@
   /* tema scuro: nero come colore principale, blu come secondario */
   @media (prefers-color-scheme:dark){
     :root:not([data-theme="light"]){
-      --bg:#100c07;                     /* fondo: nero caldo, la stessa carta di notte */
-      --bg-1:#1a140d;                   /* alone alto */
-      --bg-2:#050301;                   /* alone basso */
+      --bg:#241609;                     /* il legno: palissandro */
+      --bg-1:#31200f;                   /* alone alto */
+      --bg-2:#170d04;                   /* alone basso */
+      --vena-scura:rgba(8,4,1,.26);     /* le due venature */
+      --vena-chiara:rgba(168,120,72,.085);
       --surface:#1b1610;                /* card e pannelli */
       --surface-2:#241d15;              /* superficie incassata */
       --line:#33291e;                   /* bordi sottili */
@@ -130,9 +134,11 @@
     }
   }
   :root[data-theme="dark"]{
-    --bg:#100c07;                     /* fondo: nero caldo, la stessa carta di notte */
-    --bg-1:#1a140d;                   /* alone alto */
-    --bg-2:#050301;                   /* alone basso */
+    --bg:#241609;                     /* il legno: palissandro */
+    --bg-1:#31200f;                   /* alone alto */
+    --bg-2:#170d04;                   /* alone basso */
+    --vena-scura:rgba(8,4,1,.26);     /* le due venature */
+    --vena-chiara:rgba(168,120,72,.085);
     --surface:#1b1610;                /* card e pannelli */
     --surface-2:#241d15;              /* superficie incassata */
     --line:#33291e;                   /* bordi sottili */
@@ -175,7 +181,14 @@
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
+    /* Il legno: tre venature sovrapposte a una sfumatura di fondo. Sono
+       sfumature CSS, non un'immagine: nessun byte da scaricare. */
     background:
+      repeating-linear-gradient(91deg, var(--vena-scura) 0 1px, transparent 1px 7px),
+      repeating-linear-gradient(89.4deg, var(--vena-chiara) 0 1px, transparent 1px 17px),
+      repeating-linear-gradient(90.6deg, var(--vena-scura) 0 2px, transparent 2px 31px),
+      repeating-linear-gradient(90.2deg, var(--vena-chiara) 0 3px, transparent 3px 53px),
+      repeating-linear-gradient(89.7deg, var(--vena-scura) 0 4px, transparent 4px 97px),
       radial-gradient(120% 80% at 50% -10%, var(--bg-1) 0%, var(--bg) 55%, var(--bg-2) 100%);
     color:var(--body);
     font-family:"Roboto",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
@@ -406,6 +419,11 @@
 
   /* ---------- PRACTICE ---------- */
   .stage{position:fixed;inset:0;background:
+      repeating-linear-gradient(91deg, var(--vena-scura) 0 1px, transparent 1px 7px),
+      repeating-linear-gradient(89.4deg, var(--vena-chiara) 0 1px, transparent 1px 17px),
+      repeating-linear-gradient(90.6deg, var(--vena-scura) 0 2px, transparent 2px 31px),
+      repeating-linear-gradient(90.2deg, var(--vena-chiara) 0 3px, transparent 3px 53px),
+      repeating-linear-gradient(89.7deg, var(--vena-scura) 0 4px, transparent 4px 97px),
       radial-gradient(120% 70% at 50% -5%, var(--bg-1) 0%, var(--bg) 55%, var(--bg-2) 100%);
     display:none;flex-direction:column;z-index:20;
     padding:calc(env(safe-area-inset-top) + 6px) 16px calc(env(safe-area-inset-bottom) + 16px);}

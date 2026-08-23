@@ -5,9 +5,24 @@ description: Regole visive del sito Manico (guitarchords) — i due temi, i toke
 
 # Design del sito Manico
 
-Il sito ha **due temi, che sono lo stesso materiale sotto due luci**: carta
-avorio di giorno, nero caldo di notte. Non un tema di carta e uno di acciaio:
-i neutri virano al bruno in tutti e due, e l'accento resta blu.
+Il fondo del sito è **il legno di una tastiera**, e i due temi sono due legni
+veri: **acero** di giorno, **palissandro** di notte, come si distinguono le
+tastiere delle chitarre. Sopra il legno stanno fogli chiari, e i contenuti
+stanno sui fogli. L'accento resta blu in entrambi.
+
+Il legno è fatto di cinque venature sovrapposte (`--vena-scura` e
+`--vena-chiara`, periodi che non si allineano fra loro perché il disegno non si
+ripeta a occhio) più la grana. Sono sfumature CSS: nessuna immagine da
+scaricare, che su un server domestico conta.
+
+**Niente tasti né intarsi nel fondo.** Il diagramma dell'accordo è già un manico
+disegnato: un secondo manico sotto crea un'immagine dentro l'immagine e non si
+capisce più quali righe siano i tasti veri.
+
+**Sul legno non si scrive volentieri.** Il testo che sta direttamente sul fondo
+(presentazione, etichette dei gruppi, introduzione teorica) è l'unico posto dove
+il contrasto va ricontrollato dopo ogni ritocco del legno: è per questo che
+`--dim` è più scuro di quanto sembrerebbe necessario guardandolo su una card.
 L'aspetto è quello di un manuale di musica ben stampato, non di un'app decorata:
 carta calda con una grana appena percettibile, fogli bianchi posati sopra, e il
 simbolo dell'accordo in una serif. Prima di introdurre qualcosa di nuovo, verifica che non esista già un
