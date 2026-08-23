@@ -308,6 +308,9 @@
   /* ---------- I TRE MODI ---------- */
   /* Sta dentro la testata nel documento, ma sul telefono vive in fondo allo
      schermo: "fixed" la stacca dal flusso e la ancora alla finestra. */
+  .tutti{text-align:center;margin:22px 0 0;font-size:13.5px}
+  .tutti a{color:var(--accent-deep);text-decoration:none;border-bottom:1px solid var(--accent-soft);
+    padding-bottom:2px}
   .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:15;display:flex;
     background:var(--bg);border-top:1px solid var(--line);
     padding-bottom:env(safe-area-inset-bottom)}
@@ -663,6 +666,9 @@
   <div class="tutorial hide" id="gameLead"></div>
 
   <div id="deckList"></div>
+  <!-- Il ponte verso le pagine statiche: serve a chi cerca un accordo su Google
+       e ai crawler, che da qui raggiungono tutte e novanta le pagine. -->
+  <p class="tutti"><a href="accordi/" id="tuttiLink">Tutti gli accordi, uno per uno</a></p>
   <div style="height:96px"></div>
 
 </div>
@@ -832,6 +838,7 @@ const I18N = {
     tabTrain: "Allena", tabPlay: "Gioca",
     settingsTitle: "Impostazioni", settingsAria: "Apri le impostazioni",
     theoryOpen: "Come si costruisce",
+    allChords: "Tutti gli accordi, uno per uno",
     theoryIntroOpen: "Come nascono gli accordi",
     gameSteps: [["Scegli un insieme","Tocca una delle righe qui sotto: la partita è di dieci accordi."],
                 ["Suona quello che compare","Appare il nome, il microfono ascolta. Pizzica una volta sola e lascia suonare."],
@@ -922,6 +929,7 @@ const I18N = {
     tabTrain: "Practise", tabPlay: "Play",
     settingsTitle: "Settings", settingsAria: "Open settings",
     theoryOpen: "How it's built",
+    allChords: "Every chord, one by one",
     theoryIntroOpen: "How chords are born",
     gameSteps: [["Pick a set","Tap one of the rows below: a game is ten chords."],
                 ["Play what appears","The name shows up and the microphone listens. Strum once and let it ring."],
@@ -1590,6 +1598,7 @@ function applyLangStatic(){
   el("tabTrainLab").textContent=t('tabTrain');
   el("tabPlayLab").textContent=t('tabPlay');
   el("settingsTitle").textContent=t('settingsTitle');
+  el("tuttiLink").textContent=t('allChords');
   el("openSettings").setAttribute("aria-label", t('settingsAria'));
   el("openTuner").setAttribute("aria-label", t('tunerOpenAria'));
   el("closeSettings").setAttribute("aria-label", t('settingsCloseAria'));

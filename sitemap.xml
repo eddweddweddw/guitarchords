@@ -1,18 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <url>
-    <loc>https://eddweddweddw.github.io/guitarchords/</loc>
-    <lastmod>2026-08-21</lastmod>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/</loc><lastmod>2026-08-23</lastmod>
     <xhtml:link rel="alternate" hreflang="it" href="https://eddweddweddw.github.io/guitarchords/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://eddweddweddw.github.io/guitarchords/?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://eddweddweddw.github.io/guitarchords/"/>
-  </url>
-  <url>
-    <loc>https://eddweddweddw.github.io/guitarchords/?lang=en</loc>
-    <lastmod>2026-08-21</lastmod>
-    <xhtml:link rel="alternate" hreflang="it" href="https://eddweddweddw.github.io/guitarchords/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://eddweddweddw.github.io/guitarchords/?lang=en"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://eddweddweddw.github.io/guitarchords/"/>
-  </url>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://eddweddweddw.github.io/guitarchords/"/></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/?lang=en</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/do-maggiore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/re-bemolle-maggiore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/re-maggiore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-bemolle-maggiore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-maggiore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/fa-maggiore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/fa-diesis-maggiore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/sol-maggiore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/la-bemolle-maggiore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/la-maggiore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-bemolle-maggiore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-maggiore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/do-minore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/do-diesis-minore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/re-minore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-bemolle-minore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-minore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/fa-minore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/fa-diesis-minore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/sol-minore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/sol-diesis-minore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/la-minore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-bemolle-minore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-minore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/do-settima/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/do-diesis-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/re-settima/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-bemolle-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-settima/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/fa-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/fa-diesis-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/sol-settima-dominante/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/la-bemolle-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/la-settima/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-bemolle-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-settima/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/do-settima-maggiore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/re-bemolle-settima-maggiore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/re-settima-maggiore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-bemolle-settima-maggiore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-settima-maggiore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/fa-settima-maggiore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/sol-bemolle-settima-maggiore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/sol-settima-maggiore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/la-bemolle-settima-maggiore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/la-settima-maggiore/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-bemolle-settima-maggiore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-settima-maggiore-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/do-minore-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/do-diesis-minore-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/re-minore-settima/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-bemolle-minore-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-minore-settima/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/fa-minore-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/fa-diesis-minore-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/sol-minore-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/sol-diesis-minore-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/la-minore-settima/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-bemolle-minore-settima-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-minore-settima/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/do-sospesa-sus2-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/do-diesis-sospesa-sus2-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/re-sospesa-sus2/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-bemolle-sospesa-sus2-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-sospesa-sus2-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/fa-sospesa-sus2-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/fa-diesis-sospesa-sus2-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/sol-sospesa-sus2-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/sol-diesis-sospesa-sus2-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/la-sospesa-sus2/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-bemolle-sospesa-sus2-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-sospesa-sus2-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/do-sospesa-sus4-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/do-diesis-sospesa-sus4-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/re-sospesa-sus4/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-bemolle-sospesa-sus4-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/mi-sospesa-sus4/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/fa-sospesa-sus4-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/fa-diesis-sospesa-sus4-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/sol-sospesa-sus4-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/sol-diesis-sospesa-sus4-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/la-sospesa-sus4/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-bemolle-sospesa-sus4-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-sospesa-sus4-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/do-add9/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/re-bemolle-add9-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/re-add9-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/la-add9/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-bemolle-add9-barre/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/si-add9-barre/</loc><lastmod>2026-08-23</lastmod></url>
 </urlset>

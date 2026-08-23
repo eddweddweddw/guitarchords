@@ -38,7 +38,9 @@ locale=$(shasum -a 256 index.html | cut -c1-12)
 
 # --- solo controllo -------------------------------------------------------
 if [ "${1:-}" = "--stato" ]; then
+  python3 genera-pagine.py >/dev/null 2>&1
   echo "index.html locale : $locale"
+  echo "pagine accordi    : $(find accordi -name index.html 2>/dev/null | wc -l | tr -d ' ')"
   p=$(impronta "$SITO"); c=$(impronta "$CASA")
   echo "GitHub Pages      : ${p:-non raggiungibile}"
   echo "telefono di casa  : ${c:-non raggiungibile}"
@@ -46,6 +48,14 @@ if [ "${1:-}" = "--stato" ]; then
   echo
   git status --short --branch
   exit 0
+fi
+
+# --- 0. le pagine degli accordi ------------------------------------------
+# Si rigenerano a ogni pubblicazione: è l'unico modo perché non restino
+# indietro rispetto ai dati dentro index.html.
+if ! python3 genera-pagine.py; then
+  ko "la generazione delle pagine è fallita: non pubblico"
+  exit 1
 fi
 
 # --- 1. commit + push -----------------------------------------------------

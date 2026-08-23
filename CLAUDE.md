@@ -5,9 +5,18 @@ Online su <https://guitarchords.duckdns.org>.
 
 ## Architettura
 
-Il sito è quasi tutto in `index.html`, senza build step, senza dipendenze,
-senza framework. L'unico file a parte è `assets/listener.js`, il motore audio
-dell'accordatore, collegato con un solo `<script src>`.
+L'applicazione è quasi tutta in `index.html`, senza dipendenze e senza
+framework. Gli altri file sono `assets/listener.js`, il motore audio, e
+`assets/chord-check.js`, il componente che verifica l'accordo suonato.
+
+**Sul "niente build step".** Per molto tempo qui c'era scritto che il sito non
+ne ha uno. Era una descrizione di com'era, non una regola con una ragione: la
+regola vera è quella sotto sulle dipendenze, e riguarda ciò che il visitatore
+scarica e il telefono serve. Un generatore che gira **sul portatile** e produce
+file statici già pronti non costa niente né all'uno né all'altro, anzi alleggerisce
+le pagine. Quello che costa è la possibilità che il generato si scolli dalla
+sorgente: per questo la generazione è dentro `pubblica.sh` e non un passo che ci
+si può dimenticare.
 
 `index.html` è diviso in tre zone: il `<style>`, il markup (nessun handler
 inline) e lo `<script>`. In cima al CSS stanno i **tre blocchi dei temi**: sono
@@ -32,9 +41,10 @@ aggiungendo la classe `on`.
 
 - **Nessuna stringa scritta a mano nel codice.** Ogni testo visibile passa da
   `t('chiave')` e va aggiunto **sia** in `I18N.it` **sia** in `I18N.en`.
-- **Niente dipendenze esterne.** Il sito è servito da un telefono Android: ogni
-  libreria è banda, batteria e un punto di rottura in più. Solo i font Google
-  già presenti.
+- **Niente dipendenze esterne a runtime.** Il sito è servito da un telefono
+  Android: ogni libreria è banda, batteria e un punto di rottura in più. Solo i
+  font Google già presenti. Gli strumenti che girano sul portatile prima di
+  pubblicare non ricadono in questa regola.
 - **Mobile first.** Il contenitore `.app` è largo al massimo 460px. Il sito si usa
   in piedi con la chitarra in mano.
 - **Due temi.** Nessun colore scritto a mano nelle regole CSS: solo `var(--nome)`.
