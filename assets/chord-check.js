@@ -73,7 +73,7 @@
       padding:16px;display:flex;flex-direction:column;align-items:center;gap:12px}
     .lab{font-family:"Roboto Mono",ui-monospace,monospace;font-size:11px;font-weight:600;
       letter-spacing:.18em;text-transform:uppercase;color:var(--accent-2,#2b7ea8)}
-    .sym{font-family:"Roboto",system-ui,sans-serif;font-weight:700;line-height:1;
+    .sym{font-family:"Instrument Serif",Georgia,"Times New Roman",serif;font-weight:400;line-height:1;
       font-size:clamp(38px,12vw,54px);color:var(--text,#0a0d12);letter-spacing:-.02em}
     :host([compact]) .sym{font-size:26px}
     :host([compact]) .box{flex-direction:row;gap:14px;padding:12px 14px}

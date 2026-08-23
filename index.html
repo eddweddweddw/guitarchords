@@ -64,18 +64,19 @@
      Nessuna regola piu' in basso conosce i colori: usa solo questi nomi.
      ============================================================ */
   :root{
-    --bg:#ffffff;              /* fondo: bianco */
-    --bg-1:#ffffff;            /* alone alto del fondo */
-    --bg-2:#eef3f9;            /* alone basso, azzurrino */
-    --surface:#ffffff;         /* card e pannelli */
-    --surface-2:#eff4fa;       /* superficie incassata */
-    --line:#dbe3ec;            /* bordi sottili */
-    --text:#0a0d12;            /* testo primario: nero */
-    --text-2:#1b2029;
-    --ink:#0a0d12;             /* testo sul diagramma del manico */
-    --body:#39424e;            /* testo corrente */
-    --dim:#6d7986;             /* testo attenuato */
-    --faint:#a3aeba;           /* testo terziario */
+    --bg:#f7f4ee;              /* fondo: carta avorio */
+    --bg-1:#fbfaf7;            /* alone alto del fondo */
+    --bg-2:#efe9dd;            /* alone basso, più caldo */
+    --surface:#ffffff;         /* card e pannelli: fogli posati sulla carta */
+    --surface-2:#f1ece2;       /* superficie incassata */
+    --line:#e3dccf;            /* bordi sottili */
+    --grana:.30;               /* quanto si vede la fibra della carta */
+    --text:#14110b;            /* testo primario: nero caldo */
+    --text-2:#241f17;
+    --ink:#14110b;             /* testo sul diagramma del manico */
+    --body:#443d32;            /* testo corrente */
+    --dim:#776f61;             /* testo attenuato */
+    --faint:#b3aa98;           /* testo terziario */
     --accent:#1667d1;          /* accento: blu */
     --accent-deep:#0f4d9e;     /* accento su fondo chiaro */
     --accent-soft:rgba(22,103,209,.10);
@@ -84,9 +85,9 @@
     --danger:#c8372d;
     --danger-soft:rgba(200,55,45,.10);
     --ok:var(--accent);
-    --diagram-line:#c8d3df;    /* tasti */
-    --diagram-string:#93a1b0;  /* corde */
-    --velo:rgba(10,22,40,.34);
+    --diagram-line:#d3cdc0;    /* tasti */
+    --diagram-string:#9c9486;  /* corde */
+    --velo:rgba(32,26,16,.36);
     --shadow:0 14px 32px -18px rgba(10,22,40,.20);
     --shadow-sm:0 2px 8px -6px rgba(10,22,40,.18);
     --shadow-knob:0 1px 3px rgba(10,22,40,.28);
@@ -104,6 +105,7 @@
       --surface:#0e1219;
       --surface-2:#161c26;
       --line:#232b37;
+      --grana:.20;
       --text:#f3f6fa;
       --text-2:#dbe2ec;
       --ink:#f3f6fa;
@@ -135,6 +137,7 @@
     --surface:#0e1219;
     --surface-2:#161c26;
     --line:#232b37;
+    --grana:.20;
     --text:#f3f6fa;
     --text-2:#dbe2ec;
     --ink:#f3f6fa;
@@ -157,6 +160,18 @@
     --accent-glow:0 12px 26px -14px rgba(75,142,247,.55);
     --accent-glow-strong:0 14px 30px -12px rgba(75,142,247,.5);
   }
+
+  /* La fibra della carta. Un solo disegno per i due temi: "overlay" scurisce
+     sul chiaro e schiarisce sullo scuro, quindi il rumore resta visibile in
+     entrambi senza doverne generare due. Sta dietro al contenuto e non
+     intercetta il tocco. */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    opacity:var(--grana);mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size:160px 160px;
+  }
+  @media print{ body::before{display:none} }
 
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
@@ -326,6 +341,12 @@
   .deck:active{transform:scale(.995)}
   .deck .go{color:var(--faint);flex:none;transition:.15s}
   .deck.con-info .go{display:none}
+  /* In partita il bersaglio lo dice da sé: il segno diventa un tasto play e il
+     nome perde il grassetto, perché non stai più scegliendo cosa studiare. */
+  .deck .play{display:none;color:var(--accent);flex:none}
+  .deck.gioco .go{display:none}
+  .deck.gioco .play{display:block}
+  .deck.gioco .nm{font-weight:500}
   .deck:hover .go{color:var(--accent)}
   .deck .mini{flex:none}
   .deck .txt{flex:1;min-width:0}
@@ -1351,12 +1372,13 @@ function renderDecks(){
       blocco.className="blocco"+(gr.k==="top"?" pieno":"");   // l'insieme in evidenza prende tutta la riga
       const riga=document.createElement("div"); riga.className="riga";
       const b=document.createElement("button");
-      b.className="deck"+(f?" con-info":"");
+      b.className="deck"+(f?" con-info":"")+(G.on?" gioco":"");
       b.setAttribute("aria-label", `${G.on ? t('gameHeading') : t('startBegin')} · ${d.nm[S.lang]}`);
       b.innerHTML=`<span class="mini">${deckIcon(d.id)}</span>
         <span class="txt"><span class="nm">${d.nm[S.lang]}</span><span class="sb">${d.sb[S.lang]}</span></span>
         <span class="ct">${d.ch.length} ${t('chordsSuffix')}</span>
-        <svg class="go" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>`;
+        <svg class="go" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+        <svg class="play" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M10.2 9.1l5 2.9-5 2.9z" fill="currentColor" stroke="none"/></svg>`;
       b.onclick=()=>{ S.deckId=d.id; if(G.on) startGame(d); else startSession(); };
       riga.appendChild(b);
 

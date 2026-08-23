@@ -5,9 +5,10 @@ description: Regole visive del sito Manico (guitarchords) — i due temi, i toke
 
 # Design del sito Manico
 
-Il sito ha **due temi**: nero con accenti blu, e bianco con accenti azzurri.
-L'aspetto è asciutto e tipografico — un manuale ben stampato, non un'app
-decorata. Prima di introdurre qualcosa di nuovo, verifica che non esista già un
+Il sito ha **due temi**: nero con accenti blu, e carta avorio con accenti blu.
+L'aspetto è quello di un manuale di musica ben stampato, non di un'app decorata:
+carta calda con una grana appena percettibile, fogli bianchi posati sopra, e il
+simbolo dell'accordo in una serif. Prima di introdurre qualcosa di nuovo, verifica che non esista già un
 componente che fa il lavoro.
 
 ## Regola numero uno: mai un colore scritto a mano
@@ -22,7 +23,9 @@ permette a una sola regola di funzionare su entrambi i temi.
 
 | Token | Ruolo |
 |---|---|
-| `--bg`, `--bg-1`, `--bg-2` | fondo pagina e le due tinte del suo alone |
+| `--bg`, `--bg-1`, `--bg-2` | la carta e le due tinte del suo alone |
+| `--grana` | quanto si vede la fibra della carta (`body::before`) |
+| `--velo` | il fondo scuro dietro le finestre sovrapposte |
 | `--surface` | card e pannelli |
 | `--surface-2` | superficie incassata (segmenti, chip, riquadri) |
 | `--line` | bordi sottili |
@@ -54,12 +57,16 @@ una schermata compaiono tre elementi blu in competizione, due sono di troppo.
 
 ## Tipografia
 
-Una sola famiglia, **Roboto**, con due ruoli distinti:
+Due famiglie, con ruoli che non si scambiano:
 
 - **Roboto** — interfaccia e titoli. I titoli usano la classe `.slab`
   (peso 900, `letter-spacing:-.02em`); il testo corrente è il default del `body`.
 - **Roboto Mono** (classe `.mono`) — tutto ciò che è dato: numeri, gradi, nomi
   delle corde, etichette maiuscole spaziate.
+- **Instrument Serif** — soltanto il **simbolo dell'accordo** a schermo intero
+  (`.symbol`, `.tn-note`, `#gmFinal` e `.sym` dentro `<manico-chord-check>`).
+  È l'elemento più guardato del sito ed è l'unico posto dove questa serif
+  compare: non usarla altrove.
 
 La gerarchia si costruisce con **peso e dimensione**, non cambiando famiglia.
 Le etichette di sezione hanno un unico stile ricorrente: mono, 11px, peso 600,
@@ -68,12 +75,12 @@ sta fra 10,5px e 14px; sotto i 10,5px non si scende.
 
 ## Componenti che esistono già
 
-`.panel` (card) · `.seg` (selettore segmentato) · `.chip` (interruttore con
-`aria-pressed`) · `.deck` (riga di un insieme) · `.deck.attached` (riga agganciata
-sotto la sua scheda di teoria) · `.th-card` (scheda di teoria) · `.group-label`
-(etichetta di gruppo col filetto) · `.iconbtn` (40×40) e `.iconbtn.hdr` (tondo,
-in testata) · `.langpick` (menu a tendina) · `input[type=range]` con riempimento
-via `--pct`.
+`.panel` (card) · `.chip` (interruttore con `aria-pressed`) · `.blocco > .riga`
+(un insieme più il suo bottone info) · `.deck` (riga di un insieme; con `.gioco`
+mostra il tasto play al posto della freccia) · `.infobtn` (il tondo ⓘ) ·
+`.modale` (finestra sovrapposta col velo) · `.th-card` (scheda di teoria) ·
+`.tabbar`/`.tab` (i due modi) · `.group-label` · `.iconbtn` (40×40) e
+`.iconbtn.hdr` (tondo, in testata) · `.langpick` · `input[type=range]` con `--pct`.
 
 Riusa questi. Un componente nuovo si giustifica solo se nessuno di questi regge
 il contenuto.
@@ -120,6 +127,7 @@ alfabeto invece di disegnare un simbolo nuovo.
 6. **Ogni stringa passa da `t()`**, in italiano e in inglese. Un testo scritto
    nel markup è un bug. E non nominare i colori nei testi: "in verde" è diventato
    falso il giorno in cui l'accento è passato al blu.
+7. **Niente trattini lunghi per gli incisi**: virgola, o due punti.
 
 ## Prima di dire che è finito
 
