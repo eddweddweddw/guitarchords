@@ -572,7 +572,7 @@
 
   .th-card{background:var(--surface);border:1px solid var(--line);
     border-radius:18px;padding:15px 15px 13px;margin:8px 0 4px;box-shadow:var(--shadow)}
-  .th-card.hide{display:none}
+  .th-card.hide, .th-card.fuori{display:none}
   .blocco{margin-bottom:9px}
   .blocco .riga{display:flex;align-items:center;gap:7px}
   .blocco .deck{margin-bottom:0;flex:1;min-width:0}
@@ -669,6 +669,9 @@
   <!-- Il ponte verso le pagine statiche: serve a chi cerca un accordo su Google
        e ai crawler, che da qui raggiungono tutte e novanta le pagine. -->
   <p class="tutti"><a href="accordi/" id="tuttiLink">Tutti gli accordi, uno per uno</a></p>
+  <noscript>
+    <p class="tutti"><a href="accordi/">Vedi tutti i 90 accordi con diteggiatura, note e gradi</a></p>
+  </noscript>
   <div style="height:96px"></div>
 
 </div>
@@ -1346,17 +1349,26 @@ function apribile(etichetta, dettaglio, contenuto){
 
 /* La finestra della teoria. Ricorda chi l'ha aperta per restituirgli il fuoco:
    chi naviga da tastiera altrimenti si ritroverebbe a inizio pagina. */
-let chiHaAperto = null;
-function apriTeoria(f, sorgente){
+let chiHaAperto = null, cartaInPrestito = null;
+function apriTeoria(card, sorgente){
+  chiudiTeoria();
+  cartaInPrestito = card;
+  card.__casa = card.parentElement;
+  card.classList.remove("fuori");
   const corpo = el("theoryModalBody");
   corpo.innerHTML = "";
-  corpo.appendChild(theoryCard(f));
-  const titolo = corpo.querySelector("h3"); if(titolo) titolo.id = "theoryModalTitle";
+  corpo.appendChild(card);
+  const titolo = card.querySelector("h3"); if(titolo) titolo.id = "theoryModalTitle";
   chiHaAperto = sorgente || null;
   el("theoryModal").classList.add("on");
   el("closeTheoryModal").focus();
 }
 function chiudiTeoria(){
+  if(cartaInPrestito){
+    cartaInPrestito.classList.add("fuori");
+    if(cartaInPrestito.__casa) cartaInPrestito.__casa.appendChild(cartaInPrestito);
+    cartaInPrestito = null;
+  }
   el("theoryModal").classList.remove("on");
   if(chiHaAperto){ chiHaAperto.focus(); chiHaAperto = null; }
 }
@@ -1407,17 +1419,21 @@ function renderDecks(){
       b.onclick=()=>{ S.deckId=d.id; if(G.on) startGame(d); else startSession(); };
       riga.appendChild(b);
 
+      let card=null;
       if(f){
-        /* La teoria di una categoria sta dietro un bottone piccolo accanto alla
-           riga: c'è per chi la cerca, e non ruba spazio a tutti gli altri. */
+        /* La scheda vive nel documento anche da chiusa: nascosta col CSS, ma
+           presente, così chi indicizza la legge. La finestra se la prende in
+           prestito quando serve, invece di costruirla al momento del clic. */
+        card=theoryCard(f); card.classList.add("fuori");
         const info=document.createElement("button");
         info.className="infobtn"; info.type="button"; info.setAttribute("aria-haspopup","dialog");
         info.setAttribute("aria-label", `${t('theoryOpen')} · ${d.nm[S.lang]}`);
         info.innerHTML=`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11.2v4.6"/><circle cx="12" cy="7.9" r="1" fill="currentColor" stroke="none"/></svg>`;
-        info.onclick=()=>apriTeoria(f, info);
+        info.onclick=()=>apriTeoria(card, info);
         riga.appendChild(info);
       }
       blocco.appendChild(riga);
+      if(card) blocco.appendChild(card);
       wrap.appendChild(blocco);
     });
 
@@ -1599,6 +1615,7 @@ function applyLangStatic(){
   el("tabPlayLab").textContent=t('tabPlay');
   el("settingsTitle").textContent=t('settingsTitle');
   el("tuttiLink").textContent=t('allChords');
+  el("tuttiLink").setAttribute("href", S.lang==="en" ? "chords/" : "accordi/");
   el("openSettings").setAttribute("aria-label", t('settingsAria'));
   el("openTuner").setAttribute("aria-label", t('tunerOpenAria'));
   el("closeSettings").setAttribute("aria-label", t('settingsCloseAria'));
