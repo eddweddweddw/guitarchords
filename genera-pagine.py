@@ -410,14 +410,77 @@ def indice(accordi, insiemi, lang):
 """ % {"home": lab["home"], "titolo": lab["titolo_indice"], "intro": lab["intro_indice"], "righe": "".join(righe)}
 
 
+def testi_i18n(s, lang, chiavi):
+    """Pesca le stringhe dal blocco I18N di index.html.
+    Sono già lì, in due lingue: riscriverle qui vorrebbe dire tenere allineate
+    due copie, ed è esattamente il modo in cui le traduzioni divergono."""
+    i = s.index("\n  %s: {" % lang)
+    fine = s.index("\n  },", i)
+    zona = s[i:fine]
+    out = {}
+    for k in chiavi:
+        m = re.search(r'\n\s*%s:\s*"((?:[^"\\]|\\.)*)"' % k, zona)
+        if not m:
+            sys.exit("manca la chiave %s in I18N.%s" % (k, lang))
+        out[k] = m.group(1).replace('\\"', '"')
+    return out
+
+
+def home_inglese(s):
+    """La home inglese come pagina vera, /en/.
+
+    Prima l'inglese era ?lang=en: un indirizzo che serviva HTML dichiarato
+    italiano e con canonical verso la home italiana. Google lo classificava
+    "pagina alternativa con tag canonical appropriato", cioè non la indicizzava
+    mai, e l'hreflang che puntava lì veniva ignorato perché rimandava a un
+    indirizzo che canonicalizza altrove.
+
+    La pagina è una copia della home generata a ogni pubblicazione: nasce dalla
+    stessa sorgente, quindi non può scollarsi. Cambiano solo i segnali della
+    testa, i testi visibili prima che il JavaScript entri in funzione, e i
+    collegamenti relativi — perché /en/ sta un livello più in dentro."""
+    t = testi_i18n(s, "en", ["pageTitle", "metaDescription", "tagline", "allChords"])
+    h = s
+
+    h = h.replace('<html lang="it">', '<html lang="en">', 1)
+
+    def campo(testo, schema, valore):
+        nuovo, n = re.subn(schema, lambda m: m.group(1) + valore + m.group(2), testo, count=1)
+        if not n:
+            sys.exit("home inglese: non ho trovato %s" % schema)
+        return nuovo
+
+    h = campo(h, r'(<title>).*?(</title>)', t["pageTitle"])
+    h = campo(h, r'(<meta name="description" id="metaDescription" content=")[^"]*(")', t["metaDescription"])
+    h = campo(h, r'(<link rel="canonical" id="canonical" href=")[^"]*(")', BASE + "/en/")
+    h = campo(h, r'(<meta property="og:url" content=")[^"]*(")', BASE + "/en/")
+    h = campo(h, r'(<meta property="og:title" content=")[^"]*(")', t["pageTitle"])
+    h = campo(h, r'(<meta property="og:description" content=")[^"]*(")', t["metaDescription"])
+    h = campo(h, r'(<p class="tagline" id="tagline">).*?(</p>)', t["tagline"])
+
+    # i collegamenti relativi risalgono di un livello
+    testa, resto = h.split("</head>", 1)
+    testa = re.sub(r'(src|href)="((?!https?:|#|mailto:|data:|\.\./)[^"]+)"',
+                   lambda m: '%s="../%s"' % (m.group(1), m.group(2)), testa)
+    h = testa + "</head>" + resto
+    h = h.replace('<script src="assets/', '<script src="../assets/')
+
+    # il ponte verso le pagine statiche, in inglese e un livello più su
+    h = campo(h, r'(<a href="accordi/" id="tuttiLink">).*?(</a>)', t["allChords"])
+    h = h.replace('<a href="accordi/" id="tuttiLink">', '<a href="../chords/" id="tuttiLink">', 1)
+    h = h.replace('<a href="accordi/">Vedi tutti i 90 accordi con diteggiatura, note e gradi</a>',
+                  '<a href="../chords/">See all 90 chords with fingering, notes and degrees</a>', 1)
+    return h
+
+
 def sitemap(accordi, schede, insiemi):
     oggi = date.today().isoformat()
     def alt(it, en):
         return ('\n    <xhtml:link rel="alternate" hreflang="it" href="%s"/>'
                 '\n    <xhtml:link rel="alternate" hreflang="en" href="%s"/>'
                 '\n    <xhtml:link rel="alternate" hreflang="x-default" href="%s"/>' % (it, en, it))
-    u = ['  <url><loc>%s/</loc><lastmod>%s</lastmod>%s</url>' % (BASE, oggi, alt(BASE + "/", BASE + "/?lang=en")),
-         '  <url><loc>%s/?lang=en</loc><lastmod>%s</lastmod></url>' % (BASE, oggi),
+    u = ['  <url><loc>%s/</loc><lastmod>%s</lastmod>%s</url>' % (BASE, oggi, alt(BASE + "/", BASE + "/en/")),
+         '  <url><loc>%s/en/</loc><lastmod>%s</lastmod>%s</url>' % (BASE, oggi, alt(BASE + "/", BASE + "/en/")),
          '  <url><loc>%s/accordi/</loc><lastmod>%s</lastmod>%s</url>'
            % (BASE, oggi, alt(BASE + "/accordi/", BASE + "/chords/")),
          '  <url><loc>%s/chords/</loc><lastmod>%s</lastmod>%s</url>'
@@ -478,8 +541,13 @@ def main():
             open(os.path.join(d, "index.html"), "w", encoding="utf-8").write(pagina_teoria(sc, ins, accordi, lang))
             fatte += 1
 
+    cartella_en = os.path.join(QUI, "en")
+    os.makedirs(cartella_en, exist_ok=True)
+    open(os.path.join(cartella_en, "index.html"), "w", encoding="utf-8").write(home_inglese(s))
+    fatte += 1
+
     open(os.path.join(QUI, "sitemap.xml"), "w", encoding="utf-8").write(sitemap(accordi, schede, insiemi))
-    print("generate %d pagine (accordi e teoria, italiano e inglese) più due indici e la sitemap" % fatte)
+    print("generate %d pagine (accordi, teoria e home inglese) più due indici e la sitemap" % fatte)
 
 if __name__ == "__main__":
     main()

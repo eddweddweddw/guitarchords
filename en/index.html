@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -7,11 +7,11 @@
 <meta name="theme-color" content="#000000" media="(prefers-color-scheme:dark)" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<title>Manico · allenatore di accordi</title>
-<meta name="description" id="metaDescription" content="Allenatore di accordi per chitarra: esercizi interattivi per imparare e memorizzare le diteggiature sul manico." />
+<title>Manico · chord trainer</title>
+<meta name="description" id="metaDescription" content="Guitar chord trainer: interactive exercises to learn and memorize fretboard fingerings." />
 <!-- Lo stesso sito è servito da due indirizzi (GitHub Pages e il telefono di
      casa). Senza canonical Google li vede come due copie in concorrenza. -->
-<link rel="canonical" id="canonical" href="https://eddweddweddw.github.io/guitarchords/" />
+<link rel="canonical" id="canonical" href="https://eddweddweddw.github.io/guitarchords/en/" />
 
 <!-- Due lingue, due indirizzi. Senza questo Google indicizza solo l'italiano,
      perche' la lingua la cambia il JavaScript e l'indirizzo resterebbe uno solo. -->
@@ -19,13 +19,13 @@
 <link rel="alternate" hreflang="en" href="https://eddweddweddw.github.io/guitarchords/en/" />
 <link rel="alternate" hreflang="x-default" href="https://eddweddweddw.github.io/guitarchords/" />
 
-<link rel="icon" href="icon.svg" type="image/svg+xml" />
-<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png" />
-<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<link rel="icon" href="../icon.svg" type="image/svg+xml" />
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://eddweddweddw.github.io/guitarchords/" />
-<meta property="og:title" content="Manico · allenatore di accordi" />
-<meta property="og:description" content="Allenatore di accordi per chitarra: esercizi interattivi, accordatore dal microfono e modalità gioco." />
+<meta property="og:url" content="https://eddweddweddw.github.io/guitarchords/en/" />
+<meta property="og:title" content="Manico · chord trainer" />
+<meta property="og:description" content="Guitar chord trainer: interactive exercises to learn and memorize fretboard fingerings." />
 <meta name="robots" content="index,follow" />
 
 <!-- Dati strutturati: dicono a Google che cos'e' questa pagina, invece di
@@ -661,16 +661,16 @@
       </div>
     </div>
   </div>
-  <p class="tagline" id="tagline">Il nome dell'accordo, poi la posizione a memoria.</p>
+  <p class="tagline" id="tagline">The chord name, then the shape from memory.</p>
 
   <div class="tutorial hide" id="gameLead"></div>
 
   <div id="deckList"></div>
   <!-- Il ponte verso le pagine statiche: serve a chi cerca un accordo su Google
        e ai crawler, che da qui raggiungono tutte e novanta le pagine. -->
-  <p class="tutti"><a href="accordi/" id="tuttiLink">Tutti gli accordi, uno per uno</a></p>
+  <p class="tutti"><a href="../chords/" id="tuttiLink">Every chord, one by one</a></p>
   <noscript>
-    <p class="tutti"><a href="accordi/">Vedi tutti i 90 accordi con diteggiatura, note e gradi</a></p>
+    <p class="tutti"><a href="../chords/">See all 90 chords with fingering, notes and degrees</a></p>
   </noscript>
   <div style="height:96px"></div>
 
@@ -2159,7 +2159,7 @@ applyTheme(detectTheme());
 applyLangStatic();
 renderDecks();
 </script>
-<script src="assets/listener.js" defer></script>
-<script src="assets/chord-check.js" defer></script>
+<script src="../assets/listener.js" defer></script>
+<script src="../assets/chord-check.js" defer></script>
 </body>
 </html>

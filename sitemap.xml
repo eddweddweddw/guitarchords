@@ -3,9 +3,12 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url><loc>https://eddweddweddw.github.io/guitarchords/</loc><lastmod>2026-08-23</lastmod>
     <xhtml:link rel="alternate" hreflang="it" href="https://eddweddweddw.github.io/guitarchords/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://eddweddweddw.github.io/guitarchords/?lang=en"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://eddweddweddw.github.io/guitarchords/en/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://eddweddweddw.github.io/guitarchords/"/></url>
-  <url><loc>https://eddweddweddw.github.io/guitarchords/?lang=en</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://eddweddweddw.github.io/guitarchords/en/</loc><lastmod>2026-08-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="it" href="https://eddweddweddw.github.io/guitarchords/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://eddweddweddw.github.io/guitarchords/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://eddweddweddw.github.io/guitarchords/"/></url>
   <url><loc>https://eddweddweddw.github.io/guitarchords/accordi/</loc><lastmod>2026-08-23</lastmod>
     <xhtml:link rel="alternate" hreflang="it" href="https://eddweddweddw.github.io/guitarchords/accordi/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://eddweddweddw.github.io/guitarchords/chords/"/>
