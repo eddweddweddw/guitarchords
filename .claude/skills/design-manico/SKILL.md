@@ -58,7 +58,8 @@ permette a una sola regola di funzionare su entrambi i temi.
 | `--on-accent` | testo e simboli **sopra** l'accento |
 | `--ink` | testo sul diagramma del manico |
 | `--diagram-line`, `--diagram-string` | tasti e corde del diagramma |
-| `--danger`, `--danger-soft` | errore, "non ricordavo" |
+| `--ok` | "giusto": verde, l'unico colore del sito che non è blu |
+| `--danger`, `--danger-soft` | errore |
 | `--shadow`, `--shadow-sm`, `--shadow-knob` | ombre |
 | `--accent-glow`, `--accent-glow-strong` | aloni colorati dei pulsanti attivi |
 | `--r` | raggio di default (20px) |
@@ -68,7 +69,9 @@ permette a una sola regola di funzionare su entrambi i temi.
 `:root[data-theme="dark"]`. Saltarne uno lascia un buco che si vede solo in un
 tema, cioè quello che non stai guardando.
 
-**L'accento è uno solo.** Il blu segnala ciò che è attivo o selezionato. Se in
+**L'accento è uno solo.** Il blu segnala ciò che è attivo o selezionato. Il
+verde di `--ok` e il rosso di `--danger` non sono accenti: sono colori
+semantici, e vanno usati soltanto per dire "giusto" e "sbagliato". Se in
 una schermata compaiono tre elementi blu in competizione, due sono di troppo.
 `--accent-2` non è un secondo accento decorativo: marca i dati tecnici.
 
