@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <title>Manico · allenatore di accordi</title>
-<meta name="description" id="metaDescription" content="Allenatore di accordi per chitarra: esercizi interattivi per imparare e memorizzare le diteggiature sul manico." />
+<meta name="description" id="metaDescription" content="Manico è un gioco per imparare gli accordi della chitarra: il sito ti dice un accordo, tu lo suoni e il microfono controlla se è giusto. Novanta accordi, accordatore e teoria." />
 <!-- Lo stesso sito è servito da due indirizzi (GitHub Pages e il telefono di
      casa). Senza canonical Google li vede come due copie in concorrenza. -->
 <link rel="canonical" id="canonical" href="https://eddweddweddw.github.io/guitarchords/" />
@@ -25,7 +25,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://eddweddweddw.github.io/guitarchords/" />
 <meta property="og:title" content="Manico · allenatore di accordi" />
-<meta property="og:description" content="Allenatore di accordi per chitarra: esercizi interattivi, accordatore dal microfono e modalità gioco." />
+<meta property="og:description" content="Manico è un gioco per imparare gli accordi della chitarra: il sito ti dice un accordo, tu lo suoni e il microfono controlla se è giusto. Novanta accordi, accordatore e teoria." />
 <meta name="robots" content="index,follow" />
 
 <!-- Dati strutturati: dicono a Google che cos'e' questa pagina, invece di
@@ -619,6 +619,25 @@
   .modale .foglio{position:relative;width:100%;max-width:420px;max-height:84vh;overflow-y:auto;
     -webkit-overflow-scrolling:touch;animation:salita .18s ease-out both}
   .modale .foglio .th-card{margin:0}
+  .modale .foglio.scelta{background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--r);padding:20px 18px;box-shadow:var(--shadow);text-align:center}
+  .modale .scelta h3{font-family:"Roboto";font-weight:600;font-size:19px;color:var(--text);margin:0}
+  .modale .scelta .sotto{font-size:13px;color:var(--dim);margin:6px 0 0;line-height:1.45}
+  .livelli{display:flex;flex-direction:column;gap:9px;margin-top:16px}
+  .livelli button{display:flex;align-items:center;gap:12px;text-align:left;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 13px;
+    box-shadow:var(--shadow-sm);transition:.15s}
+  .livelli button[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+  .livelli .nome{font-weight:600;font-size:15px;color:var(--text);display:block;line-height:1.2}
+  .livelli .det{font-size:12px;color:var(--dim);display:block;margin-top:2px}
+  .livelli .num{font-family:"Roboto Mono";font-size:11px;color:var(--accent-2);margin-left:auto;
+    white-space:nowrap}
+  .gm-grande{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:64px;
+    line-height:1;color:var(--text);margin:14px 0 0}
+  .modale .scelta .gm-tacche{margin:16px 0 18px}
+  .start.secondario{background:none;border:1px solid var(--line);color:var(--accent-deep);
+    box-shadow:none;margin-top:9px}
+  .start.secondario.hide{display:none}
   .modale .chiudi{position:absolute;top:10px;right:10px;width:34px;height:34px;border-radius:17px;
     background:var(--surface-2);border:1px solid var(--line);color:var(--dim);z-index:1}
   @keyframes salita{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -773,6 +792,35 @@
   </div>
 </div>
 
+<!-- SCELTA DELLA DIFFICOLTÀ -->
+<div class="modale" id="gmLivelli" role="dialog" aria-modal="true" aria-labelledby="gmLivelliTit">
+  <div class="velo" id="gmLivelliVelo"></div>
+  <div class="foglio scelta">
+    <button class="iconbtn chiudi" id="gmLivelliChiudi" aria-label="Chiudi">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h3 id="gmLivelliTit">Quanto veloce?</h3>
+    <p class="sotto" id="gmLivelliSub"></p>
+    <div class="livelli" id="gmLivelliLista"></div>
+  </div>
+</div>
+
+<!-- RISULTATO DELLA PARTITA -->
+<div class="modale" id="gmFine" role="dialog" aria-modal="true" aria-labelledby="gmFineTit">
+  <div class="velo" id="gmFineVelo"></div>
+  <div class="foglio scelta">
+    <button class="iconbtn chiudi" id="gmFineChiudi" aria-label="Chiudi">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <h3 id="gmFineTit">Partita finita</h3>
+    <div class="gm-grande slab" id="gmFinePunti">0</div>
+    <p class="sotto" id="gmFineSu"></p>
+    <div class="gm-tacche" id="gmFineTacche" aria-hidden="true"></div>
+    <button class="start" id="gmFineAncora"></button>
+    <button class="start secondario hide" id="gmFineErrori"></button>
+  </div>
+</div>
+
 <!-- IMPOSTAZIONI -->
 <div class="stage settings" id="settings">
   <div class="top">
@@ -891,6 +939,17 @@ const I18N = {
                 ["Un punto, o la posizione","Se è giusto vai avanti. Se sbagli, il gioco si ferma e ti mostra la diteggiatura."]],
     gameCloseAria: "Esci dal gioco",
     gameScoreLab: "punti",
+    gameOverTitle: "Partita finita",
+    gameDiffTitle: "Quanto veloce?",
+    gameDiffSub: "Cambia solo il tempo, non gli accordi. Puoi sceglierlo a ogni partita.",
+    gameDiffCalma: "Con calma", gameDiffCalmaSub: "Venti secondi per guardare la posizione sbagliata",
+    gameDiffNormale: "Normale", gameDiffNormaleSub: "Dieci secondi per guardare la posizione sbagliata",
+    gameDiffSfida: "Sfida", gameDiffSfidaSub: "Sei secondi per guardare, e venti per rispondere",
+    gameNoLimit: "senza limite", gameLimit: "{n} s per rispondere",
+    gameTimeout: "Tempo scaduto",
+    gameFineSu: "{n} punti su {tot}",
+    gameErrori: "Allena i {n} accordi sbagliati",
+    errorsDeck: "Accordi da rivedere", errorsDeckSub: "Quelli che ti sono sfuggiti nell'ultima partita",
     gameRight: "Giusto",
     gameWrong: "Sbagliato",
     gameLook: "guarda la posizione",
@@ -965,7 +1024,7 @@ const I18N = {
     stringNames: ["MI","LA","RE","SOL","SI","mi"],
     chordDiagramAria: "Diagramma accordo",
     langPickAria: "Scegli la lingua",
-    metaDescription: "Allenatore di accordi per chitarra: esercizi interattivi per imparare e memorizzare le diteggiature sul manico.",
+    metaDescription: "Manico è un gioco per imparare gli accordi della chitarra: il sito ti dice un accordo, tu lo suoni e il microfono controlla se è giusto. Novanta accordi, accordatore e teoria.",
   },
   en: {
     pageTitle: "Manico · chord trainer",
@@ -983,6 +1042,17 @@ const I18N = {
                 ["A point, or the shape","Right, and you move on. Wrong, and the game stops to show you the fingering."]],
     gameCloseAria: "Leave the game",
     gameScoreLab: "points",
+    gameOverTitle: "Game over",
+    gameDiffTitle: "How fast?",
+    gameDiffSub: "It changes the timing, not the chords. You pick it every game.",
+    gameDiffCalma: "Take your time", gameDiffCalmaSub: "Twenty seconds to look at the shape you missed",
+    gameDiffNormale: "Normal", gameDiffNormaleSub: "Ten seconds to look at the shape you missed",
+    gameDiffSfida: "Challenge", gameDiffSfidaSub: "Six seconds to look, twenty to answer",
+    gameNoLimit: "no limit", gameLimit: "{n} s to answer",
+    gameTimeout: "Time's up",
+    gameFineSu: "{n} points out of {tot}",
+    gameErrori: "Practise the {n} chords you missed",
+    errorsDeck: "Chords to review", errorsDeckSub: "The ones that got away in your last game",
     gameRight: "Right",
     gameWrong: "Wrong",
     gameLook: "look at the shape",
@@ -1057,7 +1127,7 @@ const I18N = {
     stringNames: ["E","A","D","G","B","e"],
     chordDiagramAria: "Chord diagram",
     langPickAria: "Choose language",
-    metaDescription: "Guitar chord trainer: interactive exercises to learn and memorize fretboard fingerings.",
+    metaDescription: "Manico is a game for learning guitar chords: the site names a chord, you play it, and the microphone checks whether you got it right. Ninety chords, a tuner and theory.",
   },
 };
 
@@ -1471,7 +1541,7 @@ function renderDecks(){
         <span class="ct">${d.ch.length} ${t('chordsSuffix')}</span>
         <svg class="go" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
         <svg class="play" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M10.2 9.1l5 2.9-5 2.9z" fill="currentColor" stroke="none"/></svg>`;
-      b.onclick=()=>{ S.deckId=d.id; if(G.on) startGame(d); else startSession(); };
+      b.onclick=()=>{ S.deckId=d.id; if(G.on) apriLivelli(d); else startSession(); };
       riga.appendChild(b);
 
       let card=null;
@@ -1776,6 +1846,8 @@ document.addEventListener("keydown", e=>{
   if(e.key!=="Escape") return;
   closeLangMenus();
   if(el("theoryModal").classList.contains("on")) chiudiTeoria();
+  el("gmLivelli").classList.remove("on");
+  if(el("gmFine").classList.contains("on")){ el("gmFine").classList.remove("on"); gClose(); }
 });
 
 /* stage events */
@@ -1908,9 +1980,21 @@ function ruler(tones){
    Una sola macchina a stati (G.phase) decide chi ha diritto di parlare: i
    verdetti che arrivano dal microfono fuori da "listening" vengono ignorati,
    altrimenti una pennata di troppo durante la pausa conterebbe come risposta. */
-const GAME = { rounds:10, blockMs:10000, countdownMs:5000, rightMs:900, arc:131.9 };
+const GAME = { rounds:10, rightMs:900, arc:131.9 };
+
+/* La difficoltà è il tempo, non gli accordi: quanto puoi guardare la posizione
+   dopo un errore, quanto dura il conto alla rovescia, e se hai un limite per
+   rispondere. Si sceglie a ogni partita, perché dipende da come stai quel
+   giorno più che da quanto sei bravo. */
+const LIVELLI = [
+  { id:"calma",   lookMs:20000, countdownMs:5000, answerMs:0     },
+  { id:"normale", lookMs:10000, countdownMs:5000, answerMs:0     },
+  { id:"sfida",   lookMs:6000,  countdownMs:3000, answerMs:20000 },
+];
+function livello(){ return LIVELLI.find(l=>l.id===G.livello) || LIVELLI[1]; }
 const G = { on:load("chordtrainer.game.v1")===true, deck:null, queue:[], i:0, score:0,
-            phase:"off", timers:[], legato:false, esiti:[] };
+            phase:"off", timers:[], legato:false, esiti:[],
+            livello: load("chordtrainer.livello.v1") || "normale", sbagliati:[] };
 
 function gLater(fn,ms){ const h=setTimeout(fn,ms); G.timers.push(h); return h; }
 function gClear(){ G.timers.forEach(clearTimeout); G.timers=[]; }
@@ -1964,10 +2048,35 @@ function renderTutorial(){
 
 function gCheck(){ return el("gmCheck"); }
 
+/* Prima della partita si sceglie il passo. La scelta si ricorda, così chi ha
+   già deciso tocca due volte e via. */
+function apriLivelli(deck){
+  const lista = el("gmLivelliLista"); lista.innerHTML="";
+  el("gmLivelliTit").textContent = t('gameDiffTitle');
+  el("gmLivelliSub").textContent = t('gameDiffSub');
+  LIVELLI.forEach(l=>{
+    const b=document.createElement("button"); b.type="button";
+    b.setAttribute("aria-pressed", String(l.id===G.livello));
+    const nome = t('gameDiff'+l.id.charAt(0).toUpperCase()+l.id.slice(1));
+    const det  = t('gameDiff'+l.id.charAt(0).toUpperCase()+l.id.slice(1)+'Sub');
+    const lim  = l.answerMs ? t('gameLimit').replace("{n}", Math.round(l.answerMs/1000)) : t('gameNoLimit');
+    b.innerHTML=`<span><span class="nome">${nome}</span><span class="det">${det}</span></span>`+
+                `<span class="num">${lim}</span>`;
+    b.onclick=()=>{
+      G.livello=l.id; save("chordtrainer.livello.v1", l.id);
+      el("gmLivelli").classList.remove("on");
+      startGame(deck);
+    };
+    lista.appendChild(b);
+  });
+  el("gmLivelli").classList.add("on");
+  el("gmLivelliChiudi").focus();
+}
+
 async function startGame(deck){
   const check=gCheck();
   if(!check || typeof check.start!=="function") return;   // componente non caricato
-  G.deck=deck; G.queue=gQueue(deck); G.i=0; G.score=0; G.esiti=[]; G.phase="avvio";
+  G.deck=deck; G.queue=gQueue(deck); G.i=0; G.score=0; G.esiti=[]; G.sbagliati=[]; G.phase="avvio";
   gClear(); gScore(); gTacche();
   el("gmDeck").textContent=deck.nm[S.lang];
   el("gmPos").textContent="— / "+GAME.rounds;
@@ -1990,6 +2099,9 @@ async function startGame(deck){
 function gRound(){
   gClear();
   const sym=G.queue[G.i], c=CH[sym];
+  /* Se il turno non esiste la partita è finita: senza questa riga un turno
+     fuori sequenza faceva esplodere tutto invece di chiudere la partita. */
+  if(!c) return gOver();
   G.phase="listening";
   el("gmName").textContent=c.name[S.lang];
   el("gmPos").textContent=`${G.i+1} / ${GAME.rounds}`;
@@ -1998,6 +2110,8 @@ function gRound(){
   spunta(false);
   gTacche();
   gState("","");
+  const lim = livello().answerMs;
+  if(lim) gLater(()=>{ if(G.phase==="listening") gSbagliato(t('gameTimeout')); }, lim);
   /* I rivali sono gli altri accordi dell'insieme, non tutti e novanta: il motore
      deve distinguere il Do dal Lam di questo esercizio. */
   gCheck().setChord(c.sym, c.frets,
@@ -2005,22 +2119,36 @@ function gRound(){
 }
 
 function gVerdict(ev){
-  if(G.phase!=="listening" || !ev) return;
+  if(!ev) return;
+  /* Se lo suoni giusto mentre guardi la posizione, non ha senso trattenerti
+     fino allo scadere: si va avanti. Il punto resta perso, perché l'errore è
+     già stato contato: quello che si recupera è il tempo, non il punteggio. */
+  if((G.phase==="bloccato" || G.phase==="conto") && ev.ok){ gClear(); gNext(); return; }
+  if(G.phase!=="listening") return;
+  gClear();   // via i timer del turno, a partire dal limite per rispondere
   if(ev.ok){
     G.phase="giusto"; G.score++; G.esiti[G.i]=true; gScore(); gTacche();
     gState(t('gameRight'),"ok");
     spunta(true);
     gLater(gNext, GAME.rightMs);
   }else{
-    G.phase="bloccato"; G.esiti[G.i]=false; gTacche();
-    gState(`${t('gameWrong')} · ${t('gameLook')}`,"ko");
-    el("gmDiagram").innerHTML=svgChord(CH[G.queue[G.i]]);
-    /* i pallini delle dita nascono invisibili: senza questa classe il diagramma
-       resta un manico vuoto, che è il contrario di "guarda la posizione". */
-    const svg=el("gmDiagram").querySelector("svg"); if(svg) svg.classList.add("is-revealed");
-    el("gmCard").classList.remove("hide");
-    gLater(gCountdown, GAME.blockMs);
+    gSbagliato(`${t('gameWrong')} · ${t('gameLook')}`);
   }
+}
+
+/* Sbagliato, o tempo scaduto: in entrambi i casi si perde il punto, si vede la
+   posizione giusta, e poi si va avanti. */
+function gSbagliato(messaggio){
+  gClear();
+  G.phase="bloccato"; G.esiti[G.i]=false; gTacche();
+  if(G.sbagliati.indexOf(G.queue[G.i])<0) G.sbagliati.push(G.queue[G.i]);
+  gState(messaggio,"ko");
+  el("gmDiagram").innerHTML=svgChord(CH[G.queue[G.i]]);
+  /* i pallini delle dita nascono invisibili: senza questa classe il diagramma
+     resta un manico vuoto, che e' il contrario di "guarda la posizione". */
+  const svg=el("gmDiagram").querySelector("svg"); if(svg) svg.classList.add("is-revealed");
+  el("gmCard").classList.remove("hide");
+  gLater(gCountdown, livello().lookMs);
 }
 
 function gCountdown(){
@@ -2032,13 +2160,13 @@ function gCountdown(){
   /* Chi comanda è il timer, non l'animazione: requestAnimationFrame si ferma
      quando la pagina va in secondo piano, e con lui si fermerebbe la partita.
      Il giro di rAF disegna soltanto, e se resta indietro non fa danno. */
-  gLater(()=>{ if(G.phase!=="conto") return; G.score--; gScore(); gNext(); }, GAME.countdownMs);
+  gLater(()=>{ if(G.phase!=="conto") return; G.score--; gScore(); gNext(); }, livello().countdownMs);
 
   (function tick(){
     if(G.phase!=="conto") return;
-    const resta=Math.max(0, GAME.countdownMs-(Date.now()-t0));
+    const resta=Math.max(0, livello().countdownMs-(Date.now()-t0));
     el("gmRingNum").textContent=String(Math.ceil(resta/1000));
-    arc.setAttribute("stroke-dashoffset", String(GAME.arc*(1-resta/GAME.countdownMs)));
+    arc.setAttribute("stroke-dashoffset", String(GAME.arc*(1-resta/livello().countdownMs)));
     if(resta>0) requestAnimationFrame(tick);
   })();
 }
@@ -2053,11 +2181,43 @@ function gOver(){
   G.phase="fine"; gClear(); gTacche(); spunta(false);
   gCheck().stop(); gCheck().classList.add("hide");
   el("gmCard").classList.add("hide"); el("gmRing").classList.add("hide");
-  el("gmFinal").textContent=String(G.score); el("gmFinal").classList.remove("hide");
-  el("gmName").textContent=t('gameOver');
   el("gmPos").textContent=`${GAME.rounds} / ${GAME.rounds}`;
-  gState(t('gameFinal').replace("{n}",G.score).replace("{tot}",GAME.rounds),"");
-  const b=el("gmAgain"); b.textContent=t('gameAgain'); b.classList.remove("hide");
+  gState("","");
+
+  el("gmFineTit").textContent=t('gameOverTitle');
+  el("gmFinePunti").textContent=String(G.score);
+  el("gmFineSu").textContent=t('gameFineSu').replace("{n}",G.score).replace("{tot}",GAME.rounds);
+  const tac=el("gmFineTacche"); tac.innerHTML="";
+  for(let i=0;i<GAME.rounds;i++){
+    const x=document.createElement("i");
+    x.className = G.esiti[i]===true ? "ok" : (G.esiti[i]===false ? "ko" : "");
+    tac.appendChild(x);
+  }
+  el("gmFineAncora").textContent=t('gameAgain');
+  const err=el("gmFineErrori");
+  if(G.sbagliati.length){
+    err.textContent=t('gameErrori').replace("{n}", G.sbagliati.length);
+    err.classList.remove("hide");
+  } else err.classList.add("hide");
+  el("gmFine").classList.add("on");
+  el("gmFineAncora").focus();
+}
+
+/* Allenarsi su ciò che è appena andato storto: si costruisce un insieme al volo
+   con i soli accordi sbagliati e si apre l'esercizio normale. */
+function allenaSbagliati(){
+  const lista = G.sbagliati.slice();
+  if(!lista.length) return;
+  const id="__errori";
+  const esistente = DECKS.findIndex(d=>d.id===id);
+  const deck = {group:"tmp", id:id,
+                nm:{it:t('errorsDeck'), en:t('errorsDeck')},
+                sb:{it:t('errorsDeckSub'), en:t('errorsDeckSub')}, ch:lista};
+  if(esistente>=0) DECKS[esistente]=deck; else DECKS.push(deck);
+  el("gmFine").classList.remove("on");
+  gClose();
+  S.deckId=id;
+  startSession();
 }
 
 function gClose(){
@@ -2067,6 +2227,12 @@ function gClose(){
 }
 
 el("closeGame").onclick=gClose;
+el("gmFineChiudi").onclick=()=>{ el("gmFine").classList.remove("on"); gClose(); };
+el("gmFineVelo").onclick=()=>{ el("gmFine").classList.remove("on"); gClose(); };
+el("gmFineAncora").onclick=()=>{ el("gmFine").classList.remove("on"); startGame(G.deck); };
+el("gmFineErrori").onclick=allenaSbagliati;
+el("gmLivelliChiudi").onclick=()=>el("gmLivelli").classList.remove("on");
+el("gmLivelliVelo").onclick=()=>el("gmLivelli").classList.remove("on");
 el("gmAgain").onclick=()=>startGame(G.deck);
 
 /* ---------- ACCORDATORE ---------- */
