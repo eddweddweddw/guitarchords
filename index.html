@@ -211,7 +211,19 @@
   :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
 
   /* ---------- GIOCO ---------- */
-  .gm-score{font-size:19px;font-weight:600;color:var(--accent-deep);min-width:34px;text-align:right;flex:none}
+  /* Il punteggio dice di cosa è: un numero da solo si legge come "terzo turno". */
+  .gm-score{flex:none;display:flex;flex-direction:column;align-items:flex-end;line-height:1}
+  .gm-score .n{font-size:21px;font-weight:600;color:var(--accent-deep);font-variant-numeric:tabular-nums}
+  .gm-score .et{font-size:9.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent-2);margin-top:3px}
+  /* Una tacca per turno: verde se preso, rossa se sbagliato, blu quello in corso.
+     Dice a colpo d'occhio come sta andando e quanto manca. */
+  .gm-tacche{display:flex;gap:5px;justify-content:center;margin:10px 0 0;padding:0 2px}
+  .gm-tacche i{flex:1;max-width:26px;height:4px;border-radius:2px;background:var(--line);transition:.2s}
+  .gm-tacche i.ok{background:var(--ok)}
+  .gm-tacche i.ko{background:var(--danger)}
+  .gm-tacche i.ora{background:var(--accent)}
+  @media (prefers-reduced-motion:reduce){ .gm-tacche i{transition:none} }
   .gm-state{font-size:14px;color:var(--dim);text-align:center;min-height:22px;line-height:1.4}
   .gm-state.ok{color:var(--ok);font-weight:600}
   /* La spunta si disegna da sé: prima il cerchio, poi il segno. Sta sopra tutto
@@ -234,6 +246,7 @@
   .gm-state.ko{color:var(--danger);font-weight:600}
   .gm-card.hide{display:none}
   #gmCheck{width:min(320px,86vw)}
+  #gmCheck.hide{display:none}
   #gmFinal.hide{display:none}
   .gm-again{width:min(284px,80vw)}
   .gm-again.hide{display:none}
@@ -798,8 +811,12 @@
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <div class="deckname"><div class="nm" id="gmDeck">—</div><div class="pos mono" id="gmPos"></div></div>
-    <div class="gm-score mono" id="gmScore">0</div>
+    <div class="gm-score">
+      <span class="n mono" id="gmScore">0</span>
+      <span class="et mono" id="gmScoreLab">punti</span>
+    </div>
   </div>
+  <div class="gm-tacche" id="gmTacche" aria-hidden="true"></div>
 
   <div class="center">
     <manico-chord-check id="gmCheck"></manico-chord-check>
@@ -873,6 +890,7 @@ const I18N = {
                 ["Suona quello che compare","Appare il nome, il microfono ascolta. Suonalo una volta sola e lascia vibrare."],
                 ["Un punto, o la posizione","Se è giusto vai avanti. Se sbagli, il gioco si ferma e ti mostra la diteggiatura."]],
     gameCloseAria: "Esci dal gioco",
+    gameScoreLab: "punti",
     gameRight: "Giusto",
     gameWrong: "Sbagliato",
     gameLook: "guarda la posizione",
@@ -964,6 +982,7 @@ const I18N = {
                 ["Play what appears","The name shows up and the microphone listens. Strum once and let it ring."],
                 ["A point, or the shape","Right, and you move on. Wrong, and the game stops to show you the fingering."]],
     gameCloseAria: "Leave the game",
+    gameScoreLab: "points",
     gameRight: "Right",
     gameWrong: "Wrong",
     gameLook: "look at the shape",
@@ -1657,6 +1676,7 @@ function applyLangStatic(){
   el("closeSettings").setAttribute("aria-label", t('settingsCloseAria'));
   renderTutorial();
   el("closeGame").setAttribute("aria-label", t('gameCloseAria'));
+  el("gmScoreLab").textContent=t('gameScoreLab');
   updateThemeButton();
   el("closeTuner").setAttribute("aria-label", t('closeTunerAria'));
   el("tunerTopTitle").textContent=t('tunerTitle');
@@ -1890,7 +1910,7 @@ function ruler(tones){
    altrimenti una pennata di troppo durante la pausa conterebbe come risposta. */
 const GAME = { rounds:10, blockMs:10000, countdownMs:5000, rightMs:900, arc:131.9 };
 const G = { on:load("chordtrainer.game.v1")===true, deck:null, queue:[], i:0, score:0,
-            phase:"off", timers:[], legato:false };
+            phase:"off", timers:[], legato:false, esiti:[] };
 
 function gLater(fn,ms){ const h=setTimeout(fn,ms); G.timers.push(h); return h; }
 function gClear(){ G.timers.forEach(clearTimeout); G.timers=[]; }
@@ -1906,6 +1926,19 @@ function spunta(mostra){
 
 function gState(html,cls){ const e=el("gmState"); e.innerHTML=html; e.className="gm-state"+(cls?" "+cls:""); }
 function gScore(){ el("gmScore").textContent=String(G.score); }
+
+/* Le tacche raccontano la partita: una per turno, colorata dall'esito. */
+function gTacche(){
+  const box=el("gmTacche"); box.innerHTML="";
+  for(let i=0;i<GAME.rounds;i++){
+    const t=document.createElement("i");
+    const e=G.esiti[i];
+    if(e===true) t.className="ok";
+    else if(e===false) t.className="ko";
+    else if(i===G.i && G.phase!=="fine") t.className="ora";
+    box.appendChild(t);
+  }
+}
 
 /* Dieci estrazioni: si mescola l'insieme e lo si ripercorre, così un insieme da
    sei accordi non ne ripete uno due volte di fila. */
@@ -1934,8 +1967,8 @@ function gCheck(){ return el("gmCheck"); }
 async function startGame(deck){
   const check=gCheck();
   if(!check || typeof check.start!=="function") return;   // componente non caricato
-  G.deck=deck; G.queue=gQueue(deck); G.i=0; G.score=0; G.phase="avvio";
-  gClear(); gScore();
+  G.deck=deck; G.queue=gQueue(deck); G.i=0; G.score=0; G.esiti=[]; G.phase="avvio";
+  gClear(); gScore(); gTacche();
   el("gmDeck").textContent=deck.nm[S.lang];
   el("gmPos").textContent="— / "+GAME.rounds;
   el("gmName").textContent="";
@@ -1963,6 +1996,7 @@ function gRound(){
   el("gmCard").classList.add("hide");
   el("gmRing").classList.add("hide");
   spunta(false);
+  gTacche();
   gState("","");
   /* I rivali sono gli altri accordi dell'insieme, non tutti e novanta: il motore
      deve distinguere il Do dal Lam di questo esercizio. */
@@ -1973,12 +2007,12 @@ function gRound(){
 function gVerdict(ev){
   if(G.phase!=="listening" || !ev) return;
   if(ev.ok){
-    G.phase="giusto"; G.score++; gScore();
+    G.phase="giusto"; G.score++; G.esiti[G.i]=true; gScore(); gTacche();
     gState(t('gameRight'),"ok");
     spunta(true);
     gLater(gNext, GAME.rightMs);
   }else{
-    G.phase="bloccato";
+    G.phase="bloccato"; G.esiti[G.i]=false; gTacche();
     gState(`${t('gameWrong')} · ${t('gameLook')}`,"ko");
     el("gmDiagram").innerHTML=svgChord(CH[G.queue[G.i]]);
     /* i pallini delle dita nascono invisibili: senza questa classe il diagramma
@@ -2016,7 +2050,7 @@ function gNext(){
 }
 
 function gOver(){
-  G.phase="fine"; gClear();
+  G.phase="fine"; gClear(); gTacche(); spunta(false);
   gCheck().stop(); gCheck().classList.add("hide");
   el("gmCard").classList.add("hide"); el("gmRing").classList.add("hide");
   el("gmFinal").textContent=String(G.score); el("gmFinal").classList.remove("hide");
