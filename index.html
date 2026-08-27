@@ -942,10 +942,9 @@ const I18N = {
     gameOverTitle: "Partita finita",
     gameDiffTitle: "Quanto veloce?",
     gameDiffSub: "Cambia solo il tempo, non gli accordi. Puoi sceglierlo a ogni partita.",
-    gameDiffCalma: "Con calma", gameDiffCalmaSub: "Venti secondi per guardare la posizione sbagliata",
-    gameDiffNormale: "Normale", gameDiffNormaleSub: "Dieci secondi per guardare la posizione sbagliata",
-    gameDiffSfida: "Sfida", gameDiffSfidaSub: "Sei secondi per guardare, e venti per rispondere",
-    gameNoLimit: "senza limite", gameLimit: "{n} s per rispondere",
+    gameDiffFacile: "Facile", gameDiffFacileSub: "La posizione resta sempre visibile", gameDiffFacileT: "20 s",
+    gameDiffMedio: "Medio", gameDiffMedioSub: "Dieci secondi a memoria, poi compare la posizione", gameDiffMedioT: "10 + 10 s",
+    gameDiffDifficile: "Difficile", gameDiffDifficileSub: "La posizione non si vede mai", gameDiffDifficileT: "10 s",
     gameTimeout: "Tempo scaduto",
     gameFineSu: "{n} punti su {tot}",
     gameErrori: "Allena i {n} accordi sbagliati",
@@ -1045,10 +1044,9 @@ const I18N = {
     gameOverTitle: "Game over",
     gameDiffTitle: "How fast?",
     gameDiffSub: "It changes the timing, not the chords. You pick it every game.",
-    gameDiffCalma: "Take your time", gameDiffCalmaSub: "Twenty seconds to look at the shape you missed",
-    gameDiffNormale: "Normal", gameDiffNormaleSub: "Ten seconds to look at the shape you missed",
-    gameDiffSfida: "Challenge", gameDiffSfidaSub: "Six seconds to look, twenty to answer",
-    gameNoLimit: "no limit", gameLimit: "{n} s to answer",
+    gameDiffFacile: "Easy", gameDiffFacileSub: "The shape stays visible the whole time", gameDiffFacileT: "20 s",
+    gameDiffMedio: "Medium", gameDiffMedioSub: "Ten seconds from memory, then the shape appears", gameDiffMedioT: "10 + 10 s",
+    gameDiffDifficile: "Hard", gameDiffDifficileSub: "The shape never shows", gameDiffDifficileT: "10 s",
     gameTimeout: "Time's up",
     gameFineSu: "{n} points out of {tot}",
     gameErrori: "Practise the {n} chords you missed",
@@ -1980,21 +1978,23 @@ function ruler(tones){
    Una sola macchina a stati (G.phase) decide chi ha diritto di parlare: i
    verdetti che arrivano dal microfono fuori da "listening" vengono ignorati,
    altrimenti una pennata di troppo durante la pausa conterebbe come risposta. */
-const GAME = { rounds:10, rightMs:900, arc:131.9 };
+/* lookMs e countdownMs valgono dopo un errore e sono uguali per tutti: la
+   difficoltà sta nella domanda, non nella pausa che segue. */
+const GAME = { rounds:10, rightMs:900, arc:131.9, lookMs:10000, countdownMs:5000 };
 
 /* La difficoltà è il tempo, non gli accordi: quanto puoi guardare la posizione
    dopo un errore, quanto dura il conto alla rovescia, e se hai un limite per
    rispondere. Si sceglie a ogni partita, perché dipende da come stai quel
    giorno più che da quanto sei bravo. */
 const LIVELLI = [
-  { id:"calma",   lookMs:20000, countdownMs:5000, answerMs:0     },
-  { id:"normale", lookMs:10000, countdownMs:5000, answerMs:0     },
-  { id:"sfida",   lookMs:6000,  countdownMs:3000, answerMs:20000 },
+  { id:"facile",    answerMs:20000, mostraSubito:true,  rivelaDopo:0     },
+  { id:"medio",     answerMs:20000, mostraSubito:false, rivelaDopo:10000 },
+  { id:"difficile", answerMs:10000, mostraSubito:false, rivelaDopo:0     },
 ];
 function livello(){ return LIVELLI.find(l=>l.id===G.livello) || LIVELLI[1]; }
 const G = { on:load("chordtrainer.game.v1")===true, deck:null, queue:[], i:0, score:0,
             phase:"off", timers:[], legato:false, esiti:[],
-            livello: load("chordtrainer.livello.v1") || "normale", sbagliati:[] };
+            livello: load("chordtrainer.livello.v1") || "medio", sbagliati:[] };
 
 function gLater(fn,ms){ const h=setTimeout(fn,ms); G.timers.push(h); return h; }
 function gClear(){ G.timers.forEach(clearTimeout); G.timers=[]; }
@@ -2059,7 +2059,7 @@ function apriLivelli(deck){
     b.setAttribute("aria-pressed", String(l.id===G.livello));
     const nome = t('gameDiff'+l.id.charAt(0).toUpperCase()+l.id.slice(1));
     const det  = t('gameDiff'+l.id.charAt(0).toUpperCase()+l.id.slice(1)+'Sub');
-    const lim  = l.answerMs ? t('gameLimit').replace("{n}", Math.round(l.answerMs/1000)) : t('gameNoLimit');
+    const lim  = t('gameDiff'+l.id.charAt(0).toUpperCase()+l.id.slice(1)+'T');
     b.innerHTML=`<span><span class="nome">${nome}</span><span class="det">${det}</span></span>`+
                 `<span class="num">${lim}</span>`;
     b.onclick=()=>{
@@ -2110,8 +2110,10 @@ function gRound(){
   spunta(false);
   gTacche();
   gState("","");
-  const lim = livello().answerMs;
-  if(lim) gLater(()=>{ if(G.phase==="listening") gSbagliato(t('gameTimeout')); }, lim);
+  const liv = livello();
+  if(liv.mostraSubito) mostraPosizione();
+  if(liv.rivelaDopo) gLater(()=>{ if(G.phase==="listening") mostraPosizione(); }, liv.rivelaDopo);
+  gRing(liv.answerMs, ()=>{ if(G.phase==="listening") gSbagliato(t('gameTimeout')); });
   /* I rivali sono gli altri accordi dell'insieme, non tutti e novanta: il motore
      deve distinguere il Do dal Lam di questo esercizio. */
   gCheck().setChord(c.sym, c.frets,
@@ -2123,11 +2125,21 @@ function gVerdict(ev){
   /* Se lo suoni giusto mentre guardi la posizione, non ha senso trattenerti
      fino allo scadere: si va avanti. Il punto resta perso, perché l'errore è
      già stato contato: quello che si recupera è il tempo, non il punteggio. */
-  if((G.phase==="bloccato" || G.phase==="conto") && ev.ok){ gClear(); gNext(); return; }
+  if((G.phase==="bloccato" || G.phase==="conto") && ev.ok){
+    /* Preso al secondo tentativo: la spunta la merita comunque, anche se il
+       punto è già perso. Vedere il segno verde è ciò che dice "ora è giusto". */
+    gClear(); G.phase="recuperato";
+    el("gmRing").classList.add("hide");
+    gState(t('gameRight'),"ok");
+    spunta(true);
+    gLater(gNext, GAME.rightMs);
+    return;
+  }
   if(G.phase!=="listening") return;
   gClear();   // via i timer del turno, a partire dal limite per rispondere
   if(ev.ok){
     G.phase="giusto"; G.score++; G.esiti[G.i]=true; gScore(); gTacche();
+    el("gmRing").classList.add("hide");
     gState(t('gameRight'),"ok");
     spunta(true);
     gLater(gNext, GAME.rightMs);
@@ -2138,37 +2150,47 @@ function gVerdict(ev){
 
 /* Sbagliato, o tempo scaduto: in entrambi i casi si perde il punto, si vede la
    posizione giusta, e poi si va avanti. */
+function mostraPosizione(){
+  el("gmDiagram").innerHTML=svgChord(CH[G.queue[G.i]]);
+  /* i pallini delle dita nascono invisibili: senza questa classe il diagramma
+     resta un manico vuoto. */
+  const svg=el("gmDiagram").querySelector("svg"); if(svg) svg.classList.add("is-revealed");
+  el("gmCard").classList.remove("hide");
+}
+
 function gSbagliato(messaggio){
   gClear();
   G.phase="bloccato"; G.esiti[G.i]=false; gTacche();
   if(G.sbagliati.indexOf(G.queue[G.i])<0) G.sbagliati.push(G.queue[G.i]);
   gState(messaggio,"ko");
-  el("gmDiagram").innerHTML=svgChord(CH[G.queue[G.i]]);
-  /* i pallini delle dita nascono invisibili: senza questa classe il diagramma
-     resta un manico vuoto, che e' il contrario di "guarda la posizione". */
-  const svg=el("gmDiagram").querySelector("svg"); if(svg) svg.classList.add("is-revealed");
-  el("gmCard").classList.remove("hide");
-  gLater(gCountdown, livello().lookMs);
+  el("gmRing").classList.add("hide");
+  mostraPosizione();
+  gLater(gCountdown, GAME.lookMs);
+}
+
+/* Un solo conto alla rovescia, usato sia per il tempo di risposta sia per la
+   pausa dopo un errore. Chi comanda è il timer, non l'animazione:
+   requestAnimationFrame si ferma quando la pagina va in secondo piano, e con lui
+   si fermerebbe la partita. Il giro di rAF disegna soltanto. */
+function gRing(ms, alFine){
+  const ring=el("gmRing"), arc=el("gmRingArc"), t0=Date.now();
+  ring.classList.remove("hide");
+  el("gmRingNum").textContent=String(Math.ceil(ms/1000));
+  arc.setAttribute("stroke-dashoffset","0");
+  gLater(alFine, ms);
+  (function tick(){
+    if(ring.classList.contains("hide")) return;
+    const resta=Math.max(0, ms-(Date.now()-t0));
+    el("gmRingNum").textContent=String(Math.ceil(resta/1000));
+    arc.setAttribute("stroke-dashoffset", String(GAME.arc*(1-resta/ms)));
+    if(resta>0) requestAnimationFrame(tick);
+  })();
 }
 
 function gCountdown(){
   G.phase="conto";
-  el("gmRing").classList.remove("hide");
   gState(t('gameNextIn'),"ko");
-  const arc=el("gmRingArc"), t0=Date.now();
-
-  /* Chi comanda è il timer, non l'animazione: requestAnimationFrame si ferma
-     quando la pagina va in secondo piano, e con lui si fermerebbe la partita.
-     Il giro di rAF disegna soltanto, e se resta indietro non fa danno. */
-  gLater(()=>{ if(G.phase!=="conto") return; G.score--; gScore(); gNext(); }, livello().countdownMs);
-
-  (function tick(){
-    if(G.phase!=="conto") return;
-    const resta=Math.max(0, livello().countdownMs-(Date.now()-t0));
-    el("gmRingNum").textContent=String(Math.ceil(resta/1000));
-    arc.setAttribute("stroke-dashoffset", String(GAME.arc*(1-resta/livello().countdownMs)));
-    if(resta>0) requestAnimationFrame(tick);
-  })();
+  gRing(GAME.countdownMs, ()=>{ if(G.phase!=="conto") return; G.score--; gScore(); gNext(); });
 }
 
 function gNext(){
