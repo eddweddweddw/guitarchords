@@ -12,8 +12,8 @@ Gira sul portatile, non sul telefono, e non aggiunge nulla a ciò che il
 visitatore scarica. Lo lancia pubblica.sh prima di ogni pubblicazione, così il
 generato non può scollarsi dalla sorgente.
 """
-import json, os, re, shutil, sys, unicodedata
-from datetime import date
+import json, os, re, shutil, subprocess, sys, unicodedata
+from datetime import date, datetime
 
 BASE = "https://eddweddweddw.github.io/guitarchords"
 QUI  = os.path.dirname(os.path.abspath(__file__))
@@ -155,6 +155,58 @@ def svg_accordo(c, lang="it"):
             '    <g>%s</g>\n    <g class="markg">%s</g>\n    <g class="dotg">%s%s</g>\n  </svg>'
             % (W, H, "Chord diagram" if lang == "en" else "Diagramma accordo", c["sym"], "".join(g), "".join(mk), "".join(bars), "".join(dots)))
 
+# ---------------------------------------------------------------- dove si usa
+# Un accordo non vive da solo: appartiene a delle tonalità e compare in giri
+# ricorrenti. Sono fatti calcolabili dalla qualità dell'accordo, non opinioni,
+# e sono la cosa che chi cerca "come si fa il Fa#m" vuole sapere subito dopo.
+
+GRADI_MAG = [("I", 0), ("IV", 7), ("V", 5)]      # tonalità = fondamentale + n
+GRADI_MIN = [("ii", 10), ("iii", 8), ("vi", 3)]
+
+def pc_di(c):
+    """L'altezza della fondamentale, dalla nota più grave del suo accordo."""
+    APERTE = [40, 45, 50, 55, 59, 64]
+    for i, f in enumerate(c["frets"]):
+        if f != "x":
+            return (APERTE[i] + f) % 12
+    return 0
+
+def per_qualita(key):
+    for r in sorted(["Cs","Db","Ds","Eb","Fs","Gb","Gs","Ab","As","Bb","C","D","E","F","G","A","B"],
+                    key=len, reverse=True):
+        if key.startswith(r) and key[len(r):] in ("","m","7","maj7","m7","sus2","sus4","add9"):
+            return key[len(r):]
+    return None
+
+def indice_per_pc(accordi):
+    """pitch class + qualità -> accordo, per ritrovare gli accordi di una tonalità."""
+    mappa = {}
+    for k, c in accordi.items():
+        q = per_qualita(k)
+        if q is None: continue
+        mappa[(pc_di(c), q)] = c
+    return mappa
+
+def tonalita(c, key, accordi, mappa, lang):
+    """Le tonalità in cui l'accordo compare, e un giro che lo contiene."""
+    q = per_qualita(key)
+    pc = pc_di(c)
+    gradi = GRADI_MAG if q in ("", "maj7") else (GRADI_MIN if q in ("m", "m7") else
+             ([("V", 5)] if q == "7" else []))
+    if not gradi: return None, []
+    voci = []
+    for nome, salto in gradi:
+        ton = mappa.get(((pc + salto) % 12, ""))
+        if ton: voci.append((nome, ton))
+    # il giro più diffuso che esista, costruito sulla tonalità dove l'accordo è il I
+    giro = []
+    if q in ("", "maj7"):
+        for salto, qq in ((0, ""), (7, ""), (9, "m"), (5, "")):
+            a = mappa.get(((pc + salto) % 12, qq))
+            if a: giro.append(a)
+        if len(giro) < 4: giro = []
+    return voci, giro
+
 # ------------------------------------------------------------------- indirizzi
 def sfilza(testo):
     t = unicodedata.normalize("NFKD", testo.replace("♯", "-diesis").replace("♭", "-bemolle"))
@@ -279,7 +331,7 @@ def descrizione(c, lang):
     return ("Come si suona %s sulla chitarra: diteggiatura %s, note %s, gradi %s."
             % (c["name"]["it"], dita, c["notes"]["it"], c["deg"]))
 
-def pagina(c, insieme, vicini, lang, scheda):
+def pagina(c, insieme, vicini, lang, scheda, key, mappa, accordi):
     lab = L[lang]; altro = "en" if lang == "it" else "it"
     nome = c["name"][lang]
     url  = "%s/%s/%s/" % (BASE, lab["cartella"], sfilza(c["name"][lang]))
@@ -320,6 +372,35 @@ def pagina(c, insieme, vicini, lang, scheda):
              {"@type": "ListItem", "position": 1, "name": lab["home"], "item": BASE + "/"},
              {"@type": "ListItem", "position": 2, "name": lab["titolo_indice"], "item": "%s/%s/" % (BASE, lab["cartella"])},
              {"@type": "ListItem", "position": 3, "name": nome, "item": url}]}]
+    # dove si usa: tonalità e un giro, con i link agli accordi che lo compongono
+    voci, giro = tonalita(c, key, accordi, mappa, lang)
+    dove = ""
+    if voci:
+        # il nome della tonalità è la sua fondamentale, non il nome dell'accordo:
+        # la tonalità di Fa si chiama "Fa maggiore", non "Fa maggiore (barré)"
+        def nome_tonalita(a):
+            radice = a["notes"][lang].split(" · ")[0]
+            return radice + (" maggiore" if lang == "it" else " major")
+        elenco = ", ".join('<b>%s</b> (%s)' % (nome_tonalita(v), n) for n, v in voci)
+        dove += ("<h2>%s</h2><p class=\"testo\">%s %s.</p>"
+                 % ("In quali tonalità si usa" if lang == "it" else "Which keys use it",
+                    ("%s si incontra nelle tonalità di" % nome) if lang == "it"
+                    else ("%s turns up in the keys of" % nome), elenco))
+    if giro:
+        pezzi = "".join('<li><a href="../%s/">%s</a></li>' % (sfilza(g["name"][lang]), g["sym"]) for g in giro)
+        dove += ("<h2>%s</h2><p class=\"testo\">%s</p><ul class=\"vicini\">%s</ul>"
+                 % ("Un giro che lo contiene" if lang == "it" else "A progression that uses it",
+                    ("Il giro I&nbsp;·&nbsp;V&nbsp;·&nbsp;vi&nbsp;·&nbsp;IV nella sua tonalità, il più diffuso nella musica popolare:")
+                    if lang == "it" else
+                    ("The I&nbsp;·&nbsp;V&nbsp;·&nbsp;vi&nbsp;·&nbsp;IV progression in its own key, the most common one in popular music:"), pezzi))
+    if scheda:
+        t2 = scheda[lang]
+        dove += ('<h2>%s</h2><p class="testo">%s <a href="../../%s/%s/">%s</a></p>'
+                 % ("Come è costruito" if lang == "it" else "How it is built",
+                    re.sub(r"<[^>]*>", "", t2["recipe"]),
+                    "teoria" if lang == "it" else "theory", sfilza(t2["title"]),
+                    ("Tutto su %s" % t2["title"].lower()) if lang == "it" else ("More on %s" % t2["title"].lower())))
+
     return TESTA % {
       "lang": lang, "titolo": "%s · %s %s" % (c["sym"], nome, lab["sotto"]), "desc": desc, "url": url,
       "alt_it": "%s/accordi/%s/" % (BASE, sfilza(c["name"]["it"])),
@@ -336,6 +417,7 @@ def pagina(c, insieme, vicini, lang, scheda):
     <p class="testo">%(corpo)s</p>
   </div>
   <a class="prova" href="../../">%(prova)s</a>
+  %(dove)s
   <h2>%(vicini_t)s</h2>
   <ul class="vicini">%(vicini)s</ul>
   <p class="testo" style="text-align:center"><a href="%(url_altro)s">%(altra)s</a></p>
@@ -346,7 +428,7 @@ def pagina(c, insieme, vicini, lang, scheda):
        "dati": "".join("<div><b>%s</b><span>%s</span></div>" % (k, v) for k, v in dati),
        "corpo": corpo, "prova": lab["prova"], "vicini_t": lab["vicini"],
        "vicini": "".join('<li><a href="../%s/">%s</a></li>' % (sfilza(v["name"][lang]), v["sym"]) for v in vicini),
-       "url_altro": url_altro, "altra": lab["altra"]}
+       "url_altro": url_altro, "altra": lab["altra"], "dove": dove}
 
 
 def pagina_teoria(scheda, insieme, accordi, lang):
@@ -473,8 +555,21 @@ def home_inglese(s):
     return h
 
 
+def quando():
+    """La data dell'ultima modifica vera dei dati, non quella di oggi. Dichiarare
+    che tutte le pagine cambiano ogni giorno è falso, e a forza di smentite Google
+    smette di guardare il lastmod."""
+    try:
+        out = subprocess.run(["git", "log", "-1", "--format=%cI", "--", "index.html"],
+                             cwd=QUI, capture_output=True, text=True, timeout=10)
+        if out.returncode == 0 and out.stdout.strip():
+            return out.stdout.strip()[:10]
+    except Exception:
+        pass
+    return datetime.fromtimestamp(os.path.getmtime(SORGENTE)).date().isoformat()
+
 def sitemap(accordi, schede, insiemi):
-    oggi = date.today().isoformat()
+    oggi = quando()
     def alt(it, en):
         return ('\n    <xhtml:link rel="alternate" hreflang="it" href="%s"/>'
                 '\n    <xhtml:link rel="alternate" hreflang="en" href="%s"/>'
@@ -506,11 +601,22 @@ def main():
         sys.exit("non ho letto i dati da index.html (accordi %d, insiemi %d, schede %d)"
                  % (len(accordi), len(insiemi), len(schede)))
 
+    mappa = indice_per_pc(accordi)
     di_chi = {}
     for d in insiemi:
         for k in d["ch"]:
             di_chi.setdefault(k, d)
     scheda_di = {d["id"]: sc for sc in schede for d in insiemi if d["id"] == sc["deckId"]}
+    # La scheda di teoria va cercata fra gli insiemi teorici: se si guarda il
+    # primo insieme che contiene l'accordo si finisce su uno di difficoltà, che
+    # una scheda non ce l'ha, e la sezione sparisce.
+    scheda_per_accordo = {}
+    for d in insiemi:
+        if d["group"] != "th": continue
+        sc = scheda_di.get(d["id"])
+        if not sc: continue
+        for k in d["ch"]:
+            scheda_per_accordo.setdefault(k, sc)
 
     fatte = 0
     for lang in ("it", "en"):
@@ -521,10 +627,11 @@ def main():
         for k, c in accordi.items():
             insieme = di_chi.get(k)
             vicini = [accordi[x] for x in (insieme["ch"] if insieme else []) if x != k][:8]
-            sc = scheda_di.get(insieme["id"]) if insieme else None
+            sc = scheda_per_accordo.get(k)
             d = os.path.join(cartella, sfilza(c["name"][lang]))
             os.makedirs(d, exist_ok=True)
-            open(os.path.join(d, "index.html"), "w", encoding="utf-8").write(pagina(c, insieme, vicini, lang, sc))
+            open(os.path.join(d, "index.html"), "w", encoding="utf-8").write(
+                pagina(c, insieme, vicini, lang, sc, k, mappa, accordi))
             fatte += 1
         open(os.path.join(cartella, "index.html"), "w", encoding="utf-8").write(indice(accordi, insiemi, lang))
 
