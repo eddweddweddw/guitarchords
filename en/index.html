@@ -606,6 +606,8 @@
   .th-card{background:var(--surface);border:1px solid var(--line);
     border-radius:18px;padding:15px 15px 13px;margin:8px 0 4px;box-shadow:var(--shadow)}
   .th-card.hide, .th-card.fuori{display:none}
+  .ctrl.dim{opacity:.45;pointer-events:none}
+  .tbtn.hide{display:none}
   .blocco{margin-bottom:9px}
   .blocco .riga{display:flex;align-items:center;gap:7px}
   .blocco .deck{margin-bottom:0;flex:1;min-width:0}
@@ -847,6 +849,7 @@
       <button class="chip" id="tglShuffle" aria-pressed="true"><span class="sw"></span><span id="tglShuffleLab">Ordine casuale</span></button>
       <button class="chip" id="tglLoop" aria-pressed="true"><span class="sw"></span><span id="tglLoopLab">Ripeti in ciclo</span></button>
       <button class="chip" id="tglSpell" aria-pressed="true"><span class="sw"></span><span id="tglSpellLab">Mostra note e gradi</span></button>
+      <button class="chip" id="tglManuale" aria-pressed="false"><span class="sw"></span><span id="tglManualeLab">Avanza a mano</span></button>
     </div>
   </div>
   </div>
@@ -986,6 +989,7 @@ const I18N = {
     tglShuffle: "Ordine casuale",
     tglLoop: "Ripeti in ciclo",
     tglSpell: "Mostra note e gradi",
+    tglManuale: "Avanza a mano",
     groupDiff: "Per difficoltà",
     groupTh: "Per costruzione teorica",
     chordsSuffix: "accordi",
@@ -1088,6 +1092,7 @@ const I18N = {
     tglShuffle: "Random order",
     tglLoop: "Loop",
     tglSpell: "Show notes & degrees",
+    tglManuale: "Advance by hand",
     groupDiff: "By difficulty",
     groupTh: "By theoretical construction",
     chordsSuffix: "chords",
@@ -1326,6 +1331,7 @@ const S = {
   lang: detectLang(),
   revealMs:3000, studyMs:4000,
   shuffle:true, loop:true, spell:true,
+  manuale: load("chordtrainer.manuale.v1")===true,
   deckId:null,
   queue:[], qi:-1,
   phase:"idle",       // prompt | reveal
@@ -1579,6 +1585,24 @@ setPct(el("revealRange")); setPct(el("studyRange"));
 function bindToggle(id,key){ const b=el(id); b.onclick=()=>{ S[key]=!S[key]; b.setAttribute("aria-pressed",S[key]); }; }
 bindToggle("tglShuffle","shuffle"); bindToggle("tglLoop","loop"); bindToggle("tglSpell","spell");
 
+/* A mano non parte nessun timer: si va avanti quando lo decidi tu. I due cursori
+   dei tempi restano a schermo ma spenti, perché in questa modalità non contano. */
+function segnaManuale(){
+  el("tglManuale").setAttribute("aria-pressed", String(S.manuale));
+  el("revealCtrl").classList.toggle("dim", S.manuale);
+  el("studyCtrl").classList.toggle("dim", S.manuale);
+  el("playBtn").classList.toggle("hide", S.manuale);
+  /* Senza pausa, l'azione principale diventa "avanti": prende il rilievo che
+     aveva il pulsante centrale, altrimenti la fila di comandi non dice più
+     quale sia il gesto normale. */
+  el("nextBtn").classList.toggle("main", S.manuale);
+}
+el("tglManuale").onclick=()=>{
+  S.manuale=!S.manuale;
+  save("chordtrainer.manuale.v1", S.manuale);
+  segnaManuale();
+};
+
 /* ============ SESSION ============ */
 function clearTimers(){ S.timers.forEach(clearTimeout); S.timers=[]; }
 function later(fn,ms){ const t=setTimeout(fn,ms); S.timers.push(t); return t; }
@@ -1634,6 +1658,11 @@ function showPrompt(sym){
   el("hintBtn").classList.remove("hide");
   updatePos();
 
+  if(S.manuale){
+    el("ring").classList.add("hide");
+    return;                       // si aspetta te: nessun timer parte
+  }
+
   const dur=S.revealMs;
   // countdown ring
   const arc=el("ringArc"), C=2*Math.PI*21;
@@ -1667,7 +1696,7 @@ function reveal(){
     el("spellNotes").innerHTML=`<b>${t('spellNotes')}</b>${c.notes[S.lang]}`;
     el("spell").classList.add("show");
   }
-  if(!S.paused) later(()=>nextCard(), S.studyMs);
+  if(!S.manuale && !S.paused) later(()=>nextCard(), S.studyMs);
 }
 
 
@@ -1728,6 +1757,7 @@ function applyLangStatic(){
   el("tglShuffleLab").textContent=t('tglShuffle');
   el("tglLoopLab").textContent=t('tglLoop');
   el("tglSpellLab").textContent=t('tglSpell');
+  el("tglManualeLab").textContent=t('tglManuale');
   el("exitBtn").setAttribute("aria-label", t('exitAria'));
   el("shuffleBtn").setAttribute("aria-label", t('shuffleAria'));
   el("hintBtn").textContent=t('hintBtn');
@@ -2413,6 +2443,7 @@ document.addEventListener("visibilitychange",()=>{
 });
 
 /* init */
+segnaManuale();
 segnaLingua();
 setTab(G.on ? "play" : "train");
 applyTheme(detectTheme());
